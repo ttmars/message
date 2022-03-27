@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>留白</title>
+  <meta name="description" content="Your custom description" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="/public/index.xml" rel="alternate" type="application/rss+xml" title="留白" />
+  
+</head>
+
+  <body>
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<nav class="navbar navbar-default  nav-stacked" role="navigation">
+			    <div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+								data-target="#example-navbar-collapse">
+							<span class="sr-only">切换导航</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/index">Gopher</a>
+					</div>
+					<div class="collapse navbar-collapse" id="example-navbar-collapse">
+						<ul class="nav navbar-nav">
+							<li id="hot"><a href="/hot">热点</a></li>
+							<li><a href="/public">目录</a></li>
+							<li><a href="#">关于</a></li>
+						</ul>
+						<i class="navbar-text navbar-right" style="color: #AC2925;"><b>留一片空白，给以后浓墨重彩</b></i>
+					</div>
+					
+			    </div>
+			</nav>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="posts">
+<article class="post">
+  <h1 class="post-title">
+    <a href="/public/post/second/">Second</a>
+  </h1>
+  <time datetime="2022-03-27T11:22:46&#43;0800" class="post-date">Sun, Mar 27, 2022</time>
+  second page 
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/first/">First</a>
+  </h1>
+  <time datetime="2022-03-27T11:22:17&#43;0800" class="post-date">Sun, Mar 27, 2022</time>
+  一.基本概念 1.使用存储设备的一般方法
+创建分区	格式化，即创建文件系统（创建inode、block） 挂载  2.硬盘的接口方式
+PATA接口：即IDE SATA接口：多用于个人桌面 服务器常用：SCSI、SAS、FC-AL  3.分区表类型
+MBR与GPT的区别，参考： https://www.dujin.org/11274.html https://www.dazhuanlan.com/2020/01/02/5e0dafbd204e4/
+4.文件系统类型
+常见文件系统，参考： https://www.cnblogs.com/eddie1127/p/11260402.html https://blog.csdn.net/liushengxi_root/article/details/87439737 centos7默认文件系统类型：xfs win7默认文件系统类型：NTFS
+二.常用命令 1.查看磁盘和分区
+[root@localhost ~]# ls /dev/sda sda sda1 sda2 新建分区后，用partprobe刷新磁盘  2.查看已经挂载的分区
+[root@localhost ~]# df -Th|grep -v tmp 文件系统 类型 容量 已用 可用 已用% 挂载点 /dev/mapper/centos-root xfs 17G 1.6G 16G 10% / /dev/sda1 xfs 1014M 138M 877M 14% /boot  3.查看磁盘的分区、挂载信息
+[root@localhost ~]# lsblk NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT sda 8:0 0 20G 0 disk ├─sda1 8:1 0 1G 0 part /boot └─sda2 8:2 0 19G 0 part ├─centos-root 253:0 0 17G 0 lvm / └─centos-swap 253:1 0 2G 0 lvm [SWAP] sr0 11:0 1 4.
+  
+  <div class="read-more-link">
+    <a href="/public/first/">Read More…</a>
+  </div>
+  
+</article>
+</div>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>

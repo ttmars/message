@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>留白</title>
+    <link>/public/</link>
+    <description>Recent content on 留白</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 27 Mar 2022 11:22:46 +0800</lastBuildDate><atom:link href="/public/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Second</title>
+      <link>/public/post/second/</link>
+      <pubDate>Sun, 27 Mar 2022 11:22:46 +0800</pubDate>
+      
+      <guid>/public/post/second/</guid>
+      <description>second page </description>
+    </item>
+    
+    <item>
+      <title>First</title>
+      <link>/public/first/</link>
+      <pubDate>Sun, 27 Mar 2022 11:22:17 +0800</pubDate>
+      
+      <guid>/public/first/</guid>
+      <description>一.基本概念 1.使用存储设备的一般方法
+创建分区	格式化，即创建文件系统（创建inode、block） 挂载  2.硬盘的接口方式
+PATA接口：即IDE SATA接口：多用于个人桌面 服务器常用：SCSI、SAS、FC-AL  3.分区表类型
+MBR与GPT的区别，参考： https://www.dujin.org/11274.html https://www.dazhuanlan.com/2020/01/02/5e0dafbd204e4/
+4.文件系统类型
+常见文件系统，参考： https://www.cnblogs.com/eddie1127/p/11260402.html https://blog.csdn.net/liushengxi_root/article/details/87439737 centos7默认文件系统类型：xfs win7默认文件系统类型：NTFS
+二.常用命令 1.查看磁盘和分区
+[root@localhost ~]# ls /dev/sda sda sda1 sda2 新建分区后，用partprobe刷新磁盘  2.查看已经挂载的分区
+[root@localhost ~]# df -Th|grep -v tmp 文件系统 类型 容量 已用 可用 已用% 挂载点 /dev/mapper/centos-root xfs 17G 1.6G 16G 10% / /dev/sda1 xfs 1014M 138M 877M 14% /boot  3.查看磁盘的分区、挂载信息
+[root@localhost ~]# lsblk NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT sda 8:0 0 20G 0 disk ├─sda1 8:1 0 1G 0 part /boot └─sda2 8:2 0 19G 0 part ├─centos-root 253:0 0 17G 0 lvm / └─centos-swap 253:1 0 2G 0 lvm [SWAP] sr0 11:0 1 4.</description>
+    </item>
+    
+  </channel>
+</rss>
