@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/antchfx/htmlquery"
 	"io/ioutil"
+	"log"
 	"message/model"
 	"net/http"
 	"strings"
@@ -28,11 +29,13 @@ func CSDN()(result []model.Item, err error)  {
 	url := "https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type="
 	resp, err := model.DFClient.Get(url)
 	if err != nil {
+		log.Printf("CSDN err:%v\n", err)
 		return
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("CSDN err:%v\n", err)
 		return
 	}
 
@@ -58,16 +61,19 @@ func Weibo() (result []model.Item, err error) {
 	req.Header.Set("cookie", "SUB=_2AkMVZUSbf8NxqwFRmP0WxG_jb41yyAvEieKjObVAJRMxHRl-yT9jqlULtRB6PuVqdHCUYilcOycjbJG7lmJA3vZSjI41; SUBP=0033WrSXqPxfM72-Ws9jqgMF55529P9D9WFlfySZ479DB-M3cI_uFeOE")
 	resp, err := model.DFClient.Do(req)
 	if err != nil {
+		log.Printf("Weibo err:%v\n", err)
 		return
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("Weibo err:%v\n", err)
 		return
 	}
 
 	doc,err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
+		log.Printf("Weibo err:%v\n", err)
 		return
 	}
 	nodes := htmlquery.Find(doc, "//*[@id=\"pl_top_realtimehot\"]/table/tbody/tr/td[2]/a")
@@ -91,16 +97,19 @@ func Baidu()(result []model.Item, err error){
 	url := "https://top.baidu.com/board?tab=realtime"
 	resp, err := model.DFClient.Get(url)
 	if err != nil {
+		log.Printf("Baidu err:%v\n", err)
 		return
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("Baidu err:%v\n", err)
 		return
 	}
 
 	doc,err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
+		log.Printf("Baidu err:%v\n", err)
 		return
 	}
 	nodes := htmlquery.Find(doc, "//*[@id=\"sanRoot\"]/main/div[2]/div/div[2]/div/div[2]/a/div[1]")
@@ -124,16 +133,19 @@ func Bilibili()(result []model.Item, err error){
 	req.Header.Set("cookie", "buvid3=5D5418C6-B76A-475E-9EF5-618C6121ED1A167614infoc; b_lsid=DFBF6551_17FB45E250C; bsource=search_baidu; _uuid=967E76C2-AEA1-8B110-FB99-8425ABA3434C43121infoc; LIVE_BUVID=AUTO1016479985451625; buvid_fp=d2c03acdbde02a5f747fa45978e2213e; buvid4=377A79AA-5113-B55B-B36C-5925BFA3E9E745806-022032309-DsswV1JjVn6AGA18EUjH+g%3D%3D; innersign=0; b_ut=7; i-wanna-go-back=2; PVID=2")
 	resp, err := model.DFClient.Do(req)
 	if err != nil {
+		log.Printf("Bilibili err:%v\n", err)
 		return
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("Bilibili err:%v\n", err)
 		return
 	}
 
 	doc,err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
+		log.Printf("Bilibili err:%v\n", err)
 		return
 	}
 	nodes := htmlquery.Find(doc, "//*[@id=\"app\"]/div/div[2]/div[2]/ul/li/div/div[2]/a")
@@ -150,18 +162,19 @@ func Bilibili()(result []model.Item, err error){
 }
 
 func Acfun()(result []model.Item, err error){
-	// https://www.acfun.cn/rank/list
 	defer wg.Done()
 	url := "https://www.acfun.cn/rest/pc-direct/rank/channel?channelId=&subChannelId=&rankLimit=30&rankPeriod=DAY"
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36")
 	resp, err := model.DFClient.Do(req)
 	if err != nil {
+		log.Printf("Acfun err:%v\n", err)
 		return
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("Acfun err:%v\n", err)
 		return
 	}
 
