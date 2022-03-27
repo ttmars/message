@@ -45,7 +45,7 @@ func RunServer() {
 	// 加载hugo
 	r.Static("/public", "./hugo/site/public/")
 
-	r.GET("/index", func(c *gin.Context) {
+	r.GET("/", func(c *gin.Context) {
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["Weibo"]
