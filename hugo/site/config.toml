@@ -2,6 +2,8 @@ baseURL = '/'
 languageCode = 'en-us'
 title = '留白'
 theme = "hyde"
+disqusShortname = "spf13"
+googleAnalytics = "Your tracking code"
 
 [params]
   themeColor = "theme-base-08"
