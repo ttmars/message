@@ -115,7 +115,7 @@ func RunServer() {
 		c.HTML(200, "juejin.html",tmp)
 	})
 
-	r.Run()
+	r.Run("127.0.0.1:8080")
 }
 
 func PrintM()  {
