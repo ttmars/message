@@ -19,7 +19,7 @@ func Run(){
 	go func() {
 		for {
 			core.Github()
-			time.Sleep(time.Second*300)
+			time.Sleep(time.Second*120)
 		}
 	}()
 	// 其他页面
