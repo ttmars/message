@@ -70,4 +70,5 @@ func F(url string, k string)  {
 		model.M[k] = result[:model.GithubNum]
 		model.M[k] = append(model.M[k], model.Item{Name: "更多", Link: url})
 	}
+	log.Println("github success!!")
 }
