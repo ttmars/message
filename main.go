@@ -22,7 +22,7 @@ func Run(){
 			time.Sleep(time.Second*300)
 		}
 	}()
-	// 其他网站
+	// 其他页面
 	go func() {
 		for {
 			core.GetAll()
