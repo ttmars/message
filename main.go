@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"log"
 	"message/core"
 	"message/model"
@@ -40,8 +42,9 @@ func RunServer() {
 	r := gin.Default()
 
 	// 加载静态文件和模板
+	r.Static("bootstrap/img", "./web/static/bootstrap/img")
 	r.Static("/static/bootstrap", "./web/static/bootstrap")
-	r.LoadHTMLGlob("./web/static/template/*")
+	r.LoadHTMLGlob("./web/static/template/**/*")
 
 	// 加载hugo
 	r.Static("/public", "./hugo/site/public/")
@@ -58,6 +61,17 @@ func RunServer() {
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["Weibo"]
 		c.HTML(200, "content.html",tmp)
+	})
+
+	r.GET("/tool", func(c *gin.Context) {
+		var v model.ToolStruct
+		b,_ := ioutil.ReadFile("./data/tool.txt")
+		err := json.Unmarshal(b, &v)
+		if err != nil{
+			log.Printf("tool err:%v\n", err)
+			return
+		}
+		c.HTML(200, "tool.html",v)
 	})
 
 	r.GET("/csdn", func(c *gin.Context) {
@@ -139,3 +153,5 @@ func PrintM()  {
 		log.Println(k, len(v))
 	}
 }
+
+

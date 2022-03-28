@@ -1,0 +1,81 @@
+{{template "navigation" .}}
+
+{{ define "tool" }}
+	<div class="container-fluid">
+			<div class="row">
+				  <div class="col-xs-0 col-md-2">
+						<!-- <p>留白</p> -->
+				  </div>
+				  
+			      <div class="col-xs-2 col-md-1">
+						<ul class="nav nav-pills nav-stacked">
+						  <li id=""><a href="#kind1">常用</a></li>
+						  <li id=""><a href="#kind2">娱乐</a></li>
+						  <li id=""><a href="#kind3">编程</a></li>
+						  <li id=""><a href="#kind4">博客</a></li>
+						</ul>
+				  </div>
+			      <div class="col-xs-10 col-md-7">
+					  <div class="container-fluid">
+						  
+						  <div id="kind1" class="row">
+							{{ range $k,$v := .Kind1 }}
+							<div class="col-sm-4 col-md-3 ">
+							    <a href="{{$v.Link}}" target="_blank">
+							        <img class="img-circle lazy" src="../../bootstrap/img/link.png" width="30">
+							        <strong>{{$v.Name}}</strong>
+							        <p class="overflowClip_2">{{$v.Description}}</p>
+							    </a>
+							</div>
+							{{end}}
+						  </div>
+						  <br><br>
+						  
+						  <div id="kind2" class="row">
+							{{ range $k,$v := .Kind2 }}
+							<div class="col-sm-4 col-md-3 ">
+								<a href="{{$v.Link}}" target="_blank">
+									<img class="img-circle lazy" src="../../bootstrap/img/link.png" width="30">
+									<strong>{{$v.Name}}</strong>
+									<p class="overflowClip_2">{{$v.Description}}</p>
+								</a>
+							</div>
+							{{end}}
+						  </div>
+						  <br><br>
+						  
+						  <div id="kind3" class="row">
+							{{ range $k,$v := .Kind3 }}
+							<div class="col-sm-4 col-md-3 ">
+								<a href="{{$v.Link}}" target="_blank">
+									<img class="img-circle lazy" src="../../bootstrap/img/link.png" width="30">
+									<strong>{{$v.Name}}</strong>
+									<p class="overflowClip_2">{{$v.Description}}</p>
+								</a>
+							</div>
+							{{end}}
+						  </div>
+						  <br><br>
+						  
+						  <div id="kind4" class="row">
+								{{ range $k,$v := .Kind4 }}
+								<div class="col-sm-4 col-md-3 ">
+									<a href="{{$v.Link}}" target="_blank">
+										<img class="img-circle lazy" src="../../bootstrap/img/link.png" width="30">
+										<strong>{{$v.Name}}</strong>
+										<p class="overflowClip_2">{{$v.Description}}</p>
+									</a>
+								</div>
+								{{end}}
+						  </div>
+						  <br><br>
+						  
+					  </div>
+				  </div>
+				  
+				  <div class="col-xs-0 col-md-2">
+				  		<!-- <p>留白</p>			 -->
+				  </div>
+			</div>
+		</div>
+{{end}}

@@ -1,12 +1,12 @@
-{{template "web/base" .}}
+{{template "base" .}}
 
-{{ define "juejin" }}
+{{ define "kr36" }}
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-4">
-			<b><i style="color: #AC2925;">Triduum</i></b>
+			<b><i style="color: #AC2925;">人气榜</i></b>
 			<div class="list-group">
-			{{ range $k,$v := .Data.Juejin3 }}
+			{{ range $k,$v := .Data.Kr360 }}
 				<a href="{{$v.Link}}" class="list-group-item" target="_blank" style="background-color: whitesmoke;">
 					<span class="badge">{{$v.Badge}}</span>
 					<b><i style="color: #AC2925;">{{$k}}.</i></b>
@@ -17,9 +17,9 @@
 			</div>
 		</div>
 		<div class="col-md-4">
-			<b><i style="color: #AC2925;">Weekly</i></b>
+			<b><i style="color: #AC2925;">综合榜</i></b>
 			<div class="list-group">
-			{{ range $k,$v := .Data.Juejin7 }}
+			{{ range $k,$v := .Data.Kr361 }}
 				<a href="{{$v.Link}}" class="list-group-item" target="_blank" style="background-color: whitesmoke;">
 					<span class="badge">{{$v.Badge}}</span>
 					<b><i style="color: #AC2925;">{{$k}}.</i></b>
@@ -30,9 +30,9 @@
 			</div>
 		</div>
 		<div class="col-md-4">
-			<b><i style="color: #AC2925;">Monthly</i></b>
+			<b><i style="color: #AC2925;">收藏榜</i></b>
 			<div class="list-group">
-			{{ range $k,$v := .Data.Juejin30 }}
+			{{ range $k,$v := .Data.Kr362 }}
 				<a href="{{$v.Link}}" class="list-group-item" target="_blank" style="background-color: whitesmoke;">
 					<span class="badge">{{$v.Badge}}</span>
 					<b><i style="color: #AC2925;">{{$k}}.</i></b>

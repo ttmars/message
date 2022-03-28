@@ -16,6 +16,33 @@ var DFClient = &http.Client{Timeout: time.Second*10}
 var Num = 20
 var GithubNum = 10
 
+type ToolStruct struct {
+	Kind1 []struct {
+		Name        string `json:"name"`
+		Link        string `json:"link"`
+		Description string `json:"description"`
+		Badge       string `json:"badge"`
+	} `json:"kind1"`
+	Kind2 []struct {
+		Name        string `json:"name"`
+		Link        string `json:"link"`
+		Description string `json:"description"`
+		Badge       string `json:"badge"`
+	} `json:"kind2"`
+	Kind3 []struct {
+		Name        string `json:"name"`
+		Link        string `json:"link"`
+		Description string `json:"description"`
+		Badge       string `json:"badge"`
+	} `json:"kind3"`
+	Kind4 []struct {
+		Name        string `json:"name"`
+		Link        string `json:"link"`
+		Description string `json:"description"`
+		Badge       string `json:"badge"`
+	} `json:"kind4"`
+}
+
 type CSDNStruct struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`

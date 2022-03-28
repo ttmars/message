@@ -1,4 +1,4 @@
-{{define "web/base"}}
+{{define "navigation"}}
 <!doctype html>
 <html lang="zh-CN">
   <head>
@@ -30,72 +30,18 @@
 					<ul class="nav navbar-nav">
 						<li id="hot"><a href="/hot">热点</a></li>
 						<li id="public"><a href="/public">目录</a></li>
+						<li id="tool"><a href="/tool">工具</a></li>
 						<li><a href="#">关于</a></li>
 					</ul>
 					<i class="navbar-text navbar-right" style="color: #AC2925;"><b>留一片空白，给以后浓墨重彩</b></i>
 				</div>
-				
 		    </div>
 		</nav>
 	</div>
-	
-    <div class="container-fluid">
-		<div class="row">
-			  <div class="col-xs-0 col-md-2">
-					<!-- <img src="../img/1.jpg" width="100%"> -->
-			  </div>
-			  
-		      <div class="col-xs-2 col-md-1">
-				  <ul class="nav nav-pills nav-stacked">
-				    <li id="weibo"><a href="/weibo">微博</a></li>
-				    <li id="baidu"><a href="/baidu">百度</a></li>
-				    <li id="acfun"><a href="/acfun">A站</a></li>
-					<li id="blbl"><a href="/blbl">B站</a></li>
-					<li id="zhihu"><a href="/zhihu">知乎</a></li>
-					<li id="csdn"><a href="/csdn">CSDN</a></li>
-					<li id="kr36"><a href="/kr36">36氪</a></li>
-					<li id="juejin"><a href="/juejin">掘金</a></li>
-					<li id="github"><a href="/github">GitHub</a></li>
-					<li id="githubGo"><a href="/githubGo">GitHubGo</a></li>
-				  </ul>
-			  </div>
-			  <!-- https://www.liwenzhou.com/posts/Go/go_template/ -->
-		      <div class="col-xs-10 col-md-7">
-				  {{ $v := .Flag }}
-				  
-				  {{ if eq $v 0 }}
-					{{block "content" . }}{{end}}
-				  {{end}}
-				  
-				  {{ if eq $v 1 }}
-				  	{{block "github" . }}{{end}}
-				  {{end}}
-				  
-				  {{ if eq $v 2 }}
-				  	{{block "githubGo" . }}{{end}}
-				  {{end}}
-					
-				  {{ if eq $v 3 }}
-					{{block "juejin" . }}{{end}}
-				  {{end}}
-				  
-				  {{ if eq $v 4 }}
-				  	{{block "kr36" . }}{{end}}
-				  {{end}}
-			  </div>
-			  
-			  <div class="col-xs-0 col-md-2">
-			  					
-			  </div>
-		</div>
-	</div>
-	
-	<!-- <footer class="navbar-fixed-bottom">
-	   <div class="container">
-	     <p>© 2022. All rights reserved. </p>
-	   </div>
-	</footer> -->
 
+	{{block "tool" . }}{{end}}
+	
+	
     <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
     <script src="static/bootstrap/js/jquery.min.js"></script>
     <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
