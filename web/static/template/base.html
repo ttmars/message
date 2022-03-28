@@ -52,6 +52,7 @@
 				    <li id="acfun"><a href="/acfun">A站</a></li>
 					<li id="blbl"><a href="/blbl">B站</a></li>
 					<li id="csdn"><a href="/csdn">CSDN</a></li>
+					<li id="kr36"><a href="/kr36">36氪</a></li>
 					<li id="juejin"><a href="/juejin">掘金</a></li>
 					<li id="github"><a href="/github">GitHub</a></li>
 					<li id="githubGo"><a href="/githubGo">GitHubGo</a></li>
@@ -75,6 +76,10 @@
 					
 				  {{ if eq $v 3 }}
 					{{block "juejin" . }}{{end}}
+				  {{end}}
+				  
+				  {{ if eq $v 4 }}
+				  	{{block "kr36" . }}{{end}}
 				  {{end}}
 			  </div>
 			  

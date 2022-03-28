@@ -27,6 +27,7 @@ func Run(){
 		for {
 			core.GetAll()
 			core.Juejin()
+			core.Kr36()
 			PrintM()
 			time.Sleep(time.Second*60)
 		}
@@ -113,6 +114,13 @@ func RunServer() {
 		tmp["Flag"] = 3
 		tmp["Data"] = model.M
 		c.HTML(200, "juejin.html",tmp)
+	})
+
+	r.GET("/kr36", func(c *gin.Context) {
+		tmp := make(map[string]interface{})
+		tmp["Flag"] = 4
+		tmp["Data"] = model.M
+		c.HTML(200, "kr36.html",tmp)
 	})
 
 	r.Run("127.0.0.1:8080")
