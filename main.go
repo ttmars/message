@@ -67,6 +67,13 @@ func RunServer() {
 		c.HTML(200, "content.html",tmp)
 	})
 
+	r.GET("/zhihu", func(c *gin.Context) {
+		tmp := make(map[string]interface{})
+		tmp["Flag"] = 0
+		tmp["Data"] = model.M["Zhihu"]
+		c.HTML(200, "content.html",tmp)
+	})
+
 	r.GET("/weibo", func(c *gin.Context) {
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0

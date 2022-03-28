@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/antchfx/htmlquery"
+	"io"
 	"io/ioutil"
 	"log"
 	"message/model"
@@ -15,12 +16,13 @@ import (
 var wg = &sync.WaitGroup{}
 
 func GetAll()  {
-	wg.Add(5)
+	wg.Add(6)
 	go Weibo()
 	go Baidu()
 	go Bilibili()
 	go Acfun()
 	go CSDN()
+	go Zhihu()
 	wg.Wait()
 }
 
@@ -76,7 +78,11 @@ func Weibo() (result []model.Item, err error) {
 		log.Printf("Weibo err:%v\n", err)
 		return
 	}
-	nodes := htmlquery.Find(doc, "//*[@id=\"pl_top_realtimehot\"]/table/tbody/tr/td[2]/a")
+	nodes,err := htmlquery.QueryAll(doc, "//*[@id=\"pl_top_realtimehot\"]/table/tbody/tr/td[2]/a")
+	if err != nil {
+		log.Printf("Weibo err:%v\n", err)
+		return
+	}
 	for _,node := range nodes{
 		title := htmlquery.InnerText(node)
 		href := htmlquery.SelectAttr(node, "href")
@@ -112,7 +118,11 @@ func Baidu()(result []model.Item, err error){
 		log.Printf("Baidu err:%v\n", err)
 		return
 	}
-	nodes := htmlquery.Find(doc, "//*[@id=\"sanRoot\"]/main/div[2]/div/div[2]/div/div[2]/a/div[1]")
+	nodes,err := htmlquery.QueryAll(doc, "//*[@id=\"sanRoot\"]/main/div[2]/div/div[2]/div/div[2]/a/div[1]")
+	if err != nil {
+		log.Printf("Baidu err:%v\n", err)
+		return
+	}
 	for _,node := range nodes{
 		title := strings.TrimSpace(htmlquery.InnerText(node))
 		link := htmlquery.SelectAttr(node.Parent, "href")
@@ -148,7 +158,11 @@ func Bilibili()(result []model.Item, err error){
 		log.Printf("Bilibili err:%v\n", err)
 		return
 	}
-	nodes := htmlquery.Find(doc, "//*[@id=\"app\"]/div/div[2]/div[2]/ul/li/div/div[2]/a")
+	nodes,err := htmlquery.QueryAll(doc, "//*[@id=\"app\"]/div/div[2]/div[2]/ul/li/div/div[2]/a")
+	if err != nil {
+		log.Printf("Bilibili err:%v\n", err)
+		return
+	}
 	for _,node := range nodes{
 		title := strings.TrimSpace(htmlquery.InnerText(node))
 		link := "https:" + htmlquery.SelectAttr(node, "href")
@@ -189,5 +203,50 @@ func Acfun()(result []model.Item, err error){
 		model.M["Acfun"] = result[:model.Num]
 	}
 	model.M["Acfun"] = append(model.M["Acfun"], model.Item{Name: "更多", Link: "https://www.acfun.cn/rank/list"})
+	return
+}
+
+func Zhihu()  {
+	defer wg.Done()
+	url := "https://www.zhihu.com/billboard"
+	r,_ := http.NewRequest("GET", url, nil)
+	r.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36")
+	resp,err := http.DefaultClient.Do(r)
+	if err != nil {
+		log.Printf("Zhihu err:%v\n", err)
+		return
+	}
+	defer resp.Body.Close()
+	b,err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("Zhihu err:%v\n", err)
+		return
+	}
+
+	doc,err := htmlquery.Parse(bytes.NewReader(b))
+	if err != nil {
+		log.Printf("Zhihu err:%v\n", err)
+		return
+	}
+	node,err := htmlquery.Query(doc, "//*[@id=\"js-initialData\"]")
+	if err != nil {
+		log.Printf("Zhihu err:%v\n", err)
+		return
+	}
+	bodyText := []byte(htmlquery.InnerText(node))
+
+	v := &model.ZhihuStruct{}
+	err = json.Unmarshal(bodyText, v)
+	var result []model.Item
+	for _,i := range v.InitialState.Topstory.HotList{
+		title := i.Target.TitleArea.Text
+		link := "https://www.zhihu.com/question/" + i.CardID[2:]
+		result = append(result, model.Item{Name: title, Link: link})
+	}
+
+	if len(result) >= model.Num {
+		model.M["Zhihu"] = result[:model.Num]
+	}
+	model.M["Zhihu"] = append(model.M["Zhihu"], model.Item{Name: "更多", Link: url})
 	return
 }

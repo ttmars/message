@@ -339,3 +339,1191 @@ type JuejinStruct struct {
 	Count   int    `json:"count"`
 	HasMore bool   `json:"has_more"`
 }
+
+type ZhihuStruct struct {
+	InitialState struct {
+		Common struct {
+			Ask struct {
+			} `json:"ask"`
+		} `json:"common"`
+		Loading struct {
+			Global struct {
+				Count int `json:"count"`
+			} `json:"global"`
+			Local struct {
+				TopstoryGetHotList bool `json:"topstory/getHotList/"`
+			} `json:"local"`
+		} `json:"loading"`
+		Club struct {
+			Tags struct {
+			} `json:"tags"`
+			Admins struct {
+				Data []interface{} `json:"data"`
+			} `json:"admins"`
+			Members struct {
+				Data []interface{} `json:"data"`
+			} `json:"members"`
+			Explore struct {
+				CandidateSyncClubs struct {
+				} `json:"candidateSyncClubs"`
+			} `json:"explore"`
+			Profile struct {
+			} `json:"profile"`
+			Checkin struct {
+			} `json:"checkin"`
+			Comments struct {
+				Paging struct {
+				} `json:"paging"`
+				Loading struct {
+				} `json:"loading"`
+				Meta struct {
+				} `json:"meta"`
+				Ids struct {
+				} `json:"ids"`
+			} `json:"comments"`
+			PostList struct {
+				Paging struct {
+				} `json:"paging"`
+				Loading struct {
+				} `json:"loading"`
+				Ids struct {
+				} `json:"ids"`
+			} `json:"postList"`
+			Recommend struct {
+				Data []interface{} `json:"data"`
+			} `json:"recommend"`
+			Silences struct {
+				Data []interface{} `json:"data"`
+			} `json:"silences"`
+			Application struct {
+				Profile interface{} `json:"profile"`
+			} `json:"application"`
+		} `json:"club"`
+		Entities struct {
+			Users struct {
+			} `json:"users"`
+			Questions struct {
+			} `json:"questions"`
+			Answers struct {
+			} `json:"answers"`
+			Articles struct {
+			} `json:"articles"`
+			Columns struct {
+			} `json:"columns"`
+			Topics struct {
+			} `json:"topics"`
+			Roundtables struct {
+			} `json:"roundtables"`
+			Favlists struct {
+			} `json:"favlists"`
+			Comments struct {
+			} `json:"comments"`
+			Notifications struct {
+			} `json:"notifications"`
+			Ebooks struct {
+			} `json:"ebooks"`
+			Activities struct {
+			} `json:"activities"`
+			Feeds struct {
+			} `json:"feeds"`
+			Pins struct {
+			} `json:"pins"`
+			Promotions struct {
+			} `json:"promotions"`
+			Drafts struct {
+			} `json:"drafts"`
+			Chats struct {
+			} `json:"chats"`
+			Posts struct {
+			} `json:"posts"`
+			Clubs struct {
+			} `json:"clubs"`
+			ClubTags struct {
+			} `json:"clubTags"`
+			Zvideos struct {
+			} `json:"zvideos"`
+			ZvideoContributions struct {
+			} `json:"zvideoContributions"`
+			Briefs struct {
+			} `json:"briefs"`
+		} `json:"entities"`
+		CurrentUser string `json:"currentUser"`
+		Account     struct {
+			LockLevel struct {
+			} `json:"lockLevel"`
+			UnlockTicketStatus bool          `json:"unlockTicketStatus"`
+			UnlockTicket       interface{}   `json:"unlockTicket"`
+			Challenge          []interface{} `json:"challenge"`
+			ErrorStatus        bool          `json:"errorStatus"`
+			Message            string        `json:"message"`
+			IsFetching         bool          `json:"isFetching"`
+			AccountInfo        struct {
+			} `json:"accountInfo"`
+			URLToken struct {
+				Loading bool `json:"loading"`
+			} `json:"urlToken"`
+			CardUserInfo struct {
+				VipInfo struct {
+				} `json:"vipInfo"`
+			} `json:"cardUserInfo"`
+			HandleWidget struct {
+			} `json:"handleWidget"`
+			WidgetList   []interface{} `json:"widgetList"`
+			UserWidgetID string        `json:"userWidgetId"`
+		} `json:"account"`
+		Settings struct {
+			SocialBind   interface{} `json:"socialBind"`
+			InboxMsg     interface{} `json:"inboxMsg"`
+			Notification struct {
+			} `json:"notification"`
+			Email struct {
+			} `json:"email"`
+			PrivacyFlag  interface{} `json:"privacyFlag"`
+			BlockedUsers struct {
+				IsFetching bool `json:"isFetching"`
+				Paging     struct {
+					PageNo   int `json:"pageNo"`
+					PageSize int `json:"pageSize"`
+				} `json:"paging"`
+				Data []interface{} `json:"data"`
+			} `json:"blockedUsers"`
+			BlockedFollowees struct {
+				IsFetching bool `json:"isFetching"`
+				Paging     struct {
+					PageNo   int `json:"pageNo"`
+					PageSize int `json:"pageSize"`
+				} `json:"paging"`
+				Data []interface{} `json:"data"`
+			} `json:"blockedFollowees"`
+			IgnoredTopics struct {
+				IsFetching bool `json:"isFetching"`
+				Paging     struct {
+					PageNo   int `json:"pageNo"`
+					PageSize int `json:"pageSize"`
+				} `json:"paging"`
+				Data []interface{} `json:"data"`
+			} `json:"ignoredTopics"`
+			RestrictedTopics interface{} `json:"restrictedTopics"`
+			Laboratory       struct {
+			} `json:"laboratory"`
+		} `json:"settings"`
+		Notification struct {
+		} `json:"notification"`
+		People struct {
+			ProfileStatus struct {
+			} `json:"profileStatus"`
+			ActivitiesByUser struct {
+			} `json:"activitiesByUser"`
+			AnswersByUser struct {
+			} `json:"answersByUser"`
+			AnswersSortByVotesByUser struct {
+			} `json:"answersSortByVotesByUser"`
+			AnswersIncludedByUser struct {
+			} `json:"answersIncludedByUser"`
+			VotedAnswersByUser struct {
+			} `json:"votedAnswersByUser"`
+			ThankedAnswersByUser struct {
+			} `json:"thankedAnswersByUser"`
+			VoteAnswersByUser struct {
+			} `json:"voteAnswersByUser"`
+			ThankAnswersByUser struct {
+			} `json:"thankAnswersByUser"`
+			TopicAnswersByUser struct {
+			} `json:"topicAnswersByUser"`
+			ZvideosByUser struct {
+			} `json:"zvideosByUser"`
+			ArticlesByUser struct {
+			} `json:"articlesByUser"`
+			ArticlesSortByVotesByUser struct {
+			} `json:"articlesSortByVotesByUser"`
+			ArticlesIncludedByUser struct {
+			} `json:"articlesIncludedByUser"`
+			PinsByUser struct {
+			} `json:"pinsByUser"`
+			QuestionsByUser struct {
+			} `json:"questionsByUser"`
+			CommercialQuestionsByUser struct {
+			} `json:"commercialQuestionsByUser"`
+			FavlistsByUser struct {
+			} `json:"favlistsByUser"`
+			FollowingByUser struct {
+			} `json:"followingByUser"`
+			FollowersByUser struct {
+			} `json:"followersByUser"`
+			MutualsByUser struct {
+			} `json:"mutualsByUser"`
+			FollowingColumnsByUser struct {
+			} `json:"followingColumnsByUser"`
+			FollowingQuestionsByUser struct {
+			} `json:"followingQuestionsByUser"`
+			FollowingFavlistsByUser struct {
+			} `json:"followingFavlistsByUser"`
+			FollowingTopicsByUser struct {
+			} `json:"followingTopicsByUser"`
+			PublicationsByUser struct {
+			} `json:"publicationsByUser"`
+			ColumnsByUser struct {
+			} `json:"columnsByUser"`
+			AllFavlistsByUser struct {
+			} `json:"allFavlistsByUser"`
+			Brands          interface{} `json:"brands"`
+			CreationsByUser struct {
+			} `json:"creationsByUser"`
+			CreationsSortByVotesByUser struct {
+			} `json:"creationsSortByVotesByUser"`
+			CreationsFeed struct {
+			} `json:"creationsFeed"`
+			Infinity struct {
+			} `json:"infinity"`
+			BatchUsers struct {
+			} `json:"batchUsers"`
+			ProfileInfinity interface{} `json:"profileInfinity"`
+		} `json:"people"`
+		Env struct {
+			Ab struct {
+				Config struct {
+					Experiments []struct {
+						ExpID                string `json:"expId"`
+						ExpPrefix            string `json:"expPrefix"`
+						IsDynamicallyUpdated bool   `json:"isDynamicallyUpdated"`
+						IsRuntime            bool   `json:"isRuntime"`
+						IncludeTriggerInfo   bool   `json:"includeTriggerInfo"`
+					} `json:"experiments"`
+					Params []struct {
+						ID      string `json:"id"`
+						Type    string `json:"type"`
+						Value   string `json:"value"`
+						ChainID string `json:"chainId,omitempty"`
+						LayerID string `json:"layerId"`
+						Key     int    `json:"key,omitempty"`
+					} `json:"params"`
+					Chains []struct {
+						ChainID string `json:"chainId"`
+					} `json:"chains"`
+					EncodedParams string `json:"encodedParams"`
+				} `json:"config"`
+				Triggers struct {
+				} `json:"triggers"`
+			} `json:"ab"`
+			UserAgent struct {
+				Edge             bool   `json:"Edge"`
+				IE               bool   `json:"IE"`
+				Wechat           bool   `json:"Wechat"`
+				Weibo            bool   `json:"Weibo"`
+				QQ               bool   `json:"QQ"`
+				MQQBrowser       bool   `json:"MQQBrowser"`
+				Qzone            bool   `json:"Qzone"`
+				Mobile           bool   `json:"Mobile"`
+				Android          bool   `json:"Android"`
+				IOS              bool   `json:"iOS"`
+				IsAppleDevice    bool   `json:"isAppleDevice"`
+				Zhihu            bool   `json:"Zhihu"`
+				ZhihuHybrid      bool   `json:"ZhihuHybrid"`
+				IsBot            bool   `json:"isBot"`
+				Tablet           bool   `json:"Tablet"`
+				UC               bool   `json:"UC"`
+				Quark            bool   `json:"Quark"`
+				Sogou            bool   `json:"Sogou"`
+				Qihoo            bool   `json:"Qihoo"`
+				Baidu            bool   `json:"Baidu"`
+				BaiduApp         bool   `json:"BaiduApp"`
+				Safari           bool   `json:"Safari"`
+				GoogleBot        bool   `json:"GoogleBot"`
+				AndroidDaily     bool   `json:"AndroidDaily"`
+				IOSDaily         bool   `json:"iOSDaily"`
+				WxMiniProgram    bool   `json:"WxMiniProgram"`
+				BaiduMiniProgram bool   `json:"BaiduMiniProgram"`
+				QQMiniProgram    bool   `json:"QQMiniProgram"`
+				JDMiniProgram    bool   `json:"JDMiniProgram"`
+				IsWebView        bool   `json:"isWebView"`
+				IsMiniProgram    bool   `json:"isMiniProgram"`
+				Origin           string `json:"origin"`
+			} `json:"userAgent"`
+			AppViewConfig struct {
+			} `json:"appViewConfig"`
+			Ctx struct {
+				Path  string `json:"path"`
+				Query struct {
+				} `json:"query"`
+				Href string `json:"href"`
+				Host string `json:"host"`
+			} `json:"ctx"`
+			TrafficSource string `json:"trafficSource"`
+			Edition       struct {
+				Beijing      bool `json:"beijing"`
+				Baidu        bool `json:"baidu"`
+				Sogou        bool `json:"sogou"`
+				BaiduBeijing bool `json:"baiduBeijing"`
+				SogouBeijing bool `json:"sogouBeijing"`
+				SogouInput   bool `json:"sogouInput"`
+				BaiduSearch  bool `json:"baiduSearch"`
+				GoogleSearch bool `json:"googleSearch"`
+				Shenma       bool `json:"shenma"`
+				MiniProgram  bool `json:"miniProgram"`
+				Xiaomi       bool `json:"xiaomi"`
+			} `json:"edition"`
+			Theme          string `json:"theme"`
+			AppHeaderTheme struct {
+				Current string `json:"current"`
+				Disable bool   `json:"disable"`
+				Normal  struct {
+					BgColor string `json:"bgColor"`
+				} `json:"normal"`
+				Custom struct {
+					BgColor string `json:"bgColor"`
+				} `json:"custom"`
+			} `json:"appHeaderTheme"`
+			EnableShortcut bool   `json:"enableShortcut"`
+			Referer        string `json:"referer"`
+			XUDID          string `json:"xUDId"`
+			Mode           string `json:"mode"`
+			Conf           struct {
+			} `json:"conf"`
+			XTrafficFreeOrigin string `json:"xTrafficFreeOrigin"`
+			IPInfo             struct {
+			} `json:"ipInfo"`
+			Logged bool `json:"logged"`
+			Vars   struct {
+				PassThroughHeaders struct {
+				} `json:"passThroughHeaders"`
+			} `json:"vars"`
+		} `json:"env"`
+		Me struct {
+			ColumnContributions []interface{} `json:"columnContributions"`
+		} `json:"me"`
+		Label struct {
+			RecognizerLists struct {
+			} `json:"recognizerLists"`
+		} `json:"label"`
+		Ecommerce struct {
+		} `json:"ecommerce"`
+		Favlists struct {
+			Relations struct {
+			} `json:"relations"`
+		} `json:"favlists"`
+		Question struct {
+			Followers struct {
+			} `json:"followers"`
+			ConcernedFollowers struct {
+			} `json:"concernedFollowers"`
+			Answers struct {
+			} `json:"answers"`
+			HiddenAnswers struct {
+			} `json:"hiddenAnswers"`
+			UpdatedAnswers struct {
+			} `json:"updatedAnswers"`
+			AriaAnswers struct {
+			} `json:"ariaAnswers"`
+			CollapsedAnswers struct {
+			} `json:"collapsedAnswers"`
+			NotificationAnswers struct {
+			} `json:"notificationAnswers"`
+			InvitedQuestions struct {
+				Total struct {
+					Count     interface{}   `json:"count"`
+					IsEnd     bool          `json:"isEnd"`
+					IsLoading bool          `json:"isLoading"`
+					Questions []interface{} `json:"questions"`
+				} `json:"total"`
+				Followees struct {
+					Count     interface{}   `json:"count"`
+					IsEnd     bool          `json:"isEnd"`
+					IsLoading bool          `json:"isLoading"`
+					Questions []interface{} `json:"questions"`
+				} `json:"followees"`
+			} `json:"invitedQuestions"`
+			LaterQuestions struct {
+				Count     interface{}   `json:"count"`
+				IsEnd     bool          `json:"isEnd"`
+				IsLoading bool          `json:"isLoading"`
+				Questions []interface{} `json:"questions"`
+			} `json:"laterQuestions"`
+			WaitingQuestions struct {
+				Recommend struct {
+					IsEnd     bool          `json:"isEnd"`
+					IsLoading bool          `json:"isLoading"`
+					Questions []interface{} `json:"questions"`
+				} `json:"recommend"`
+				Invite struct {
+					IsEnd     bool          `json:"isEnd"`
+					IsLoading bool          `json:"isLoading"`
+					Questions []interface{} `json:"questions"`
+				} `json:"invite"`
+				Newest struct {
+					IsEnd     bool          `json:"isEnd"`
+					IsLoading bool          `json:"isLoading"`
+					Questions []interface{} `json:"questions"`
+				} `json:"newest"`
+				Hot struct {
+					IsEnd     bool          `json:"isEnd"`
+					IsLoading bool          `json:"isLoading"`
+					Questions []interface{} `json:"questions"`
+				} `json:"hot"`
+			} `json:"waitingQuestions"`
+			InvitationCandidates struct {
+			} `json:"invitationCandidates"`
+			Inviters struct {
+			} `json:"inviters"`
+			Invitees struct {
+			} `json:"invitees"`
+			SimilarQuestions struct {
+			} `json:"similarQuestions"`
+			QuestionBanners struct {
+			} `json:"questionBanners"`
+			RelatedCommodities struct {
+			} `json:"relatedCommodities"`
+			Bio struct {
+			} `json:"bio"`
+			Brand struct {
+			} `json:"brand"`
+			Permission struct {
+			} `json:"permission"`
+			Adverts struct {
+			} `json:"adverts"`
+			AdvancedStyle struct {
+			} `json:"advancedStyle"`
+			CommonAnswerCount int `json:"commonAnswerCount"`
+			HiddenAnswerCount int `json:"hiddenAnswerCount"`
+			TopicMeta         struct {
+			} `json:"topicMeta"`
+			BluestarRanklist struct {
+			} `json:"bluestarRanklist"`
+			RelatedSearch struct {
+			} `json:"relatedSearch"`
+			AutoInvitation struct {
+			} `json:"autoInvitation"`
+			SimpleConcernedFollowers struct {
+			} `json:"simpleConcernedFollowers"`
+			DraftStatus struct {
+			} `json:"draftStatus"`
+			Disclaimers struct {
+			} `json:"disclaimers"`
+			IsShowMobileSignInModal bool `json:"isShowMobileSignInModal"`
+			ModalShowCondition      struct {
+			} `json:"modalShowCondition"`
+		} `json:"question"`
+		Banner struct {
+		} `json:"banner"`
+		Comments struct {
+			Pagination struct {
+			} `json:"pagination"`
+			Collapsed struct {
+			} `json:"collapsed"`
+			Reverse struct {
+			} `json:"reverse"`
+			Reviewing struct {
+			} `json:"reviewing"`
+			Conversation struct {
+			} `json:"conversation"`
+			Parent struct {
+			} `json:"parent"`
+		} `json:"comments"`
+		CommentsV2 struct {
+			Stickers                 []interface{} `json:"stickers"`
+			CommentWithPicPermission struct {
+			} `json:"commentWithPicPermission"`
+			NotificationsComments struct {
+			} `json:"notificationsComments"`
+			Pagination struct {
+			} `json:"pagination"`
+			Collapsed struct {
+			} `json:"collapsed"`
+			Reverse struct {
+			} `json:"reverse"`
+			Reviewing struct {
+			} `json:"reviewing"`
+			Conversation struct {
+			} `json:"conversation"`
+			ConversationMore struct {
+			} `json:"conversationMore"`
+			Parent struct {
+			} `json:"parent"`
+		} `json:"commentsV2"`
+		Answers struct {
+			Voters struct {
+			} `json:"voters"`
+			CopyrightApplicants struct {
+			} `json:"copyrightApplicants"`
+			Favlists struct {
+			} `json:"favlists"`
+			NewAnswer struct {
+			} `json:"newAnswer"`
+			EntityWords struct {
+			} `json:"entityWords"`
+			ConcernedUpvoters struct {
+			} `json:"concernedUpvoters"`
+			SimpleConcernedUpvoters struct {
+			} `json:"simpleConcernedUpvoters"`
+			PaidContent struct {
+			} `json:"paidContent"`
+			Settings struct {
+			} `json:"settings"`
+		} `json:"answers"`
+		Switches struct {
+		} `json:"switches"`
+		Video struct {
+			Data struct {
+			} `json:"data"`
+			ShareVideoDetail struct {
+			} `json:"shareVideoDetail"`
+			Last struct {
+			} `json:"last"`
+		} `json:"video"`
+		Sms struct {
+			SupportedCountries []interface{} `json:"supportedCountries"`
+		} `json:"sms"`
+		Daily struct {
+		} `json:"daily"`
+		Explore struct {
+			Recommendations struct {
+			} `json:"recommendations"`
+			Specials struct {
+				Entities struct {
+				} `json:"entities"`
+				Order []interface{} `json:"order"`
+			} `json:"specials"`
+			Roundtables struct {
+				Entities struct {
+				} `json:"entities"`
+				Order []interface{} `json:"order"`
+			} `json:"roundtables"`
+			Collections struct {
+			} `json:"collections"`
+			Columns struct {
+			} `json:"columns"`
+			Square struct {
+				HotQuestionList []interface{} `json:"hotQuestionList"`
+				PotentialList   []interface{} `json:"potentialList"`
+			} `json:"square"`
+		} `json:"explore"`
+		RelatedReadings struct {
+		} `json:"relatedReadings"`
+		HotQuestions struct {
+		} `json:"hotQuestions"`
+		PushNotifications struct {
+			Default struct {
+				IsFetching bool          `json:"isFetching"`
+				IsDrained  bool          `json:"isDrained"`
+				Ids        []interface{} `json:"ids"`
+			} `json:"default"`
+			Follow struct {
+				IsFetching bool          `json:"isFetching"`
+				IsDrained  bool          `json:"isDrained"`
+				Ids        []interface{} `json:"ids"`
+			} `json:"follow"`
+			VoteThank struct {
+				IsFetching bool          `json:"isFetching"`
+				IsDrained  bool          `json:"isDrained"`
+				Ids        []interface{} `json:"ids"`
+			} `json:"vote_thank"`
+			CurrentTab         string `json:"currentTab"`
+			NotificationsCount struct {
+				Default   int `json:"default"`
+				Follow    int `json:"follow"`
+				VoteThank int `json:"vote_thank"`
+			} `json:"notificationsCount"`
+		} `json:"pushNotifications"`
+		Messages struct {
+			Data struct {
+			} `json:"data"`
+			CurrentTab   string `json:"currentTab"`
+			MessageCount int    `json:"messageCount"`
+		} `json:"messages"`
+		Pins struct {
+			Reviewing struct {
+			} `json:"reviewing"`
+		} `json:"pins"`
+		Pin struct {
+			Pin      interface{}   `json:"pin"`
+			Brief    interface{}   `json:"brief"`
+			Author   interface{}   `json:"author"`
+			Comments []interface{} `json:"comments"`
+			Pins     struct {
+			} `json:"pins"`
+			Special struct {
+			} `json:"special"`
+			Daily struct {
+			} `json:"daily"`
+			Topic struct {
+			} `json:"topic"`
+			TopicFeeds struct {
+				Data      []interface{} `json:"data"`
+				IsLoading bool          `json:"isLoading"`
+				Paging    struct {
+				} `json:"paging"`
+			} `json:"topicFeeds"`
+		} `json:"pin"`
+		Captcha struct {
+			CaptchaNeeded            bool        `json:"captchaNeeded"`
+			CaptchaValidated         bool        `json:"captchaValidated"`
+			CaptchaBase64String      interface{} `json:"captchaBase64String"`
+			CaptchaValidationMessage interface{} `json:"captchaValidationMessage"`
+			LoginCaptchaExpires      bool        `json:"loginCaptchaExpires"`
+		} `json:"captcha"`
+		Login struct {
+			LoginUnregisteredError    bool        `json:"loginUnregisteredError"`
+			LoginBindWechatError      bool        `json:"loginBindWechatError"`
+			LoginConfirmError         interface{} `json:"loginConfirmError"`
+			SendDigitsError           interface{} `json:"sendDigitsError"`
+			NeedSMSIdentify           bool        `json:"needSMSIdentify"`
+			ValidateDigitsError       bool        `json:"validateDigitsError"`
+			LoginConfirmSucceeded     interface{} `json:"loginConfirmSucceeded"`
+			QrcodeLoginToken          string      `json:"qrcodeLoginToken"`
+			QrcodeLoginScanStatus     int         `json:"qrcodeLoginScanStatus"`
+			QrcodeLoginError          interface{} `json:"qrcodeLoginError"`
+			QrcodeLoginReturnNewToken bool        `json:"qrcodeLoginReturnNewToken"`
+		} `json:"login"`
+		Register struct {
+			RegisterValidateSucceeded interface{} `json:"registerValidateSucceeded"`
+			RegisterValidateErrors    struct {
+			} `json:"registerValidateErrors"`
+			RegisterConfirmError     interface{} `json:"registerConfirmError"`
+			SendDigitsError          interface{} `json:"sendDigitsError"`
+			RegisterConfirmSucceeded interface{} `json:"registerConfirmSucceeded"`
+		} `json:"register"`
+		Topic struct {
+			Bios struct {
+			} `json:"bios"`
+			Hot struct {
+			} `json:"hot"`
+			Newest struct {
+			} `json:"newest"`
+			Top struct {
+			} `json:"top"`
+			Unanswered struct {
+			} `json:"unanswered"`
+			Questions struct {
+			} `json:"questions"`
+			Followers struct {
+			} `json:"followers"`
+			Contributors struct {
+			} `json:"contributors"`
+			Parent struct {
+			} `json:"parent"`
+			Children struct {
+			} `json:"children"`
+			BestAnswerers struct {
+			} `json:"bestAnswerers"`
+			WikiMeta struct {
+			} `json:"wikiMeta"`
+			Index struct {
+			} `json:"index"`
+			Intro struct {
+			} `json:"intro"`
+			Meta struct {
+			} `json:"meta"`
+			Schema struct {
+			} `json:"schema"`
+			CreatorWall struct {
+			} `json:"creatorWall"`
+			WikiEditInfo struct {
+			} `json:"wikiEditInfo"`
+			CommittedWiki struct {
+			} `json:"committedWiki"`
+			LandingBasicData struct {
+			} `json:"landingBasicData"`
+			LandingExcellentItems   []interface{} `json:"landingExcellentItems"`
+			LandingExcellentEditors []interface{} `json:"landingExcellentEditors"`
+			LandingCatalog          []interface{} `json:"landingCatalog"`
+			LandingEntries          struct {
+			} `json:"landingEntries"`
+		} `json:"topic"`
+		Drama struct {
+		} `json:"drama"`
+		Topstory struct {
+			Recommend struct {
+				IsFetching bool          `json:"isFetching"`
+				IsDrained  bool          `json:"isDrained"`
+				AfterID    int           `json:"afterId"`
+				Items      []interface{} `json:"items"`
+				Next       interface{}   `json:"next"`
+			} `json:"recommend"`
+			Follow struct {
+				IsFetching bool          `json:"isFetching"`
+				IsDrained  bool          `json:"isDrained"`
+				AfterID    int           `json:"afterId"`
+				Items      []interface{} `json:"items"`
+				Next       interface{}   `json:"next"`
+			} `json:"follow"`
+			Room struct {
+				Meta struct {
+				} `json:"meta"`
+				IsFetching bool          `json:"isFetching"`
+				AfterID    int           `json:"afterId"`
+				Items      []interface{} `json:"items"`
+				Next       interface{}   `json:"next"`
+			} `json:"room"`
+			FollowWonderful struct {
+				IsFetching bool          `json:"isFetching"`
+				IsDrained  bool          `json:"isDrained"`
+				AfterID    int           `json:"afterId"`
+				Items      []interface{} `json:"items"`
+				Next       interface{}   `json:"next"`
+			} `json:"followWonderful"`
+			Sidebar      interface{} `json:"sidebar"`
+			Announcement struct {
+			} `json:"announcement"`
+			HotList []struct {
+				Type         string `json:"type"`
+				StyleType    string `json:"styleType"`
+				ID           string `json:"id"`
+				CardID       string `json:"cardId"`
+				FeedSpecific struct {
+					AnswerCount int `json:"answerCount"`
+				} `json:"feedSpecific"`
+				Target struct {
+					TitleArea struct {
+						Text string `json:"text"`
+					} `json:"titleArea"`
+					ExcerptArea struct {
+						Text string `json:"text"`
+					} `json:"excerptArea"`
+					ImageArea struct {
+						URL string `json:"url"`
+					} `json:"imageArea"`
+					MetricsArea struct {
+						Text string `json:"text"`
+					} `json:"metricsArea"`
+					LabelArea struct {
+						Type        string `json:"type"`
+						Trend       int    `json:"trend"`
+						NightColor  string `json:"nightColor"`
+						NormalColor string `json:"normalColor"`
+					} `json:"labelArea"`
+					Link struct {
+						URL string `json:"url"`
+					} `json:"link"`
+				} `json:"target"`
+				AttachedInfo string `json:"attachedInfo"`
+			} `json:"hotList"`
+			GuestFeeds struct {
+				IsFetching bool          `json:"isFetching"`
+				IsDrained  bool          `json:"isDrained"`
+				AfterID    int           `json:"afterId"`
+				Items      []interface{} `json:"items"`
+				Next       interface{}   `json:"next"`
+			} `json:"guestFeeds"`
+			FollowExtra struct {
+				IsNewUser   interface{}   `json:"isNewUser"`
+				IsFetched   bool          `json:"isFetched"`
+				FollowCount int           `json:"followCount"`
+				Followers   []interface{} `json:"followers"`
+			} `json:"followExtra"`
+			HotDaily struct {
+				Data   []interface{} `json:"data"`
+				Paging struct {
+				} `json:"paging"`
+			} `json:"hotDaily"`
+			HotHighlight struct {
+				IsFetching bool          `json:"isFetching"`
+				IsDrained  bool          `json:"isDrained"`
+				Data       []interface{} `json:"data"`
+				Paging     struct {
+				} `json:"paging"`
+			} `json:"hotHighlight"`
+			Banner struct {
+			} `json:"banner"`
+			CommercialBanner struct {
+				Show   bool `json:"show"`
+				Banner struct {
+				} `json:"banner"`
+				TrackData struct {
+				} `json:"trackData"`
+			} `json:"commercialBanner"`
+			Video struct {
+				Items     []interface{} `json:"items"`
+				Next      interface{}   `json:"next"`
+				IsLoading bool          `json:"isLoading"`
+				IsDrained bool          `json:"isDrained"`
+			} `json:"video"`
+		} `json:"topstory"`
+		Search struct {
+			RecommendSearch []interface{} `json:"recommendSearch"`
+			TopSearch       struct {
+			} `json:"topSearch"`
+			SearchValue struct {
+			} `json:"searchValue"`
+			SuggestSearch struct {
+			} `json:"suggestSearch"`
+			AttachedInfo struct {
+				GeneralByQuery struct {
+				} `json:"generalByQuery"`
+			} `json:"attachedInfo"`
+			NextOffset struct {
+				GeneralByQuery struct {
+				} `json:"generalByQuery"`
+			} `json:"nextOffset"`
+			TopicReview struct {
+			} `json:"topicReview"`
+			Calendar struct {
+			} `json:"calendar"`
+			Scores interface{} `json:"scores"`
+			Majors struct {
+			} `json:"majors"`
+			University struct {
+			} `json:"university"`
+			GeneralByQuery struct {
+			} `json:"generalByQuery"`
+			GeneralByQueryInADay struct {
+			} `json:"generalByQueryInADay"`
+			GeneralByQueryInAWeek struct {
+			} `json:"generalByQueryInAWeek"`
+			GeneralByQueryInThreeMonths struct {
+			} `json:"generalByQueryInThreeMonths"`
+			PeopleByQuery struct {
+			} `json:"peopleByQuery"`
+			ClubentityByQuery struct {
+			} `json:"clubentityByQuery"`
+			ClubPostByQuery struct {
+			} `json:"clubPostByQuery"`
+			TopicByQuery struct {
+			} `json:"topicByQuery"`
+			ZvideoByQuery struct {
+			} `json:"zvideoByQuery"`
+			ScholarByQuery struct {
+			} `json:"scholarByQuery"`
+			ColumnByQuery struct {
+			} `json:"columnByQuery"`
+			LiveByQuery struct {
+			} `json:"liveByQuery"`
+			AlbumByQuery struct {
+			} `json:"albumByQuery"`
+			EBookByQuery struct {
+			} `json:"eBookByQuery"`
+			KmGeneralByQuery struct {
+			} `json:"kmGeneralByQuery"`
+			KmCourseByQuery struct {
+			} `json:"kmCourseByQuery"`
+			CustomFilter struct {
+				Keys []interface{} `json:"keys"`
+				Tags []interface{} `json:"tags"`
+			} `json:"customFilter"`
+		} `json:"search"`
+		Story struct {
+		} `json:"story"`
+		Spread struct {
+			SpreadData struct {
+			} `json:"spreadData"`
+		} `json:"spread"`
+		Gift struct {
+			GotStatus    bool   `json:"gotStatus"`
+			Participated bool   `json:"participated"`
+			IsSuccess    bool   `json:"isSuccess"`
+			PhoneNo      string `json:"phoneNo"`
+		} `json:"gift"`
+		InterestZone struct {
+			InterestZone []interface{} `json:"interestZone"`
+			FeedsList    struct {
+			} `json:"feedsList"`
+		} `json:"interestZone"`
+		VideoTopic struct {
+			TopData struct {
+			} `json:"topData"`
+			Data      []interface{} `json:"data"`
+			IsLoading bool          `json:"isLoading"`
+			IsDrained bool          `json:"isDrained"`
+			Next      string        `json:"next"`
+		} `json:"videoTopic"`
+		ReadStatus struct {
+		} `json:"readStatus"`
+		News struct {
+			Special struct {
+				Topic struct {
+				} `json:"topic"`
+				BgItems       []interface{} `json:"bgItems"`
+				InDepthModule struct {
+				} `json:"inDepthModule"`
+				PinItems   []interface{} `json:"pinItems"`
+				ShowButton bool          `json:"showButton"`
+			} `json:"special"`
+		} `json:"news"`
+		ThemeColors struct {
+		} `json:"themeColors"`
+		Creator struct {
+			CurrentCreatorURLToken interface{} `json:"currentCreatorUrlToken"`
+			HomeData               struct {
+				RecommendQuestions []interface{} `json:"recommendQuestions"`
+			} `json:"homeData"`
+			Tools struct {
+				Question struct {
+					InvitationCount struct {
+						QuestionFolloweeCount int `json:"questionFolloweeCount"`
+						QuestionTotalCount    int `json:"questionTotalCount"`
+					} `json:"invitationCount"`
+					GoodatTopics []interface{} `json:"goodatTopics"`
+				} `json:"question"`
+				CustomPromotion struct {
+					ItemLists struct {
+					} `json:"itemLists"`
+				} `json:"customPromotion"`
+				Recommend struct {
+					RecommendTimes struct {
+					} `json:"recommendTimes"`
+				} `json:"recommend"`
+			} `json:"tools"`
+			Explore struct {
+				Academy struct {
+					Tabs    []interface{} `json:"tabs"`
+					Article struct {
+					} `json:"article"`
+				} `json:"academy"`
+			} `json:"explore"`
+			Rights       []interface{} `json:"rights"`
+			NewRights    []interface{} `json:"newRights"`
+			RightsStatus struct {
+			} `json:"rightsStatus"`
+			LevelUpperLimit int `json:"levelUpperLimit"`
+			Account         struct {
+				GrowthLevel struct {
+				} `json:"growthLevel"`
+			} `json:"account"`
+			Mcn struct {
+			} `json:"mcn"`
+			ApplyStatus struct {
+			} `json:"applyStatus"`
+			VideoSupport struct {
+			} `json:"videoSupport"`
+			TextBenefit struct {
+			} `json:"textBenefit"`
+			McnManage struct {
+			} `json:"mcnManage"`
+			Tasks struct {
+			} `json:"tasks"`
+			NewTasks   []interface{} `json:"newTasks"`
+			NewTaskDes []interface{} `json:"newTaskDes"`
+			ScoreInfo  struct {
+			} `json:"scoreInfo"`
+			RecentlyCreated []interface{} `json:"recentlyCreated"`
+			Analysis        struct {
+				All struct {
+				} `json:"all"`
+				Answer struct {
+				} `json:"answer"`
+				Zvideo struct {
+				} `json:"zvideo"`
+				Article struct {
+				} `json:"article"`
+				Pin struct {
+				} `json:"pin"`
+				SingleContent struct {
+				} `json:"singleContent"`
+			} `json:"analysis"`
+			Announcement struct {
+			} `json:"announcement"`
+			BannerList []interface{} `json:"bannerList"`
+			School     struct {
+				Tabs     []interface{} `json:"tabs"`
+				Contents []interface{} `json:"contents"`
+				Banner   interface{}   `json:"banner"`
+				Entities struct {
+				} `json:"entities"`
+			} `json:"school"`
+			CreatorsRecommendInfo struct {
+			} `json:"creatorsRecommendInfo"`
+			MenusShowControlByServer struct {
+				BVipRecomend         bool `json:"bVipRecomend"`
+				CreationRelationship bool `json:"creationRelationship"`
+			} `json:"menusShowControlByServer"`
+			Income struct {
+				Aggregation struct {
+				} `json:"aggregation"`
+			} `json:"income"`
+		} `json:"creator"`
+		CreationRanking struct {
+		} `json:"creationRanking"`
+		CreatorSalt struct {
+			RecommendQuestionList []interface{} `json:"recommendQuestionList"`
+			BannerList            []interface{} `json:"bannerList"`
+			ClaimBannerList       []interface{} `json:"claimBannerList"`
+			Sites                 []interface{} `json:"sites"`
+			Domains               struct {
+			} `json:"domains"`
+			HasRecored             bool          `json:"hasRecored"`
+			HasClaim               bool          `json:"hasClaim"`
+			HasContributedList     []interface{} `json:"hasContributedList"`
+			NotContributedList     []interface{} `json:"notContributedList"`
+			ContributesTotal       interface{}   `json:"contributesTotal"`
+			PreviewPageTitle       string        `json:"previewPageTitle"`
+			PreviewPageContent     string        `json:"previewPageContent"`
+			RestContributionNumber string        `json:"restContributionNumber"`
+		} `json:"creatorSalt"`
+		Emoticons struct {
+			EmoticonGroupList   []interface{} `json:"emoticonGroupList"`
+			EmoticonGroupDetail struct {
+			} `json:"emoticonGroupDetail"`
+		} `json:"emoticons"`
+		Authorize struct {
+		} `json:"authorize"`
+		Theater struct {
+			Account struct {
+				SaltBalance  int           `json:"saltBalance"`
+				CoinBalance  int           `json:"coinBalance"`
+				FishBalance  int           `json:"fishBalance"`
+				GiftReserves []interface{} `json:"giftReserves"`
+			} `json:"account"`
+			Activity struct {
+				Activities struct {
+				} `json:"activities"`
+			} `json:"activity"`
+			SideFeeds struct {
+			} `json:"sideFeeds"`
+			Debates struct {
+				Data            []interface{} `json:"data"`
+				LastDebateApply struct {
+				} `json:"lastDebateApply"`
+			} `json:"debates"`
+			Theaters struct {
+			} `json:"theaters"`
+			FinishInfos struct {
+			} `json:"finishInfos"`
+			Forecasts struct {
+			} `json:"forecasts"`
+			Messages struct {
+			} `json:"messages"`
+			ActorApply struct {
+				IsAuditing bool `json:"isAuditing"`
+			} `json:"actorApply"`
+			DramaCategories struct {
+				CategoriesData []interface{} `json:"categoriesData"`
+			} `json:"dramaCategories"`
+			DramaFeeds struct {
+			} `json:"dramaFeeds"`
+			DramaGifts struct {
+				Data []interface{} `json:"data"`
+				Tabs []interface{} `json:"tabs"`
+			} `json:"dramaGifts"`
+			GrowTask struct {
+			} `json:"growTask"`
+		} `json:"theater"`
+		Ranking struct {
+		} `json:"ranking"`
+		KnowledgePlan struct {
+			Lists struct {
+			} `json:"lists"`
+			AllCreationRankList struct {
+			} `json:"allCreationRankList"`
+			FeaturedQuestions struct {
+			} `json:"featuredQuestions"`
+		} `json:"knowledgePlan"`
+		Topsearch struct {
+		} `json:"topsearch"`
+		Collections struct {
+			Hot struct {
+				Data   []interface{} `json:"data"`
+				Paging struct {
+				} `json:"paging"`
+				IsLoading bool `json:"isLoading"`
+			} `json:"hot"`
+			CollectionFeeds struct {
+			} `json:"collectionFeeds"`
+		} `json:"collections"`
+		SearchSpecial struct {
+			Contents   []interface{} `json:"contents"`
+			Navigators []interface{} `json:"navigators"`
+		} `json:"searchSpecial"`
+		Liveplus struct {
+		} `json:"liveplus"`
+		WallE struct {
+			ProtectHistory struct {
+				Total int `json:"total"`
+				Pages struct {
+				} `json:"pages"`
+				Entities struct {
+				} `json:"entities"`
+			} `json:"protectHistory"`
+		} `json:"wallE"`
+		CommentManage struct {
+			CommentList struct {
+				Ids      []interface{} `json:"ids"`
+				Entities struct {
+				} `json:"entities"`
+				NextOffset int    `json:"nextOffset"`
+				URLToken   string `json:"urlToken"`
+			} `json:"commentList"`
+			SubCommentList struct {
+				Ids      []interface{} `json:"ids"`
+				Entities struct {
+				} `json:"entities"`
+				Paging struct {
+					Next  string `json:"next"`
+					IsEnd bool   `json:"isEnd"`
+				} `json:"paging"`
+			} `json:"subCommentList"`
+		} `json:"commentManage"`
+		ZhiPlus struct {
+			PermissionStatus int `json:"permissionStatus"`
+		} `json:"zhiPlus"`
+		Zvideos struct {
+			CampaignVideoList struct {
+			} `json:"campaignVideoList"`
+			Campaigns struct {
+			} `json:"campaigns"`
+			TagoreCategory  []interface{} `json:"tagoreCategory"`
+			Recommendations struct {
+			} `json:"recommendations"`
+			Insertable struct {
+			} `json:"insertable"`
+			Recruit struct {
+				Form struct {
+					Platform      string `json:"platform"`
+					Nickname      string `json:"nickname"`
+					FollowerCount string `json:"followerCount"`
+					Domain        string `json:"domain"`
+					Contact       string `json:"contact"`
+				} `json:"form"`
+				Submited bool          `json:"submited"`
+				Ranking  []interface{} `json:"ranking"`
+			} `json:"recruit"`
+			Club struct {
+			} `json:"club"`
+			QyActivityData struct {
+			} `json:"qyActivityData"`
+			TalkActivityData struct {
+			} `json:"talkActivityData"`
+			Party2022ActivityData struct {
+			} `json:"party2022ActivityData"`
+			BatchVideos struct {
+			} `json:"batchVideos"`
+			Contribution struct {
+				SelectedContribution interface{} `json:"selectedContribution"`
+				Campaign             interface{} `json:"campaign"`
+				Configs              struct {
+				} `json:"configs"`
+				ContributionLists struct {
+				} `json:"contributionLists"`
+				RecommendQuestions struct {
+					IsLoading bool `json:"isLoading"`
+					Paging    struct {
+						IsEnd   bool `json:"isEnd"`
+						IsStart bool `json:"isStart"`
+						Totals  int  `json:"totals"`
+					} `json:"paging"`
+					Data []interface{} `json:"data"`
+				} `json:"recommendQuestions"`
+				QuestionSearchResults struct {
+					IsLoading bool `json:"isLoading"`
+					Paging    struct {
+						IsEnd   bool `json:"isEnd"`
+						IsStart bool `json:"isStart"`
+						Totals  int  `json:"totals"`
+					} `json:"paging"`
+					Data []interface{} `json:"data"`
+				} `json:"questionSearchResults"`
+			} `json:"contribution"`
+			CreationReferences struct {
+			} `json:"creationReferences"`
+			ZvideoCollection struct {
+			} `json:"zvideoCollection"`
+			ZvideoGrant struct {
+			} `json:"zvideoGrant"`
+			CollectData struct {
+				IsFetching bool          `json:"isFetching"`
+				List       []interface{} `json:"list"`
+			} `json:"collectData"`
+			VideoSource struct {
+				IsLoaded bool `json:"isLoaded"`
+			} `json:"videoSource"`
+		} `json:"zvideos"`
+	} `json:"initialState"`
+	SubAppName string `json:"subAppName"`
+}
