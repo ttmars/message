@@ -28,9 +28,9 @@
 				</div>
 				<div class="collapse navbar-collapse" id="example-navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li id="hot"><a href="/hot">热点</a></li>
-						<li id="public"><a href="/public">目录</a></li>
-						<li id="tool"><a href="/tool">工具</a></li>
+						<li id="hot"><a href="/hot">资讯</a></li>
+						<li id="public"><a href="/public">随笔</a></li>
+						<li id="tool"><a href="/tool">导航</a></li>
 						<li><a href="#">关于</a></li>
 					</ul>
 					<i class="navbar-text navbar-right" style="color: #AC2925;"><b>留一片空白，给以后浓墨重彩</b></i>
@@ -49,10 +49,22 @@
 	<!-- 自定义JS -->
 	<script src="static/bootstrap/js/DIY.js"></script>
 	<script type="text/javascript">
+		
+		// 热点页 侧边导航栏 点击切换
 		$(document).ready(function(){
 			var location = window.location.href
 			var id = location.substring(location.lastIndexOf('/') + 1)
 			$("#"+id).addClass("active")
+		
+		});
+		
+		// 工具页 侧边导航栏 点击切换
+		$(document).ready(function(){
+			$("li").click(function(){
+				console.log("xasdf")
+				$("li.active").removeClass("active");
+				$(this).addClass("active");
+			});
 		});
 	</script>
   </body>
