@@ -20,9 +20,10 @@
         { "name":"GitHub" , "link":"https://github.com/" , "description":"YYDS", "badge":""},
         { "name":"LeetCode" , "link":"https://leetcode-cn.com/" , "description":"在线刷题", "badge":""},
         { "name":"菜鸟教程" , "link":"https://www.runoob.com/" , "description":"梦想的起点", "badge":""},
-        { "name":"CSDN" , "link":"https://mp.csdn.net/mp_blog/manage/article" , "description":"CSDN", "badge":""}
+        { "name":"Bootstrap3" , "link":"https://v3.bootcss.com/" , "description":"Bootstrap3", "badge":""}
     ],
     "kind4": [
-        { "name":"zeruns" , "link":"https://blog.zeruns.tech/" , "description":"", "badge":""}
+        { "name":"zeruns" , "link":"https://blog.zeruns.tech/" , "description":"", "badge":""},
+        { "name":"CSDN" , "link":"https://mp.csdn.net/mp_blog/manage/article" , "description":"", "badge":""}
     ]
 }
