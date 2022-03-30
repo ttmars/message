@@ -1,13 +1,14 @@
 {
 	"kind1": [
         { "name":"transform" , "link":"https://transform.tools/json-to-go" , "description":"json转struct", "badge":""},
-        { "name":"sojson" , "link":"https://www.sojson.com/" , "description":"json在线解析", "badge":""},
+        { "name":"sojson" , "link":"https://www.sojson.com/" , "description":"json解析", "badge":""},
         { "name":"oschina" , "link":"https://tool.oschina.net/diff/" , "description":"代码对比/归并", "badge":""},
-        { "name":"curlconverter" , "link":"https://curlconverter.com/" , "description":"curl在线转换", "badge":""},
+        { "name":"curlconverter" , "link":"https://curlconverter.com/" , "description":"curl转换", "badge":""},
         { "name":"chahuo" , "link":"http://encode.chahuo.com/" , "description":"在线加密/解密", "badge":""},
         { "name":"processon" , "link":"https://processon.com/diagrams" , "description":"流程图/思维导图", "badge":""},
-        { "name":"KMS" , "link":"https://blog.zeruns.tech/kms/" , "description":"KMS激活Win系统", "badge":""},
-        { "name":"tools" , "link":"http://tool.liumingye.cn/" , "description":"在线工具集", "badge":""}
+        { "name":"KMS" , "link":"https://blog.zeruns.tech/kms/" , "description":"Win激活", "badge":""},
+        { "name":"tools" , "link":"http://tool.liumingye.cn/" , "description":"工具集", "badge":""},
+        { "name":"unicode" , "link":"https://tool.chinaz.com/tools/unicode.aspx" , "description":"unicode编码/解码", "badge":""}
     ],
 	"kind2": [
         { "name":"初音" , "link":"http://www.youthsweet.com/" , "description":"在线听音乐", "badge":""},

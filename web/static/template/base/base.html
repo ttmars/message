@@ -79,23 +79,11 @@
 				  {{ $v := .Flag }}
 				  
 				  {{ if eq $v 0 }}
-					{{block "content" . }}{{end}}
+					{{block "onelist" . }}{{end}}
 				  {{end}}
 				  
 				  {{ if eq $v 1 }}
-				  	{{block "github" . }}{{end}}
-				  {{end}}
-				  
-				  {{ if eq $v 2 }}
-				  	{{block "githubGo" . }}{{end}}
-				  {{end}}
-					
-				  {{ if eq $v 3 }}
-					{{block "juejin" . }}{{end}}
-				  {{end}}
-				  
-				  {{ if eq $v 4 }}
-				  	{{block "kr36" . }}{{end}}
+				  	{{block "threelist" . }}{{end}}
 				  {{end}}
 			  </div>
 			  
