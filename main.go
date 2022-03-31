@@ -60,17 +60,13 @@ func RunServer() {
 	r.Static("/public", "./hugo/site/public/")
 
 	r.GET("/", func(c *gin.Context) {
-		tmp := make(map[string]interface{})
-		tmp["Flag"] = 0
-		tmp["Data"] = model.M["Weibo"]
-		c.HTML(200, "onelist.html",tmp)
+		c.Request.URL.Path = "/weibo"
+		r.HandleContext(c)
 	})
 
 	r.GET("/hot", func(c *gin.Context) {
-		tmp := make(map[string]interface{})
-		tmp["Flag"] = 0
-		tmp["Data"] = model.M["Weibo"]
-		c.HTML(200, "onelist.html",tmp)
+		c.Request.URL.Path = "/weibo"
+		r.HandleContext(c)
 	})
 
 	r.GET("/weibo", func(c *gin.Context) {
