@@ -12,7 +12,6 @@
     ],
 	"kind2": [
         { "name":"初音" , "link":"http://www.youthsweet.com/" , "description":"在线听音乐", "badge":""},
-        { "name":"抖音" , "link":"https://www.douyin.com/" , "description":"抖音", "badge":""},
         { "name":"哔哩哔哩" , "link":"https://www.bilibili.com/" , "description":"哔哩哔哩", "badge":""},
         { "name":"努努影院" , "link":"https://www.nunuyy10.top/" , "description":"努努影院", "badge":""}
     ],
