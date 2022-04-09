@@ -12,11 +12,14 @@
     ],
 	"kind2": [
         { "name":"初音" , "link":"http://www.youthsweet.com/" , "description":"在线听音乐", "badge":""},
+        { "name":"甜瓜音乐" , "link":"https://www.melon365.com/video/indexgb.html" , "description":"在线听音乐", "badge":""},
         { "name":"哔哩哔哩" , "link":"https://www.bilibili.com/" , "description":"哔哩哔哩", "badge":""},
-        { "name":"努努影院" , "link":"https://www.nunuyy10.top/" , "description":"努努影院", "badge":""}
+        { "name":"努努影院" , "link":"https://www.nunuyy10.top/" , "description":"努努影院", "badge":""},
+        { "name":"今日热榜" , "link":"https://tophub.today/" , "description":"今日热榜", "badge":""}
     ],
 	"kind3": [
-        { "name":"GitHub" , "link":"https://github.com/" , "description":"YYDS", "badge":""},
+        { "name":"GitHub" , "link":"https://github.com/" , "description":"GitHub", "badge":""},
+        { "name":"HelloGithub" , "link":"https://hellogithub.com/" , "description":"HelloGithub", "badge":""},
         { "name":"LeetCode" , "link":"https://leetcode-cn.com/" , "description":"在线刷题", "badge":""},
         { "name":"菜鸟教程" , "link":"https://www.runoob.com/" , "description":"梦想的起点", "badge":""},
         { "name":"Bootstrap3" , "link":"https://v3.bootcss.com/" , "description":"Bootstrap3", "badge":""}
