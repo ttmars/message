@@ -30,6 +30,6 @@
     "kind4": [
         { "name":"zeruns" , "link":"https://blog.zeruns.tech/" , "description":"", "badge":""},
         { "name":"Jiajun" , "link":"https://jiajunhuang.com/" , "description":"", "badge":""},
-        { "name":"fatedier" , "link":"https://blog.fatedier.com/" , "description":"frp", "badge":""}
+        { "name":"fatedier" , "link":"https://blog.fatedier.com/" , "description":"", "badge":""}
     ]
 }
