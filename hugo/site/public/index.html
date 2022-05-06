@@ -79,6 +79,22 @@
 		<div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="/public/k8s/ingress-nginx%E4%B8%AD%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E5%93%8D%E5%BA%94%E5%A4%B4/">Ingress-nginx中如何配置自定义响应头</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  官方文档：https://kubernetes.github.io/ingress-nginx/
+方式一 通过Ingress注释配置，add_header指令会映射到nginx配置文件中的localtion模块中，只对单个服务生效
+https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#configuration-snippet
+示例：
+apiVersion: extensions/v1betal kind: Ingress metadata:  annotations:  kubernetes.io/ingress.class: nginx  nginx.ingress.kubernetes.io/configuration-snippet: | add_header &#34;**&#34; &#34;**&#34;; spec:  rules:  ** 方式二 将配置存储在configmap中，在Ingress中间接引用，此方式会将add_header指令映射到nginx配置文件中的http模块中，对所有服务生效
+https://kubernetes.github.io/ingress-nginx/examples/customization/custom-headers/
+示例：
+自定义custom-headers文件，存储响应头
+apiVersion: v1 kind: ConfigMap metadata:  name: custom-headers  namespace: ingress-nginx data:  X-Different-Name: &#34;true&#34;  X-Using-Nginx-Controller: &#34;true&#34; 在Ingress-nginx默认配置文件中，间接引用custom-headers
+apiVersion: v1 kind: ConfigMap metadata:  name: ingress-nginx-controller  namespace: ingress-nginx data:  add-headers: &#34;ingress-nginx/custom-headers&#34; 注意事项  方式二修改配置文件后，需要重启nginx-ingress-controller，配置才能生效！ 由于nginx指令add_header的继承性问题，两种方式不能同时配置，否则方式二会失效！请参考：https://juejin.cn/post/6844904041126838286  
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="/public/k8s/%E8%A7%A3%E5%86%B3ingress-nginx%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/">解决Ingress-nginx路由配置问题</a>
   </h1>
   <time datetime="2022-05-06T09:33:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
@@ -90,33 +106,6 @@ https://stackoverflow.com/questions/50871970/kubernetes-ingress-nginx-loading-re
   
   <div class="read-more-link">
     <a href="/public/k8s/%E8%A7%A3%E5%86%B3ingress-nginx%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/">Read More…</a>
-  </div>
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="/public/post/second/">Second</a>
-  </h1>
-  <time datetime="2022-03-27T11:22:46&#43;0800" class="post-date">Sun, Mar 27, 2022</time>
-  second page 
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="/public/first/">First</a>
-  </h1>
-  <time datetime="2022-03-27T11:22:17&#43;0800" class="post-date">Sun, Mar 27, 2022</time>
-  一.基本概念 1.使用存储设备的一般方法
-创建分区	格式化，即创建文件系统（创建inode、block） 挂载  2.硬盘的接口方式
-PATA接口：即IDE SATA接口：多用于个人桌面 服务器常用：SCSI、SAS、FC-AL  3.分区表类型
-MBR与GPT的区别，参考： https://www.dujin.org/11274.html https://www.dazhuanlan.com/2020/01/02/5e0dafbd204e4/
-4.文件系统类型
-常见文件系统，参考： https://www.cnblogs.com/eddie1127/p/11260402.html https://blog.csdn.net/liushengxi_root/article/details/87439737 centos7默认文件系统类型：xfs win7默认文件系统类型：NTFS
-二.常用命令 1.查看磁盘和分区
-[root@localhost ~]# ls /dev/sda sda sda1 sda2 新建分区后，用partprobe刷新磁盘  2.查看已经挂载的分区
-[root@localhost ~]# df -Th|grep -v tmp 文件系统 类型 容量 已用 可用 已用% 挂载点 /dev/mapper/centos-root xfs 17G 1.6G 16G 10% / /dev/sda1 xfs 1014M 138M 877M 14% /boot  3.查看磁盘的分区、挂载信息
-[root@localhost ~]# lsblk NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT sda 8:0 0 20G 0 disk ├─sda1 8:1 0 1G 0 part /boot └─sda2 8:2 0 19G 0 part ├─centos-root 253:0 0 17G 0 lvm / └─centos-swap 253:1 0 2G 0 lvm [SWAP] sr0 11:0 1 4.
-  
-  <div class="read-more-link">
-    <a href="/public/first/">Read More…</a>
   </div>
   
 </article>
