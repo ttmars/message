@@ -1,3 +1,8 @@
+---
+title: "解决Ingress-nginx路由配置问题"
+date: 2022-05-06T09:33:00+08:00
+draft: true
+---
 ### 解决Ingress-nginx路由配置问题
 
 官方文档：[https://kubernetes.github.io/ingress-nginx/examples/rewrite/](https://kubernetes.github.io/ingress-nginx/examples/rewrite/)
