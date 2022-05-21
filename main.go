@@ -83,6 +83,13 @@ func RunServer() {
 		c.HTML(200, "onelist.html",tmp)
 	})
 
+	r.GET("/cctv", func(c *gin.Context) {
+		tmp := make(map[string]interface{})
+		tmp["Flag"] = 0
+		tmp["Data"] = model.M["CCTV"]
+		c.HTML(200, "onelist.html",tmp)
+	})
+
 	r.GET("/csdn", func(c *gin.Context) {
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0

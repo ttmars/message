@@ -16,13 +16,14 @@ import (
 var wg = &sync.WaitGroup{}
 
 func GetAll()  {
-	wg.Add(6)
+	wg.Add(7)
 	go Weibo()
 	go Baidu()
 	go Bilibili()
 	go Acfun()
 	go CSDN()
 	go Zhihu()
+	go CCTV()
 	wg.Wait()
 }
 
@@ -51,6 +52,8 @@ func CSDN()(result []model.Item, err error)  {
 	}
 	if len(result) >= model.Num {
 		model.M["CSDN"] = result[:model.Num]
+	}else{
+		model.M["CSDN"] = result
 	}
 	model.M["CSDN"] = append(model.M["CSDN"], model.Item{Name: "更多", Link: "https://blog.csdn.net/rank/list"})
 	return
@@ -93,6 +96,8 @@ func Weibo() (result []model.Item, err error) {
 	}
 	if len(result) >= model.Num {
 		model.M["Weibo"] = result[:model.Num]
+	}else{
+		model.M["Weibo"] = result
 	}
 	model.M["Weibo"] = append(model.M["Weibo"], model.Item{Name: "更多", Link: url})
 	return
@@ -130,6 +135,8 @@ func Baidu()(result []model.Item, err error){
 	}
 	if len(result) >= model.Num {
 		model.M["Baidu"] = result[:model.Num]
+	}else{
+		model.M["Baidu"] = result
 	}
 	model.M["Baidu"] = append(model.M["Baidu"], model.Item{Name: "更多", Link: url})
 	return
@@ -170,6 +177,8 @@ func Bilibili()(result []model.Item, err error){
 	}
 	if len(result) >= model.Num {
 		model.M["Bilibili"] = result[:model.Num]
+	}else{
+		model.M["Bilibili"] = result
 	}
 	model.M["Bilibili"] = append(model.M["Bilibili"], model.Item{Name: "更多", Link: url})
 	return
@@ -201,6 +210,8 @@ func Acfun()(result []model.Item, err error){
 	}
 	if len(result) >= model.Num {
 		model.M["Acfun"] = result[:model.Num]
+	}else{
+		model.M["Acfun"] = result
 	}
 	model.M["Acfun"] = append(model.M["Acfun"], model.Item{Name: "更多", Link: "https://www.acfun.cn/rank/list"})
 	return
@@ -246,7 +257,51 @@ func Zhihu()  {
 
 	if len(result) >= model.Num {
 		model.M["Zhihu"] = result[:model.Num]
+	}else{
+		model.M["Zhihu"] = result
 	}
 	model.M["Zhihu"] = append(model.M["Zhihu"], model.Item{Name: "更多", Link: url})
+	return
+}
+
+func CCTV() () {
+	defer wg.Done()
+	url := "https://tv.cctv.com/lm/xwlb/"
+	req,_ := http.NewRequest("GET", url, nil)
+	resp, err := model.DFClient.Do(req)
+	if err != nil {
+		log.Printf("CCTV err:%v\n", err)
+		return
+	}
+	defer resp.Body.Close()
+	bodyText, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("CCTV err:%v\n", err)
+		return
+	}
+
+	doc,err := htmlquery.Parse(bytes.NewReader(bodyText))
+	if err != nil {
+		log.Printf("CCTV err:%v\n", err)
+		return
+	}
+	nodes,err := htmlquery.QueryAll(doc, "//*[@id=\"content\"]/li/div/a")
+	if err != nil {
+		log.Printf("CCTV err:%v\n", err)
+		return
+	}
+	var result []model.Item
+	for _,node := range nodes{
+		title := htmlquery.SelectAttr(node, "alt")
+		link := htmlquery.SelectAttr(node, "href")
+		result = append(result, model.Item{Name:title, Link: link})
+	}
+
+	if len(result) >= model.Num {
+		model.M["CCTV"] = result[:model.Num]
+	}else{
+		model.M["CCTV"] = result
+	}
+	model.M["CCTV"] = append(model.M["CCTV"], model.Item{Name: "更多", Link: url})
 	return
 }

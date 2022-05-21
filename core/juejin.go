@@ -49,6 +49,8 @@ func FF(url, k string) {
 	name := "Juejin" + k
 	if len(result) >= model.Num {
 		model.M[name] = result[:model.Num]
+	}else{
+		model.M[name] = result
 	}
 	model.M[name] = append(model.M[name], model.Item{Name: "更多", Link: url})
 	return
