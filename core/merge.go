@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"strings"
 	"sync"
+	"time"
 )
 
 var wg = &sync.WaitGroup{}
@@ -264,10 +265,12 @@ func Zhihu()  {
 	return
 }
 
-func CCTV() () {
+func CCTV() {
 	defer wg.Done()
 	url := "https://tv.cctv.com/lm/xwlb/"
-	req,_ := http.NewRequest("GET", url, nil)
+	t := time.Now().AddDate(0, 0, -1).Format("20060102")
+	dataUrl := "https://tv.cctv.com/lm/xwlb/day/" + t +".shtml"
+	req,_ := http.NewRequest("GET", dataUrl, nil)
 	resp, err := model.DFClient.Do(req)
 	if err != nil {
 		log.Printf("CCTV err:%v\n", err)
@@ -285,7 +288,7 @@ func CCTV() () {
 		log.Printf("CCTV err:%v\n", err)
 		return
 	}
-	nodes,err := htmlquery.QueryAll(doc, "//*[@id=\"content\"]/li/div/a")
+	nodes,err := htmlquery.QueryAll(doc, "/html/body/li/div/a")
 	if err != nil {
 		log.Printf("CCTV err:%v\n", err)
 		return
