@@ -8,7 +8,8 @@
         { "name":"processon" , "link":"https://processon.com/diagrams" , "description":"流程图/思维导图", "badge":""},
         { "name":"KMS" , "link":"https://blog.zeruns.tech/kms/" , "description":"Win激活", "badge":""},
         { "name":"tools" , "link":"http://tool.liumingye.cn/" , "description":"工具集", "badge":""},
-        { "name":"unicode" , "link":"https://tool.chinaz.com/tools/unicode.aspx" , "description":"unicode编码/解码", "badge":""}
+        { "name":"unicode" , "link":"http://www.jsons.cn/unicode
+" , "description":"unicode编码/解码", "badge":""}
     ],
 	"kind2": [
         { "name":"初音" , "link":"http://www.youthsweet.com/" , "description":"在线听音乐", "badge":""},
