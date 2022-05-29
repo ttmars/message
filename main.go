@@ -166,6 +166,18 @@ func RunServer() {
 		c.HTML(200, "threelist.html",R)
 	})
 
+	r.GET("/zwtx", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 10
+		R.Data = append(R.Data,
+			S2{Title: "06:00", Content: model.M["zwtx0"]},
+			S2{Title: "07:00", Content: model.M["zwtx1"]},
+			S2{Title: "08:00", Content: model.M["zwtx2"]},
+		)
+		c.HTML(200, "threelist.html",R)
+	})
+
 	r.GET("/tool", func(c *gin.Context) {
 		var v model.ToolStruct
 		b,_ := ioutil.ReadFile("./data/tool.txt")
