@@ -360,13 +360,10 @@ func ZWTX() {
 		}
 		if strings.Contains(data.Time, "06:") {
 			T["zwtx0"] = append(model.M["zwtx0"], model.Item{Name:title, Link: link})
-			model.M["zwtx0"] = append(model.M["zwtx0"], model.Item{Name:title, Link: link})
 		}else if strings.Contains(data.Time, "07:") {
 			T["zwtx1"] = append(model.M["zwtx1"], model.Item{Name:title, Link: link})
-			model.M["zwtx1"] = append(model.M["zwtx1"], model.Item{Name:title, Link: link})
 		}else {
 			T["zwtx2"] = append(model.M["zwtx2"], model.Item{Name:title, Link: link})
-			model.M["zwtx2"] = append(model.M["zwtx2"], model.Item{Name:title, Link: link})
 		}
 	}
 	model.M["zwtx0"] = T["zwtx0"]
