@@ -351,6 +351,7 @@ func ZWTX() {
 		log.Printf("ZWTX err:%v\n", err)
 		return
 	}
+	var T = make(map[string][]model.Item)
 	for _,data := range v.Data.List {
 		title := data.Brief
 		link := data.URL
@@ -358,13 +359,19 @@ func ZWTX() {
 			title = data.Title
 		}
 		if strings.Contains(data.Time, "06:") {
+			T["zwtx0"] = append(model.M["zwtx0"], model.Item{Name:title, Link: link})
 			model.M["zwtx0"] = append(model.M["zwtx0"], model.Item{Name:title, Link: link})
 		}else if strings.Contains(data.Time, "07:") {
+			T["zwtx1"] = append(model.M["zwtx1"], model.Item{Name:title, Link: link})
 			model.M["zwtx1"] = append(model.M["zwtx1"], model.Item{Name:title, Link: link})
 		}else {
+			T["zwtx2"] = append(model.M["zwtx2"], model.Item{Name:title, Link: link})
 			model.M["zwtx2"] = append(model.M["zwtx2"], model.Item{Name:title, Link: link})
 		}
 	}
+	model.M["zwtx0"] = T["zwtx0"]
+	model.M["zwtx1"] = T["zwtx1"]
+	model.M["zwtx2"] = T["zwtx2"]
 
 	for i:=0;i<=2;i++ {
 		k := "zwtx" + strconv.Itoa(i)
