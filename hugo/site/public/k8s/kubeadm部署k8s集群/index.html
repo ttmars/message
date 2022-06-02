@@ -253,6 +253,27 @@
 <li>开启VPN，畅通无阻！</li>
 </ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubeadm init
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Your Kubernetes control-plane has initialized successfully!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>To start using your cluster, you need to run the following as a regular user:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  mkdir -p $HOME/.kube
+</span></span><span style="display:flex;"><span>  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+</span></span><span style="display:flex;"><span>  sudo chown <span style="color:#66d9ef">$(</span>id -u<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>id -g<span style="color:#66d9ef">)</span> $HOME/.kube/config
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Alternatively, <span style="color:#66d9ef">if</span> you are the root user, you can run:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  export KUBECONFIG<span style="color:#f92672">=</span>/etc/kubernetes/admin.conf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>You should now deploy a pod network to the cluster.
+</span></span><span style="display:flex;"><span>Run <span style="color:#e6db74">&#34;kubectl apply -f [podnetwork].yaml&#34;</span> with one of the options listed at:
+</span></span><span style="display:flex;"><span>  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Then you can join any number of worker nodes by running the following on each as root:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>kubeadm join 192.168.66.100:6443 --token pxukys.1ptoihhkdxxdnv70 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	--discovery-token-ca-cert-hash sha256:416230308cc2c9f98105ed161b729d9988595e4d5944e6f894293159e64b9dca 
 </span></span></code></pre></div><ol start="2">
 <li>根据输出提示，配置kubectl访问</li>
 <li>根据输出提示，将node节点加入集群</li>

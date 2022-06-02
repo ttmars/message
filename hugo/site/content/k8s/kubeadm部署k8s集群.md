@@ -202,6 +202,27 @@ systemctl restart kubelet;systemctl enable kubelet
 
 ```bash
 kubeadm init
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.66.100:6443 --token pxukys.1ptoihhkdxxdnv70 \
+	--discovery-token-ca-cert-hash sha256:416230308cc2c9f98105ed161b729d9988595e4d5944e6f894293159e64b9dca 
 ```
 
 2. 根据输出提示，配置kubectl访问
