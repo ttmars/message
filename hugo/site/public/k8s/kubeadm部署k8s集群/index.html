@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>kubeadm部署k8s集群 &middot; 留白</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Gopher</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>留一片空白，给以后浓墨重彩</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1>kubeadm部署k8s集群</h1>
+  <time datetime=2022-06-02T23:25:00&#43;0800 class="post-date">Thu, Jun 2, 2022</time>
+  <p><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/">官方部署文档</a></p>
+<h3 id="一环境准备">一、环境准备</h3>
+<ol>
+<li>准备两台全新的虚拟机</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>IP</th>
+<th>系统类型</th>
+<th>配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>master</td>
+<td>192.168.66.100</td>
+<td>centos7.6</td>
+<td>2c2g</td>
+</tr>
+<tr>
+<td>node1</td>
+<td>192.168.66.101</td>
+<td>centos7.6</td>
+<td>2c2g</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>配置主机名</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hostnamectl set-hostname master
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># cat /etc/hosts</span>
+</span></span><span style="display:flex;"><span>127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+</span></span><span style="display:flex;"><span>::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>192.168.66.100 master
+</span></span><span style="display:flex;"><span>192.168.66.101 node1
+</span></span></code></pre></div><ol start="3">
+<li>网卡配置</li>
+</ol>
+<p>VMware网络适配器选择NAT模式，网卡配置为静态IP</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># cat /etc/sysconfig/network-scripts/ifcfg-ens33 </span>
+</span></span><span style="display:flex;"><span>TYPE<span style="color:#f92672">=</span>Ethernet
+</span></span><span style="display:flex;"><span>PROXY_METHOD<span style="color:#f92672">=</span>none
+</span></span><span style="display:flex;"><span>BROWSER_ONLY<span style="color:#f92672">=</span>no
+</span></span><span style="display:flex;"><span>BOOTPROTO<span style="color:#f92672">=</span>static
+</span></span><span style="display:flex;"><span>DEFROUTE<span style="color:#f92672">=</span>yes
+</span></span><span style="display:flex;"><span>IPV4_FAILURE_FATAL<span style="color:#f92672">=</span>no
+</span></span><span style="display:flex;"><span>IPV6INIT<span style="color:#f92672">=</span>yes
+</span></span><span style="display:flex;"><span>IPV6_AUTOCONF<span style="color:#f92672">=</span>yes
+</span></span><span style="display:flex;"><span>IPV6_DEFROUTE<span style="color:#f92672">=</span>yes
+</span></span><span style="display:flex;"><span>IPV6_FAILURE_FATAL<span style="color:#f92672">=</span>no
+</span></span><span style="display:flex;"><span>IPV6_ADDR_GEN_MODE<span style="color:#f92672">=</span>stable-privacy
+</span></span><span style="display:flex;"><span>NAME<span style="color:#f92672">=</span>ens33
+</span></span><span style="display:flex;"><span>UUID<span style="color:#f92672">=</span>443eb4f6-645e-4eee-ab28-21f5cde8026f
+</span></span><span style="display:flex;"><span>DEVICE<span style="color:#f92672">=</span>ens33
+</span></span><span style="display:flex;"><span>ONBOOT<span style="color:#f92672">=</span>yes
+</span></span><span style="display:flex;"><span>IPADDR<span style="color:#f92672">=</span>192.168.66.100
+</span></span><span style="display:flex;"><span>NETMASK<span style="color:#f92672">=</span>255.255.255.0
+</span></span><span style="display:flex;"><span>GATEWAY<span style="color:#f92672">=</span>192.168.66.2
+</span></span><span style="display:flex;"><span>DNS1<span style="color:#f92672">=</span>8.8.8.8
+</span></span><span style="display:flex;"><span>DNS2<span style="color:#f92672">=</span>8.8.4.4
+</span></span></code></pre></div><ol start="4">
+<li>配置yum源</li>
+</ol>
+<p><a href="https://developer.aliyun.com/mirror/">https://developer.aliyun.com/mirror/</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+</span></span><span style="display:flex;"><span>sed -i -e <span style="color:#e6db74">&#39;/mirrors.cloud.aliyuncs.com/d&#39;</span> -e <span style="color:#e6db74">&#39;/mirrors.aliyuncs.com/d&#39;</span> /etc/yum.repos.d/CentOS-Base.repo
+</span></span></code></pre></div><h3 id="二关闭防火墙selinuxswap">二、关闭防火墙、selinux、swap</h3>
+<ol>
+<li>关闭防火墙</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl stop firewalld;systemctl disable firewalld
+</span></span></code></pre></div><ol start="2">
+<li>关闭selinux</li>
+</ol>
+<p>将SELINUX改为disabled，重启生效</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># cat /etc/selinux/config </span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This file controls the state of SELinux on the system.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># SELINUX= can take one of these three values:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     enforcing - SELinux security policy is enforced.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     permissive - SELinux prints warnings instead of enforcing.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     disabled - No SELinux policy is loaded.</span>
+</span></span><span style="display:flex;"><span>SELINUX<span style="color:#f92672">=</span>disabled
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># SELINUXTYPE= can take one of three values:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     targeted - Targeted processes are protected,</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     minimum - Modification of targeted policy. Only selected processes are protected. </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     mls - Multi Level Security protection.</span>
+</span></span><span style="display:flex;"><span>SELINUXTYPE<span style="color:#f92672">=</span>targeted
+</span></span></code></pre></div><ol start="3">
+<li>关闭swap</li>
+</ol>
+<p>注释最后一行，重启生效</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># cat /etc/fstab </span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># /etc/fstab</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Created by anaconda on Fri Jun  3 00:34:12 2022</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Accessible filesystems, by reference, are maintained under &#39;/dev/disk&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span>/dev/mapper/centos-root /                       xfs     defaults        <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>UUID<span style="color:#f92672">=</span>43aad901-8cc9-4a3f-a2f5-e42a78439098 /boot                   xfs     defaults        <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>/dev/mapper/centos-home /home                   xfs     defaults        <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#/dev/mapper/centos-swap swap                    swap    defaults        0 0</span>
+</span></span></code></pre></div><h3 id="三配置iptables">三、配置iptables</h3>
+<p><a href="https://kubernetes.io/docs/setup/production-environment/container-runtimes/">https://kubernetes.io/docs/setup/production-environment/container-runtimes/</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>modprobe br_netfilter
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">overlay
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">br_netfilter
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo modprobe overlay
+</span></span><span style="display:flex;"><span>sudo modprobe br_netfilter
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># sysctl params required by setup, params persist across reboots</span>
+</span></span><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">net.bridge.bridge-nf-call-iptables  = 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">net.bridge.bridge-nf-call-ip6tables = 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">net.ipv4.ip_forward                 = 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Apply sysctl params without reboot</span>
+</span></span><span style="display:flex;"><span>sudo sysctl --system
+</span></span></code></pre></div><h3 id="四安装docker容器运行时">四、安装docker容器运行时</h3>
+<p><a href="https://docs.docker.com/engine/install/centos/">https://docs.docker.com/engine/install/centos/</a></p>
+<p><a href="https://kubernetes.io/docs/setup/production-environment/container-runtimes/">https://kubernetes.io/docs/setup/production-environment/container-runtimes/</a></p>
+<ol>
+<li>配置docker源</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
+</span></span></code></pre></div><ol start="2">
+<li>安装docker</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yum install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+</span></span></code></pre></div><ol start="3">
+<li>配置cgroup driver</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat  &gt;&gt; /etc/docker/daemon.json <span style="color:#e6db74">&lt;&lt; EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> &#34;exec-opts&#34;:[&#34;native.cgroupdriver=systemd&#34;]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span></code></pre></div><ol start="4">
+<li>重启docker、containerd</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl restart docker;systemctl enable docker
+</span></span><span style="display:flex;"><span>systemctl restart containerd;systemctl enable containerd;
+</span></span></code></pre></div><h3 id="五安装kubeadmkubeletkubectl">五、安装kubeadm、kubelet、kubectl</h3>
+<p><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/">https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/</a></p>
+<p><a href="https://www.orchome.com/10036">https://www.orchome.com/10036</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt;EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[kubernetes]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">name=Kubernetes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">enabled=1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">gpgcheck=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">repo_gpgcheck=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>yum install -y kubelet kubeadm kubectl
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>systemctl restart kubelet;systemctl enable kubelet
+</span></span></code></pre></div><h3 id="六初始化集群master">六、初始化集群（master）</h3>
+<ol>
+<li>开启VPN，畅通无阻！</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubeadm init
+</span></span></code></pre></div><ol start="2">
+<li>根据输出提示，配置kubectl访问</li>
+<li>根据输出提示，将node节点加入集群</li>
+</ol>
+<h3 id="七安装calico网络插件">七、安装calico网络插件</h3>
+<p><a href="https://projectcalico.docs.tigera.io/getting-started/kubernetes/quickstart">https://projectcalico.docs.tigera.io/getting-started/kubernetes/quickstart</a></p>
+<p><a href="https://blog.csdn.net/weixin_44455125/article/details/124081178">https://blog.csdn.net/weixin_44455125/article/details/124081178</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl apply -f https://projectcalico.docs.tigera.io/manifests/calico.yaml
+</span></span></code></pre></div><h3 id="八安装dashboard插件">八、安装dashboard插件</h3>
+<p><a href="https://github.com/kubernetes/dashboard">https://github.com/kubernetes/dashboard</a></p>
+<ol>
+<li>安装dashboard</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.6.0/aio/deploy/recommended.yaml
+</span></span></code></pre></div><ol start="2">
+<li>修改服务类型为NodePort</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>type: NodePort
+</span></span><span style="display:flex;"><span>ports:
+</span></span><span style="display:flex;"><span>- nodePort: <span style="color:#ae81ff">30000</span>
+</span></span><span style="display:flex;"><span>  port: <span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>  protocol: TCP
+</span></span><span style="display:flex;"><span>  targetPort: <span style="color:#ae81ff">8443</span>
+</span></span></code></pre></div><ol start="3">
+<li>创建访问token</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl create token kubernetes-dashboard -n kubernetes-dashboard
+</span></span></code></pre></div><ol start="4">
+<li>通过任意节点IP+Port访问</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>https://192.168.66.100:30000/
+</span></span></code></pre></div><h3 id="九去除master污点">九、去除master污点</h3>
+<p><a href="https://blog.csdn.net/shanghaibao123/article/details/123878175">https://blog.csdn.net/shanghaibao123/article/details/123878175</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl describe node master | grep Taint
+</span></span><span style="display:flex;"><span>kubectl taint node master node-role.kubernetes.io/control-plane:NoSchedule-
+</span></span></code></pre></div>
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>

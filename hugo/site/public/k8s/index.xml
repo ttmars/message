@@ -6,7 +6,18 @@
     <description>Recent content in K8s on 留白</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 06 May 2022 10:26:00 +0800</lastBuildDate><atom:link href="/public/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 02 Jun 2022 23:25:00 +0800</lastBuildDate><atom:link href="/public/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>kubeadm部署k8s集群</title>
+      <link>/public/k8s/kubeadm%E9%83%A8%E7%BD%B2k8s%E9%9B%86%E7%BE%A4/</link>
+      <pubDate>Thu, 02 Jun 2022 23:25:00 +0800</pubDate>
+      
+      <guid>/public/k8s/kubeadm%E9%83%A8%E7%BD%B2k8s%E9%9B%86%E7%BE%A4/</guid>
+      <description>官方部署文档
+一、环境准备  准备两台全新的虚拟机     主机名 IP 系统类型 配置     master 192.168.66.100 centos7.6 2c2g   node1 192.168.66.101 centos7.6 2c2g    配置主机名  hostnamectl set-hostname master  [root@master ~]# cat /etc/hosts 127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4 ::1 localhost localhost.localdomain localhost6 localhost6.localdomain6  192.168.66.100 master 192.168.66.101 node1 网卡配置  VMware网络适配器选择NAT模式，网卡配置为静态IP
+[root@master ~]# cat /etc/sysconfig/network-scripts/ifcfg-ens33  TYPE=Ethernet PROXY_METHOD=none BROWSER_ONLY=no BOOTPROTO=static DEFROUTE=yes IPV4_FAILURE_FATAL=no IPV6INIT=yes IPV6_AUTOCONF=yes IPV6_DEFROUTE=yes IPV6_FAILURE_FATAL=no IPV6_ADDR_GEN_MODE=stable-privacy NAME=ens33 UUID=443eb4f6-645e-4eee-ab28-21f5cde8026f DEVICE=ens33 ONBOOT=yes IPADDR=192.</description>
+    </item>
+    
     <item>
       <title>Ingress-nginx中如何配置自定义响应头</title>
       <link>/public/k8s/ingress-nginx%E4%B8%AD%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E5%93%8D%E5%BA%94%E5%A4%B4/</link>
