@@ -13,11 +13,10 @@
       <pubDate>Sat, 04 Jun 2022 17:49:00 +0800</pubDate>
       
       <guid>/public/k8s/k8s%E6%9C%8D%E5%8A%A1/</guid>
-      <description>五种服务类型 向外发布服务
+      <description>一、服务类型 向外发布服务
  ClusterIP NodePort LoadBalancer  向内发布服务
- 无头服务 ExternalName  两种服务发现方式   环境变量
-  DNS服务器
-  ClusterIP  通过kube-proxy组件实现负载均衡 自动分配集群IP  # https://kubernetes.io/docs/concepts/services-networking/service/ apiVersion: v1 kind: Service metadata:  name: service-simple-service spec:  selector:  app: service-simple-app  ports:  - protocol: TCP  port: 80  targetPort: 8080 NodePort  基于ClusterIP模式 端口范围：30000-32767  # https://kubernetes.io/docs/concepts/services-networking/service/#nodeport apiVersion: v1 kind: Service metadata:  name: service-node-port-service spec:  type: NodePort  selector:  app: MyApp  ports:  - port: 80 # By default and for convenience, the `targetPort` is set to the same value as the `port` field.</description>
+ 无头服务 ExternalName  服务发现方式
+ 环境变量 DNS服务器  二、ClusterIP  通过kube-proxy组件实现负载均衡 自动分配集群IP  # https://kubernetes.io/docs/concepts/services-networking/service/ apiVersion: v1 kind: Service metadata:  name: service-simple-service spec:  selector:  app: service-simple-app  ports:  - protocol: TCP  port: 80  targetPort: 8080 三、NodePort  基于ClusterIP模式 端口范围：30000-32767  # https://kubernetes.io/docs/concepts/services-networking/service/#nodeport apiVersion: v1 kind: Service metadata:  name: service-node-port-service spec:  type: NodePort  selector:  app: MyApp  ports:  - port: 80 # By default and for convenience, the `targetPort` is set to the same value as the `port` field.</description>
     </item>
     
     <item>

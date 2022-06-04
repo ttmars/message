@@ -4,7 +4,7 @@ date: 2022-06-04T17:49:00+08:00
 draft: true
 ---
 
-### 五种服务类型
+### 一、服务类型
 
 向外发布服务
 
@@ -17,13 +17,12 @@ draft: true
 - 无头服务
 - ExternalName
 
-### 两种服务发现方式
+服务发现方式
 
 - 环境变量
-
 - DNS服务器
 
-### ClusterIP
+### 二、ClusterIP
 
 1. 通过kube-proxy组件实现负载均衡
 2. 自动分配集群IP
@@ -43,7 +42,7 @@ spec:
       targetPort: 8080
 ```
 
-### NodePort
+### 三、NodePort
 
 1. 基于ClusterIP模式
 2. 端口范围：30000-32767
@@ -65,7 +64,7 @@ spec:
  
 ```
 
-### LoadBalancer
+### 四、LoadBalancer
 
 1. 基于ClusterIP+NodePort
 2. 公有云才支持LoadBalancer
@@ -98,7 +97,7 @@ configInline:
       - 192.168.66.100-192.168.66.101
 ```
 
-### 无头服务
+### 五、无头服务
 
 1. 不会分配集群IP
 2. 不经过kube-proxy实现负载均衡
@@ -152,7 +151,7 @@ Name:      nginx-headless
 Address 1: 172.16.166.157 172-16-166-157.nginx.test.svc.cluster.local		# 解析为POD地址
 ```
 
-### ExternalName
+### 六、ExternalName
 
 1. 将外部服务引入集群
 2. 没有选择器、端口定义
@@ -169,12 +168,12 @@ spec:
  
 ```
 
-### 其他方式
+### 七、其他模式
 
 1. 自定义Endpoints
 2. ExternalIP
 
-### 服务访问方式
+### 八、服务访问方式
 
 #### 创建一个nginx服务
 
@@ -214,7 +213,7 @@ Events:
 
 #### 外部节点访问
 
-```
+```bash
 任意节点IP+NodePort访问
 http://192.168.66.100:31006/
 http://192.168.66.101:31006/
@@ -225,7 +224,7 @@ http://192.168.66.100:31006/
 
 #### 集群节点访问
 
-```
+```bash
 集群IP+Port访问
 curl 10.100.203.13:80
 
@@ -235,7 +234,7 @@ curl 172.16.166.157:8080
 
 #### 集群Pod访问
 
-```
+```bash
 集群IP+Port访问
 wget -O- 10.100.203.13:80
 
@@ -252,16 +251,3 @@ wget -O- nginx.test.svc.cluster.local:80
 ### Ingress
 
 [https://kubernetes.github.io/ingress-nginx/](https://kubernetes.github.io/ingress-nginx/)
-
-
-
-
-
-
-
-
-
-
-
-
-
