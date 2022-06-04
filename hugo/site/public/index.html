@@ -79,6 +79,17 @@
 		<div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="/public/k8s/k8s%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/">k8s存储与配置</a>
+  </h1>
+  <time datetime="2022-06-04T21:46:00&#43;0800" class="post-date">Sat, Jun 4, 2022</time>
+  一、本地存储卷 emptyDir  将主机的临时目录映射到容器里 与pod同生命周期，pod销毁，存储卷同时销毁  # 基于磁盘的临时存储 volumes:  - name: cache-volume  emptyDir: {}  # 基于内存的临时存储 volumes:  - name: cache-volume  emptyDir:  medium: Memory hostPath  将主机上的指定目录映射到容器里 永久保存  volumes:  - name: cache-volume  hostPath:  path: /data 二、网络存储卷  可以跨节点共享存储 支持多种存储方案，如NFS  volumes:  - name: cache-volume  nfs:  path: /data  server: 192.168.66.100 三、持久存储卷 静态PV # NFS服务==&gt;持久卷（PersistentVolume）==&gt;持久卷声明（PersistentVolumeClaim）==&gt;Pod引用 volumes:  - name: cache-volume  persistentVolumeClaim:  claimName: &lt;pvcName&gt; 动态PV # NFS服务==&gt;存储分配器（provisioner）==&gt;持久卷类（StorageClass）==&gt;持久卷声明（PersistentVolumeClaim）==&gt;Pod引用（自动绑定PV） volumes:  - name: cache-volume  persistentVolumeClaim:  claimName: &lt;scName&gt; 四、配置存储卷 ConfigMap  模板示例  apiVersion: v1 kind: ConfigMap metadata:  name: example-configmap data:  name: valar  age: 25  hobby: |game=LOL movie=Titanic 通过环境变量引用  # 依次引用 env:  - name: NAME  valueFrom:  configMapKeyRef:  name: example-configmap  key: name  - name: AGE  valueFrom:  configMapKeyRef:  name: example-configmap  key: age  - name: HOBBY  valueFrom:  configMapKeyRef:  name: example-configmap  key: hobby # 一次引用所有 envFrom:  - configMapRef:  name: example-configmap 通过存储卷引用  # 会将configMap中的键值对映射到容器的指定目录，键-&gt;文件名，值-&gt;文件内容 volumes:  - name: volume-config  configMap:  name: example-configmap Secret  OpaqueSecret，对数据进行base64编码  加密：echo &#34;hello&#34; | base64 解密：echo &#34;aGVsbG8K&#34; | base64 --decode  ImagePullSecret，用于存储私有仓库的认证信息
+  
+  <div class="read-more-link">
+    <a href="/public/k8s/k8s%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="/public/k8s/k8s%E6%9C%8D%E5%8A%A1/">K8S服务</a>
   </h1>
   <time datetime="2022-06-04T17:49:00&#43;0800" class="post-date">Sat, Jun 4, 2022</time>

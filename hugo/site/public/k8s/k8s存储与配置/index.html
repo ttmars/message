@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>k8s存储与配置 &middot; 留白</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Gopher</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>留一片空白，给以后浓墨重彩</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1>k8s存储与配置</h1>
+  <time datetime=2022-06-04T21:46:00&#43;0800 class="post-date">Sat, Jun 4, 2022</time>
+  <h3 id="一本地存储卷">一、本地存储卷</h3>
+<h4 id="emptydir">emptyDir</h4>
+<ol>
+<li>将主机的临时目录映射到容器里</li>
+<li>与pod同生命周期，pod销毁，存储卷同时销毁</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># 基于磁盘的临时存储</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cache-volume</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">emptyDir</span>: {}
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 基于内存的临时存储</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cache-volume</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">emptyDir</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">medium</span>: <span style="color:#ae81ff">Memory</span>
+</span></span></code></pre></div><h4 id="hostpath">hostPath</h4>
+<ol>
+<li>将主机上的指定目录映射到容器里</li>
+<li>永久保存</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cache-volume</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">hostPath</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/data</span>
+</span></span></code></pre></div><h3 id="二网络存储卷">二、网络存储卷</h3>
+<ol>
+<li>可以跨节点共享存储</li>
+<li>支持多种存储方案，如NFS</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cache-volume</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">nfs</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/data</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">server</span>: <span style="color:#ae81ff">192.168.66.100</span>
+</span></span></code></pre></div><h3 id="三持久存储卷">三、持久存储卷</h3>
+<h4 id="静态pv">静态PV</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># NFS服务==&gt;持久卷（PersistentVolume）==&gt;持久卷声明（PersistentVolumeClaim）==&gt;Pod引用</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cache-volume</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">persistentVolumeClaim</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">claimName</span>: <span style="color:#ae81ff">&lt;pvcName&gt;</span>
+</span></span></code></pre></div><h4 id="动态pv">动态PV</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># NFS服务==&gt;存储分配器（provisioner）==&gt;持久卷类（StorageClass）==&gt;持久卷声明（PersistentVolumeClaim）==&gt;Pod引用（自动绑定PV）</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cache-volume</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">persistentVolumeClaim</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">claimName</span>: <span style="color:#ae81ff">&lt;scName&gt;</span>
+</span></span></code></pre></div><h3 id="四配置存储卷">四、配置存储卷</h3>
+<h4 id="configmap">ConfigMap</h4>
+<ol>
+<li>模板示例</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ConfigMap</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example-configmap</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">data</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">valar</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">age</span>: <span style="color:#ae81ff">25</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">hobby</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    game=LOL
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    movie=Titanic</span>    
+</span></span></code></pre></div><ol start="2">
+<li>通过环境变量引用</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># 依次引用</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">env</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">NAME</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">valueFrom</span>: 
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">configMapKeyRef</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example-configmap</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">key</span>: <span style="color:#ae81ff">name</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">AGE</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">valueFrom</span>: 
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">configMapKeyRef</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example-configmap</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">key</span>: <span style="color:#ae81ff">age</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">HOBBY</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">valueFrom</span>: 
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">configMapKeyRef</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example-configmap</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">key</span>: <span style="color:#ae81ff">hobby</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 一次引用所有</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">envFrom</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">configMapRef</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example-configmap</span>
+</span></span></code></pre></div><ol start="3">
+<li>通过存储卷引用</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># 会将configMap中的键值对映射到容器的指定目录，键-&gt;文件名，值-&gt;文件内容</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">volume-config</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">configMap</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example-configmap</span>
+</span></span></code></pre></div><h4 id="secret">Secret</h4>
+<ol>
+<li>OpaqueSecret，对数据进行base64编码</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>加密：echo <span style="color:#e6db74">&#34;hello&#34;</span> | base64
+</span></span><span style="display:flex;"><span>解密：echo <span style="color:#e6db74">&#34;aGVsbG8K&#34;</span> | base64 --decode
+</span></span></code></pre></div><ol start="2">
+<li>
+<p>ImagePullSecret，用于存储私有仓库的认证信息</p>
+</li>
+<li>
+<p>ServiceAccountSecret，用于存储访问KubernetesAPI的认证信息</p>
+</li>
+</ol>
+<h4 id="downwardapi">DownwardAPI</h4>
+<p>向Pod中运行的容器暴露Pod自身的信息</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>
