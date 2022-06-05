@@ -356,3 +356,7 @@ https://192.168.66.100:30000/
 3. 负载均衡插件metallb
 
 [https://artifacthub.io/packages/helm/bitnami/metallb](https://artifacthub.io/packages/helm/bitnami/metallb)
+
+4. 资源监控Prometheus+Grafana
+
+5. 日志采集ElasticSearch+Fluentd+Kibana
