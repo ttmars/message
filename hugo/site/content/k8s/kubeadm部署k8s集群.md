@@ -2,6 +2,8 @@
 title: "kubeadm部署k8s集群"
 date: 2022-06-02T23:25:00+08:00
 draft: true
+
+
 ---
 
 [官方部署文档](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/)
@@ -13,7 +15,7 @@ draft: true
 | 主机名 | IP             | 系统类型  | 配置 |
 | ------ | -------------- | --------- | ---- |
 | master | 192.168.66.100 | centos7.6 | 2c2g |
-| node1  | 192.168.66.101 | centos7.6 | 2c2g |
+| node1  | 192.168.66.101 | centos7.6 | 4c4g |
 
 2. 配置主机名
 
@@ -119,8 +121,6 @@ UUID=43aad901-8cc9-4a3f-a2f5-e42a78439098 /boot                   xfs     defaul
 [https://kubernetes.io/docs/setup/production-environment/container-runtimes/](https://kubernetes.io/docs/setup/production-environment/container-runtimes/)
 
 ```bash
-modprobe br_netfilter
-
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
@@ -158,7 +158,14 @@ curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos
 yum install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ```
 
-3. 配置cgroup driver
+3. 启动docker、containerd
+
+```bash
+systemctl start docker;systemctl enable docker;docker run hello-world
+systemctl start containerd;systemctl enable containerd;
+```
+
+4. 配置cgroup driver
 
 ```bash
 cat  >> /etc/docker/daemon.json << EOF
@@ -166,14 +173,10 @@ cat  >> /etc/docker/daemon.json << EOF
  "exec-opts":["native.cgroupdriver=systemd"]
 }
 EOF
+
+systemctl restart docker
 ```
 
-4. 重启docker、containerd
-
-```bash
-systemctl restart docker;systemctl enable docker
-systemctl restart containerd;systemctl enable containerd;
-```
 
 ### 五、安装kubeadm、kubelet、kubectl
 
@@ -193,12 +196,29 @@ EOF
 
 yum install -y kubelet kubeadm kubectl
 
-systemctl restart kubelet;systemctl enable kubelet
+systemctl start kubelet;systemctl enable kubelet
 ```
 
 ### 六、初始化集群（master）
 
-1. 开启VPN，畅通无阻！
+1. 重启containerd
+
+```bash
+[root@master ~]# kubeadm init
+[init] Using Kubernetes version: v1.24.1
+[preflight] Running pre-flight checks
+error execution phase preflight: [preflight] Some fatal errors occurred:
+	[ERROR CRI]: container runtime is not running: output: E0605 09:24:44.860979    7368 remote_runtime.go:925] "Status from runtime service failed" err="rpc error: code = Unimplemented desc = unknown service runtime.v1alpha2.RuntimeService"
+time="2022-06-05T09:24:44+08:00" level=fatal msg="getting status of runtime: rpc error: code = Unimplemented desc = unknown service runtime.v1alpha2.RuntimeService"
+, error: exit status 1
+[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+To see the stack trace of this error execute with --v=5 or higher
+[root@master ~]# 
+[root@master ~]# rm -rf /etc/containerd/config.toml 
+[root@master ~]# systemctl restart containerd
+```
+
+2. 开启VPN，初始化集群
 
 ```bash
 kubeadm init
@@ -225,8 +245,13 @@ kubeadm join 192.168.66.100:6443 --token pxukys.1ptoihhkdxxdnv70 \
 	--discovery-token-ca-cert-hash sha256:416230308cc2c9f98105ed161b729d9988595e4d5944e6f894293159e64b9dca 
 ```
 
-2. 根据输出提示，配置kubectl访问
-3. 根据输出提示，将node节点加入集群
+3. 配置kubectl访问
+
+```bash
+mkdir ~/.kube ; cp /etc/kubernetes/admin.conf ~/.kube/config
+```
+
+4. 根据输出提示，将node节点加入集群
 
 ### 七、安装calico网络插件
 
@@ -238,42 +263,7 @@ kubeadm join 192.168.66.100:6443 --token pxukys.1ptoihhkdxxdnv70 \
 kubectl apply -f https://projectcalico.docs.tigera.io/manifests/calico.yaml
 ```
 
-### 八、安装dashboard插件
-
-[https://github.com/kubernetes/dashboard](https://github.com/kubernetes/dashboard)
-
-1. 安装dashboard
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.6.0/aio/deploy/recommended.yaml
-```
-
-2. 修改服务类型为NodePort
-
-```bash
-kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
-
-type: NodePort
-ports:
-- nodePort: 30000
-  port: 443
-  protocol: TCP
-  targetPort: 8443
-```
-
-3. 创建访问token
-
-```bash
-kubectl create token kubernetes-dashboard -n kubernetes-dashboard
-```
-
-4. 通过任意节点IP+Port访问
-
-```bash
-https://192.168.66.100:30000/
-```
-
-### 九、去除master污点
+### 八、去除master污点
 
 [https://blog.csdn.net/shanghaibao123/article/details/123878175](https://blog.csdn.net/shanghaibao123/article/details/123878175)
 
@@ -282,3 +272,87 @@ kubectl describe node master | grep Taint
 kubectl taint node master node-role.kubernetes.io/control-plane:NoSchedule-
 ```
 
+
+### 九、配置kebectl
+
+1. 自动补全
+
+[https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion)
+
+```bash
+yum install -y bash-completion
+source /usr/share/bash-completion/bash_completion
+source <(kubectl completion bash)
+alias k=kubectl
+complete -F __start_kubectl k
+```
+
+2. 配置别名
+
+```bash
+alias kcd='kubectl config set-context --current --namespace '
+```
+
+
+3. 配置bash提示符
+
+[https://github.com/jonmosco/kube-ps1](https://github.com/jonmosco/kube-ps1)
+
+```bash
+source /root/tool/kube-ps1/kube-ps1.sh
+PS1='[\u@\h $(kube_ps1) \W]\$ '
+```
+
+### 九、安装dashboard插件
+
+1. 安装helm
+
+```bash
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+```
+
+2. 安装dashboard
+
+[https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard](https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard)
+
+[https://github.com/kubernetes/dashboard](https://github.com/kubernetes/dashboard)
+
+3. 修改服务类型为NodePort、绑定角色
+
+```yaml
+# 绑定集群角色：cluster-admin
+
+# 修改服务类型
+type: NodePort
+ports:
+- nodePort: 30000
+  port: 443
+  protocol: TCP
+  targetPort: 8443
+```
+
+4. 创建访问token
+
+```bash
+kubectl create token kubernetes-dashboard --duration=36500h
+```
+
+5. 通过任意节点IP+Port访问
+
+```bash
+https://192.168.66.100:30000/
+```
+
+### 十、其他插件
+
+1. 本地存储插件hostpath
+
+[https://artifacthub.io/packages/helm/rimusz/hostpath-provisioner](https://artifacthub.io/packages/helm/rimusz/hostpath-provisioner)
+
+2. Metrics Server
+
+[https://artifacthub.io/packages/helm/metrics-server/metrics-server](https://artifacthub.io/packages/helm/metrics-server/metrics-server)
+
+3. 负载均衡插件metallb
+
+[https://artifacthub.io/packages/helm/bitnami/metallb](https://artifacthub.io/packages/helm/bitnami/metallb)
