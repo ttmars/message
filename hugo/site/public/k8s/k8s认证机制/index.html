@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>K8s &middot; 留白</title>
+  <title>k8s认证机制 &middot; 留白</title>
   <meta name="description" content="" />
 
   
@@ -25,7 +25,6 @@
   <link rel="shortcut icon" href="/favicon.png">
 
   
-  <link href="/public/k8s/index.xml" rel="alternate" type="application/rss+xml" title="留白" />
   
 </head>
 
@@ -76,21 +75,47 @@
 	<div class="theme-base-08 ">
 		
 		<main class="content container">
-		<ul class="posts">
-<li>
-    <span><a href="/public/k8s/k8s%E8%AE%A4%E8%AF%81%E6%9C%BA%E5%88%B6/">k8s认证机制</a> <time class="pull-right post-list" datetime="2022-06-05T13:11:00&#43;0800">Sun, Jun 5, 2022</time></span>
-  </li><li>
-    <span><a href="/public/k8s/k8s%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/">k8s存储与配置</a> <time class="pull-right post-list" datetime="2022-06-04T21:46:00&#43;0800">Sat, Jun 4, 2022</time></span>
-  </li><li>
-    <span><a href="/public/k8s/k8s%E6%9C%8D%E5%8A%A1/">K8S服务</a> <time class="pull-right post-list" datetime="2022-06-04T17:49:00&#43;0800">Sat, Jun 4, 2022</time></span>
-  </li><li>
-    <span><a href="/public/k8s/kubeadm%E9%83%A8%E7%BD%B2k8s%E9%9B%86%E7%BE%A4/">kubeadm部署k8s集群</a> <time class="pull-right post-list" datetime="2022-06-02T23:25:00&#43;0800">Thu, Jun 2, 2022</time></span>
-  </li><li>
-    <span><a href="/public/k8s/ingress-nginx%E4%B8%AD%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E5%93%8D%E5%BA%94%E5%A4%B4/">Ingress-nginx中如何配置自定义响应头</a> <time class="pull-right post-list" datetime="2022-05-06T10:26:00&#43;0800">Fri, May 6, 2022</time></span>
-  </li><li>
-    <span><a href="/public/k8s/%E8%A7%A3%E5%86%B3ingress-nginx%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/">解决Ingress-nginx路由配置问题</a> <time class="pull-right post-list" datetime="2022-05-06T09:33:00&#43;0800">Fri, May 6, 2022</time></span>
-  </li>
-</ul>
+		<div class="post">
+  <h1>k8s认证机制</h1>
+  <time datetime=2022-06-05T13:11:00&#43;0800 class="post-date">Sun, Jun 5, 2022</time>
+  <h3 id="apiserver三重认证">APIServer三重认证</h3>
+<ol>
+<li>身份认证：决定用户能不能访问</li>
+<li>授权：决定用户能访问的资源</li>
+<li>准入控制器：决定用户访问资源的规范、准则</li>
+</ol>
+<h3 id="身份认证">身份认证</h3>
+<ol>
+<li>常规用户认证</li>
+<li>ServiceAccount认证，集群内部Pod使用</li>
+</ol>
+<h3 id="rbac授权">RBAC授权</h3>
+<p><img src="https://raw.githubusercontent.com/va-len-tine/image/master/k8s/k8s-1.png" alt=""></p>
+<h3 id="准入控制器">准入控制器</h3>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 		</main>
 		
 		

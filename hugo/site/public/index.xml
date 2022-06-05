@@ -6,7 +6,16 @@
     <description>Recent content on 留白</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 04 Jun 2022 21:46:00 +0800</lastBuildDate><atom:link href="/public/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Jun 2022 13:11:00 +0800</lastBuildDate><atom:link href="/public/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>k8s认证机制</title>
+      <link>/public/k8s/k8s%E8%AE%A4%E8%AF%81%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Sun, 05 Jun 2022 13:11:00 +0800</pubDate>
+      
+      <guid>/public/k8s/k8s%E8%AE%A4%E8%AF%81%E6%9C%BA%E5%88%B6/</guid>
+      <description>APIServer三重认证  身份认证：决定用户能不能访问 授权：决定用户能访问的资源 准入控制器：决定用户访问资源的规范、准则  身份认证  常规用户认证 ServiceAccount认证，集群内部Pod使用  RBAC授权 准入控制器 </description>
+    </item>
+    
     <item>
       <title>k8s存储与配置</title>
       <link>/public/k8s/k8s%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/</link>
