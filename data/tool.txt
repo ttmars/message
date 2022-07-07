@@ -19,7 +19,7 @@
         { "name":"找到AI" , "link":"https://zhaodao.ai/" , "description":"", "badge":""}
     ],
 	"kind3": [
-        { "name":"GitHub" , "link":"https://github.com/" , "description":"GitHub", "badge":""},
+        { "name":"GitHub" , "link":"https://github.com/" , "description":"", "badge":""},
         { "name":"HelloGithub" , "link":"https://hellogithub.com/" , "description":"", "badge":""},
         { "name":"oschina" , "link":"https://www.oschina.net/" , "description":"", "badge":""},
         { "name":"开发者头条" , "link":"https://toutiao.io/posts/hot/7" , "description":"", "badge":""},
