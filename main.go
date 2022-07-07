@@ -142,6 +142,18 @@ func RunServer() {
 		c.HTML(200, "threelist.html",R)
 	})
 
+	r.GET("/githubPy", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 20
+		R.Data = append(R.Data,
+			S2{Title: "Daily(Py)", Content: model.M["Github6"]},
+			S2{Title: "Weekly(Py)", Content: model.M["Github7"]},
+			S2{Title: "Monthly(Py)", Content: model.M["Github8"]},
+		)
+		c.HTML(200, "threelist.html",R)
+	})
+
 	r.GET("/juejin", func(c *gin.Context) {
 		var R S1
 		R.Flag = 1
