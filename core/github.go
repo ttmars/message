@@ -23,6 +23,9 @@ func Github()  {
 					"https://github.com/trending/python?since=daily",
 					"https://github.com/trending/python?since=weekly",
 					"https://github.com/trending/python?since=monthly",
+					"https://github.com/trending/c?since=daily",
+					"https://github.com/trending/c?since=weekly",
+					"https://github.com/trending/c?since=monthly",
 	}
 	for i,url := range urls{
 		//log.Println("debug", i, url)
