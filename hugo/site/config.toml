@@ -1,6 +1,6 @@
 baseURL = '/'
 languageCode = 'en-us'
-title = '留白'
+title = 'Blog'
 theme = "hyde"
 disqusShortname = "spf13"
 googleAnalytics = "Your tracking code"

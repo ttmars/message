@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>K8s on 留白</title>
+    <title>K8s on Blog</title>
     <link>/public/k8s/</link>
-    <description>Recent content in K8s on 留白</description>
+    <description>Recent content in K8s on Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 05 Jun 2022 15:27:00 +0800</lastBuildDate><atom:link href="/public/k8s/index.xml" rel="self" type="application/rss+xml" />
