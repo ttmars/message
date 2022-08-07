@@ -13,8 +13,6 @@
 	"kind2": [
         { "name":"初音" , "link":"http://www.youthsweet.com/" , "description":"", "badge":""},
         { "name":"甜瓜音乐" , "link":"https://www.melon365.com/video/indexgb.html" , "description":"", "badge":""},
-        { "name":"哔哩哔哩" , "link":"https://www.bilibili.com/" , "description":"", "badge":""},
-        { "name":"努努影院" , "link":"https://www.nunuyy10.top/" , "description":"", "badge":""},
         { "name":"今日热榜" , "link":"https://tophub.today/" , "description":"", "badge":""},
         { "name":"找到AI" , "link":"https://zhaodao.ai/" , "description":"", "badge":""}
     ],
