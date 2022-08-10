@@ -21,7 +21,7 @@
         { "name":"HelloGithub" , "link":"https://hellogithub.com/" , "description":"", "badge":""},
         { "name":"oschina" , "link":"https://www.oschina.net/" , "description":"", "badge":""},
         { "name":"开发者头条" , "link":"https://toutiao.io/posts/hot/7" , "description":"", "badge":""},
-        { "name":"LeetCode" , "link":"https://leetcode-cn.com/" , "description":"", "badge":""},
+        { "name":"LeetCode" , "link":"https://leetcode.cn/" , "description":"", "badge":""},
         { "name":"菜鸟教程" , "link":"https://www.runoob.com/" , "description":"", "badge":""},
         { "name":"Bootstrap3" , "link":"https://v3.bootcss.com/" , "description":"", "badge":""}
     ],
