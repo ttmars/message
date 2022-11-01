@@ -410,7 +410,16 @@ package main  import ( 	&amp;#34;demo/protocol&amp;#34; 	&amp;#34;fmt&amp;#34; 	
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/public/go/4.%E5%85%B6%E4%BB%96%E5%BA%94%E7%94%A8/%E5%BA%94%E7%94%A8/</guid>
-      <description> 外挂 GUI 游戏 爬虫  </description>
+      <description>hello</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/public/go/%E5%BA%94%E7%94%A8/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/public/go/%E5%BA%94%E7%94%A8/</guid>
+      <description>hello</description>
     </item>
     
   </channel>
