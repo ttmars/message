@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>并发编程 &middot; Blog</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Home</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>The winner takes it all.</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1>并发编程</h1>
+  <time datetime=2022-05-06T10:26:00&#43;0800 class="post-date">Fri, May 6, 2022</time>
+  <h1 id="传统多进程编程">传统多进程编程</h1>
+<h3 id="进程">进程</h3>
+<h3 id="进程通信">进程通信</h3>
+<h5 id="通信方式">通信方式</h5>
+<ul>
+<li>管道</li>
+<li>消息队列</li>
+<li>信号量</li>
+<li>共享内存</li>
+<li>信号</li>
+<li>socket</li>
+</ul>
+<p>Go语言支持：管道、信号、socket</p>
+<h5 id="管道">管道</h5>
+<p>匿名管道，实现命令：ps -ef|grep nginx</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;bytes&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os/exec&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 将cmd1的标准输出作为cmd2的标准输入
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cmd1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">exec</span>.<span style="color:#a6e22e">Command</span>(<span style="color:#e6db74">&#34;ps&#34;</span>, <span style="color:#e6db74">&#34;-ef&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd2</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">exec</span>.<span style="color:#a6e22e">Command</span>(<span style="color:#e6db74">&#34;grep&#34;</span>, <span style="color:#e6db74">&#34;nginx&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">outputBuf1</span> <span style="color:#a6e22e">bytes</span>.<span style="color:#a6e22e">Buffer</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd1</span>.<span style="color:#a6e22e">Stdout</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">outputBuf1</span>		<span style="color:#75715e">// 将cmd1的标准输出指定为outputBuf1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cmd1</span>.<span style="color:#a6e22e">Start</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#e6db74">&#34;cmd1 start error!&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cmd1</span>.<span style="color:#a6e22e">Wait</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#e6db74">&#34;cmd1 wait error!&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">outputBuf2</span> <span style="color:#a6e22e">bytes</span>.<span style="color:#a6e22e">Buffer</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd2</span>.<span style="color:#a6e22e">Stdin</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">outputBuf1</span>		<span style="color:#75715e">// 将cmd2的标准输入指定为outputBuf1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cmd2</span>.<span style="color:#a6e22e">Stdout</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">outputBuf2</span>		<span style="color:#75715e">// 将cmd2的标准输出指定为outputBuf2，用于输出结果
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cmd2</span>.<span style="color:#a6e22e">Start</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#e6db74">&#34;cmd2 start error!&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cmd2</span>.<span style="color:#a6e22e">Wait</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#e6db74">&#34;cmd2 wait error!&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">outputBuf2</span>.<span style="color:#a6e22e">String</span>())
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>输出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># ps -ef|grep nginx</span>
+</span></span><span style="display:flex;"><span>root     <span style="color:#ae81ff">12211</span> <span style="color:#ae81ff">11690</span>  <span style="color:#ae81ff">0</span> 21:39 pts/1    00:00:00 grep --color<span style="color:#f92672">=</span>auto nginx
+</span></span><span style="display:flex;"><span>root     <span style="color:#ae81ff">29225</span>     <span style="color:#ae81ff">1</span>  <span style="color:#ae81ff">0</span> 11:39 ?        00:00:00 nginx: master process /usr/sbin/nginx
+</span></span><span style="display:flex;"><span>nginx    <span style="color:#ae81ff">29226</span> <span style="color:#ae81ff">29225</span>  <span style="color:#ae81ff">0</span> 11:39 ?        00:00:00 nginx: worker process
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># go run test.go</span>
+</span></span><span style="display:flex;"><span>root     <span style="color:#ae81ff">29225</span>     <span style="color:#ae81ff">1</span>  <span style="color:#ae81ff">0</span> 11:39 ?        00:00:00 nginx: master process /usr/sbin/nginx
+</span></span><span style="display:flex;"><span>nginx    <span style="color:#ae81ff">29226</span> <span style="color:#ae81ff">29225</span>  <span style="color:#ae81ff">0</span> 11:39 ?        00:00:00 nginx: worker process
+</span></span></code></pre></div><p>命名管道，通过shell创建命名管道</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># mkfifo myPipe</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># ll</span>
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>prw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">0</span> Aug  <span style="color:#ae81ff">7</span> 21:50 myPipe
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># echo &#39;hello,world!&#39; &gt; myPipe &amp;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#ae81ff">13268</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># cat &lt; myPipe</span>
+</span></span><span style="display:flex;"><span>hello,world!
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>+  Done                    echo <span style="color:#e6db74">&#39;hello,world!&#39;</span> &gt; myPipe
+</span></span></code></pre></div><p>Go创建命名管道，操作管道两端的代码需要并发执行，否则阻塞</p>
+<ul>
+<li>os.Pipe()，不提供原子操作支持</li>
+<li>io.Pipe()，提供原子操作支持，进程安全</li>
+</ul>
+<h5 id="信号">信号</h5>
+<p>linux支持62种信号，不存在32、33信号，1~31为标准信号（不可靠信号），34~64为实时信号（可靠信号）</p>
+<p>发送信号：键盘输入、硬件故障、系统函数调用、软件中的非法运算</p>
+<p>响应信号：忽略、捕捉、执行默认操作</p>
+<p>监听所有信号：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os/signal&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Signal</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">signal</span>.<span style="color:#a6e22e">Notify</span>(<span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;进程启动&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>输出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># go run test.go</span>
+</span></span><span style="display:flex;"><span>进程启动
+</span></span><span style="display:flex;"><span>^Cinterrupt		<span style="color:#75715e"># 键盘Ctrl+C触发</span>
+</span></span><span style="display:flex;"><span>^<span style="color:#ae81ff">\q</span>uit			<span style="color:#75715e"># 键盘Ctrl+\触发</span>
+</span></span><span style="display:flex;"><span>interrupt		<span style="color:#75715e"># kill -s 2 11770</span>
+</span></span><span style="display:flex;"><span>quit			<span style="color:#75715e"># kill -s 3 11770</span>
+</span></span><span style="display:flex;"><span>terminated		<span style="color:#75715e"># kill -s 15 11770</span>
+</span></span><span style="display:flex;"><span>signal: killed	<span style="color:#75715e"># kill -s 9 11770 (信号9不能被捕获、阻塞或忽略，直接终止进程)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># ps -ef|grep test</span>
+</span></span><span style="display:flex;"><span>root     <span style="color:#ae81ff">11750</span>  <span style="color:#ae81ff">7282</span>  <span style="color:#ae81ff">1</span> 11:08 pts/1    00:00:00 go run test.go
+</span></span><span style="display:flex;"><span>root     <span style="color:#ae81ff">11770</span> <span style="color:#ae81ff">11750</span>  <span style="color:#ae81ff">0</span> 11:08 pts/1    00:00:00 /tmp/go-build1051118277/b001/exe/test
+</span></span><span style="display:flex;"><span>root     <span style="color:#ae81ff">11786</span> <span style="color:#ae81ff">10250</span>  <span style="color:#ae81ff">0</span> 11:09 pts/2    00:00:00 grep --color<span style="color:#f92672">=</span>auto test
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># kill -s 2 11770</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># kill -s 3 11770</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># kill -s 15 11770</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># kill -s 9 11770</span>
+</span></span></code></pre></div><p>监听指定信号：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os/signal&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;syscall&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Signal</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">signal</span>.<span style="color:#a6e22e">Notify</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SIGINT</span>, <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SIGQUIT</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;进程启动&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>输出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># go run test.go </span>
+</span></span><span style="display:flex;"><span>进程启动
+</span></span><span style="display:flex;"><span>^Cinterrupt		<span style="color:#75715e"># 键盘触发，捕获syscall.SIGINT信号</span>
+</span></span><span style="display:flex;"><span>^<span style="color:#ae81ff">\q</span>uit			<span style="color:#75715e"># 键盘触发，捕获syscall.SIGQUIT信号</span>
+</span></span><span style="display:flex;"><span>signal: terminated	<span style="color:#75715e"># kill 12866触发，因为没有监听syscall.SIGTERM信号，程序执行默认操作即退出</span>
+</span></span></code></pre></div><p>优雅退出程序</p>
+<p><a href="https://www.jianshu.com/p/ae72ad58ecb6">https://www.jianshu.com/p/ae72ad58ecb6</a></p>
+<h5 id="socket">socket</h5>
+<h1 id="传统多线程编程">传统多线程编程</h1>
+<h3 id="线程">线程</h3>
+<p>线程间的控制</p>
+<ul>
+<li>创建线程</li>
+<li>终止线程</li>
+<li>连接已终止的线程</li>
+<li>分离线程</li>
+</ul>
+<p>线程的状态</p>
+<p>线程的调度</p>
+<p>线程实现模型</p>
+<ul>
+<li>用户级线程模型</li>
+<li>内核级线程模型</li>
+<li>两级线程模型</li>
+</ul>
+<h3 id="线程同步">线程同步</h3>
+<h5 id="互斥锁">互斥锁</h5>
+<h5 id="读写锁">读写锁</h5>
+<h5 id="条件变量">条件变量</h5>
+<h5 id="信号量">信号量</h5>
+<p><a href="https://zhuanlan.zhihu.com/p/461063930">https://zhuanlan.zhihu.com/p/461063930</a></p>
+<h1 id="go的并发机制">Go的并发机制</h1>
+<h3 id="协程">协程</h3>
+<h5 id="进程与线程的区别">进程与线程的区别</h5>
+<ol>
+<li>进程是操作系统<strong>资源分配</strong>的最小单位，线程是操作系统<strong>调度</strong>的最小单位</li>
+<li>线程是进程的组成部分，多个线程共享进程的内存地址空间</li>
+<li>线程的上下文切换速度更快</li>
+</ol>
+<h5 id="线程与协程的区别">线程与协程的区别</h5>
+<ol>
+<li>调度方式：操作系统感知不到协程的存在，协程由go语言自身调度</li>
+<li>上下文切换：协程是用户态的，协程的切换不用经过操作系统用户态与内核态的转变，速度更快</li>
+<li>调度策略：多数情况下，线程是抢占式调度，而协程是协作式调度</li>
+<li>栈大小：创建一个线程栈大小为2M，而创建一个协程栈大小为2KB，并且协程的栈可以动态扩容</li>
+</ol>
+<h5 id="并行与并发的区别">并行与并发的区别</h5>
+<ul>
+<li>并发：同一段时间有多个协程运行</li>
+<li>并行：同一时刻有多个协程运行</li>
+</ul>
+<h5 id="gpm调度原理">GPM调度原理</h5>
+<ul>
+<li>G：表示一个协程</li>
+<li>P：表示一个逻辑处理器，默认值为处理器核数</li>
+<li>M：表示一个实际线程，默认值为10000</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">Goexit</span>()		<span style="color:#75715e">// 结束当前goroutine的运行
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">Gosched</span>()		<span style="color:#75715e">// 放弃当前调度执行机会，加入goroutine队列等待下次执行
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">GOMAXPROCS</span>()	<span style="color:#75715e">// 查询或设置逻辑处理器数量
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;runtime&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">GOMAXPROCS</span>(<span style="color:#ae81ff">0</span>))		<span style="color:#75715e">// 查询逻辑处理器数量
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">GOMAXPROCS</span>(<span style="color:#ae81ff">3</span>)					<span style="color:#75715e">// 设置逻辑处理器数量
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">GOMAXPROCS</span>(<span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//12
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//3
+</span></span></span></code></pre></div><h3 id="协程的通信与同步通道">协程的通信与同步（通道）</h3>
+<h5 id="操作特性">操作特性</h5>
+<ul>
+<li>
+<p>通道相当于一个FIFO（先进先出）的消息队列</p>
+</li>
+<li>
+<p>接收值是发送值的一个副本，若发送值是一个引用类型，则对接收值的修改会影响发送值</p>
+</li>
+</ul>
+<h5 id="初始化通道">初始化通道</h5>
+<p>使用未初始化的通道会panic</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)		<span style="color:#75715e">// 缓冲通道
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)			<span style="color:#75715e">// 非缓冲通道
+</span></span></span></code></pre></div><h5 id="发送元素">发送元素</h5>
+<p>向一个已关闭的通道发送元素会panic</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">strChan</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>, <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">strChan</span> <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;hello&#34;</span>
+</span></span></code></pre></div><h5 id="接收元素">接收元素</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">elem1</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">strChan</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">elem2</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">strChan</span>		<span style="color:#75715e">// 当通道关闭时，ok用于判断elem是通道中的元素还是该通道已经关闭的标识
+</span></span></span></code></pre></div><h5 id="监听一个通道forchan">监听一个通道（for、chan）</h5>
+<p>for语句会不断尝试从通道中取元素，直到通道关闭，for语句结束</p>
+<p>若忘记关闭通道，会造成死锁！</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">intChan</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#ae81ff">5</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">intChan</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">i</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 等待三秒后，关闭通道
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span><span style="color:#f92672">*</span><span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>		close(<span style="color:#a6e22e">intChan</span>)
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 通道未关闭时，range阻塞
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">elem</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">intChan</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">elem</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;end&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h5 id="监听多个通道forselectchan">监听多个通道（for、select、chan）</h5>
+<p>select语句执行时，case表达式会先求值，顺序从左至右，至上而下</p>
+<p>若有多个case语句满足条件执行，则系统随机选择一个case</p>
+<p>若所有case都不满足条件，则执行default语句；若未定义default语句，则select语句阻塞，直到某个case满足条件</p>
+<p>break语句只会结束select，并不会结束外层for循环；可以通过带标签的break语句结束外层for循环</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;strconv&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">intChan</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">strChan</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>, <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#ae81ff">5</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">intChan</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">i</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">strChan</span> <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;hello&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Loop</span>:
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">e1</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">intChan</span>:
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;intChan:&#34;</span>, <span style="color:#a6e22e">e1</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">e2</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">strChan</span>:
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;strChan:&#34;</span>, <span style="color:#a6e22e">e2</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;no element!&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span> <span style="color:#a6e22e">Loop</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;end!&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 打印顺序随机
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//intChan: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//strChan: hello0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//strChan: hello1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//intChan: 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//intChan: 2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//strChan: hello2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//intChan: 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//intChan: 4
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//strChan: hello3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//strChan: hello4
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//no element!
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//end!
+</span></span></span></code></pre></div><h5 id="timetick">time.Tick</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span>  make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>:
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;hello&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Tick</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;world&#34;</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span><span style="color:#f92672">*</span><span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>	close(<span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//world
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//world
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//hello
+</span></span></span></code></pre></div><h5 id="关闭通道">关闭通道</h5>
+<p>已关闭的通道，只能接收元素，发送元素会panic；因此推荐在发送端执行关闭操作，不影响接收端</p>
+<p>通道只能关闭一次，重复关闭会panic</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>close(<span style="color:#a6e22e">strChan</span>)
+</span></span></code></pre></div><h5 id="单向通道">单向通道</h5>
+<p>单向通道分为接收通道和发送通道，一般用作函数参数，作为一种约束</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">receive</span>(<span style="color:#a6e22e">strChan</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>){}		<span style="color:#75715e">// 接收通道，只能从strChan中取值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">strChan</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">string</span>){}			<span style="color:#75715e">// 发送通道，只能往strChan中发送值
+</span></span></span></code></pre></div><h3 id="其他同步方式">其他同步方式</h3>
+<h5 id="数据争用检测race">数据争用检测race</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">count</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#ae81ff">10000</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">count</span><span style="color:#f92672">++</span>			<span style="color:#75715e">// 将会触发race事件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		}()
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">count</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># go run main.go </span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">9579</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@iZ8vb8qjajxkxytobaq81hZ test<span style="color:#f92672">]</span><span style="color:#75715e"># go run -race main.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==================</span>
+</span></span><span style="display:flex;"><span>WARNING: DATA RACE
+</span></span><span style="display:flex;"><span>Read at 0x00c00001a0d8 by goroutine 7:
+</span></span><span style="display:flex;"><span>  main.main.func1<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>      /root/test/main.go:15 +0x8d
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Previous write at 0x00c00001a0d8 by goroutine 161:
+</span></span><span style="display:flex;"><span>  main.main.func1<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>      /root/test/main.go:15 +0xa4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Goroutine <span style="color:#ae81ff">7</span> <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> created at:
+</span></span><span style="display:flex;"><span>  main.main<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>      /root/test/main.go:13 +0x84
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Goroutine <span style="color:#ae81ff">161</span> <span style="color:#f92672">(</span>finished<span style="color:#f92672">)</span> created at:
+</span></span><span style="display:flex;"><span>  main.main<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>      /root/test/main.go:13 +0x84
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==================</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">10000</span>
+</span></span><span style="display:flex;"><span>Found <span style="color:#ae81ff">1</span> data race<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>exit status <span style="color:#ae81ff">66</span>
+</span></span></code></pre></div><h5 id="syncatomic原子操作">sync/atomic（原子操作）</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// src/sync/atomic/doc.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">SwapInt64</span>(<span style="color:#a6e22e">addr</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span>, <span style="color:#a6e22e">new</span> <span style="color:#66d9ef">int64</span>) (<span style="color:#a6e22e">old</span> <span style="color:#66d9ef">int64</span>)						<span style="color:#75715e">// 交换
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CompareAndSwapInt64</span>(<span style="color:#a6e22e">addr</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span>, <span style="color:#a6e22e">old</span>, <span style="color:#a6e22e">new</span> <span style="color:#66d9ef">int64</span>) (<span style="color:#a6e22e">swapped</span> <span style="color:#66d9ef">bool</span>)	<span style="color:#75715e">// 比较并且交换
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">AddInt64</span>(<span style="color:#a6e22e">addr</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span>, <span style="color:#a6e22e">delta</span> <span style="color:#66d9ef">int64</span>) (<span style="color:#a6e22e">new</span> <span style="color:#66d9ef">int64</span>)						<span style="color:#75715e">// 增减
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">LoadInt64</span>(<span style="color:#a6e22e">addr</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span>) (<span style="color:#a6e22e">val</span> <span style="color:#66d9ef">int64</span>)								 <span style="color:#75715e">// 加载
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">StoreInt64</span>(<span style="color:#a6e22e">addr</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span>, <span style="color:#a6e22e">val</span> <span style="color:#66d9ef">int64</span>)								<span style="color:#75715e">// 存储
+</span></span></span></code></pre></div><p>通过atomic.AddInt64同步count</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync/atomic&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">count</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#ae81ff">10000</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">AddInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">count</span>, <span style="color:#ae81ff">1</span>)		<span style="color:#75715e">// 强制同一时刻只能有一个goroutine完成加一操作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		}()
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">count</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h5 id="syncmutex互斥锁">sync.Mutex（互斥锁）</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// src/sync/mutex.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// A Mutex is a mutual exclusion lock.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// The zero value for a Mutex is an unlocked mutex.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// A Mutex must not be copied after first use.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Mutex</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">state</span> <span style="color:#66d9ef">int32</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sema</span>  <span style="color:#66d9ef">uint32</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// A Locker represents an object that can be locked and unlocked.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Locker</span> <span style="color:#66d9ef">interface</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>并发读取并修改变量：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">count</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">mutex</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>			<span style="color:#75715e">// 定义互斥锁
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#ae81ff">10000</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">mutex</span>.<span style="color:#a6e22e">Lock</span>()			<span style="color:#75715e">// 加锁
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">mutex</span>.<span style="color:#a6e22e">Unlock</span>()	<span style="color:#75715e">// 解锁
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">count</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>		}()
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">count</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>使用通道解决同步</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int64</span>, <span style="color:#ae81ff">1</span>)		<span style="color:#75715e">// 创建一个长度为1的缓存通道存储count
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">0</span>							<span style="color:#75715e">// 初始化count
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">1</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">&lt;=</span><span style="color:#ae81ff">10000</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>			<span style="color:#75715e">// 并发读阻塞
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">t</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">t</span>				<span style="color:#75715e">// 并发写阻塞
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		}()
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h5 id="syncrwmutex读写锁">sync.RWMutex（读写锁）</h5>
+<p>读写锁是对互斥锁的一个封装，在读多写少的情况下比互斥锁更高效</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// src/sync/rwmutex.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">RWMutex</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">w</span>           <span style="color:#a6e22e">Mutex</span>  <span style="color:#75715e">// held if there are pending writers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">writerSem</span>   <span style="color:#66d9ef">uint32</span> <span style="color:#75715e">// semaphore for writers to wait for completing readers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">readerSem</span>   <span style="color:#66d9ef">uint32</span> <span style="color:#75715e">// semaphore for readers to wait for completing writers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">readerCount</span> <span style="color:#66d9ef">int32</span>  <span style="color:#75715e">// number of pending readers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">readerWait</span>  <span style="color:#66d9ef">int32</span>  <span style="color:#75715e">// number of departing readers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">rw</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">RWMutex</span>) <span style="color:#a6e22e">RLock</span>() {}	<span style="color:#75715e">// 读锁定
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">rw</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">RWMutex</span>) <span style="color:#a6e22e">RUnlock</span>() {}	<span style="color:#75715e">// 读解锁
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">rw</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">RWMutex</span>) <span style="color:#a6e22e">Lock</span>() {}	<span style="color:#75715e">// 写锁定
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">rw</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">RWMutex</span>) <span style="color:#a6e22e">Unlock</span>() {}	<span style="color:#75715e">// 写解锁
+</span></span></span></code></pre></div><h5 id="synccond条件变量">*sync.Cond（条件变量）</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// src/sync/cond.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Cond</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">noCopy</span> <span style="color:#a6e22e">noCopy</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// L is held while observing or changing the condition
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">L</span> <span style="color:#a6e22e">Locker</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">notify</span>  <span style="color:#a6e22e">notifyList</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">checker</span> <span style="color:#a6e22e">copyChecker</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// NewCond returns a new Cond with Locker l.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewCond</span>(<span style="color:#a6e22e">l</span> <span style="color:#a6e22e">Locker</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">Cond</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Cond</span>{<span style="color:#a6e22e">L</span>: <span style="color:#a6e22e">l</span>}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Cond</span>) <span style="color:#a6e22e">Wait</span>() {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Cond</span>) <span style="color:#a6e22e">Signal</span>() {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Cond</span>) <span style="color:#a6e22e">Broadcast</span>() {}
+</span></span></code></pre></div><p><a href="https://www.cnblogs.com/mayanan/p/15842054.html">https://www.cnblogs.com/mayanan/p/15842054.html</a></p>
+<h5 id="errgroup">errgroup</h5>
+<p><a href="https://pkg.go.dev/golang.org/x/sync/errgroup">https://pkg.go.dev/golang.org/x/sync/errgroup</a></p>
+<h5 id="syncwaitgroup等待组">sync.WaitGroup（等待组）</h5>
+<p>协调多个协程运行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// src/sync/waitgroup.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">WaitGroup</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">noCopy</span> <span style="color:#a6e22e">noCopy</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">state1</span> <span style="color:#66d9ef">uint64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">state2</span> <span style="color:#66d9ef">uint32</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">wg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">WaitGroup</span>) <span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">delta</span> <span style="color:#66d9ef">int</span>) {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">wg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">WaitGroup</span>) <span style="color:#a6e22e">Done</span>() {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">wg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">WaitGroup</span>) <span style="color:#a6e22e">Wait</span>() {}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#ae81ff">5</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">v</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;goroutine %d done.\n&#34;</span>, <span style="color:#a6e22e">v</span>)
+</span></span><span style="display:flex;"><span>		}(<span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;end.&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//goroutine 1 done.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//goroutine 4 done.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//goroutine 3 done.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//goroutine 0 done.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//goroutine 2 done.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//end.
+</span></span></span></code></pre></div><h5 id="synconce执行一次">sync.Once（执行一次）</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// src/sync/once.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Once</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">done</span> <span style="color:#66d9ef">uint32</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">m</span>    <span style="color:#a6e22e">Mutex</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">o</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Once</span>) <span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">f</span> <span style="color:#66d9ef">func</span>()) {}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">once</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Once</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">count</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#ae81ff">10000</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">once</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">count</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>		})
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">count</span>)		<span style="color:#75715e">// 无论循环多少次，func()函数只会执行一次，count等于1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h5 id="syncmap并发安全散列表">sync.Map（并发安全散列表）</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">m</span> <span style="color:#f92672">:=</span> new(<span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Map</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 增
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#e6db74">&#34;math&#34;</span>, <span style="color:#ae81ff">99</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#e6db74">&#34;english&#34;</span>, <span style="color:#ae81ff">59</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#e6db74">&#34;chemistry&#34;</span>, <span style="color:#ae81ff">88</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 删
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Delete</span>(<span style="color:#e6db74">&#34;english&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 改:先删后增
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 查
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 加载
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">v1</span>,<span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Load</span>(<span style="color:#e6db74">&#34;math&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;math:&#34;</span>,<span style="color:#a6e22e">v1</span>,<span style="color:#a6e22e">ok</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 加载并删除
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">v2</span>,<span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">LoadAndDelete</span>(<span style="color:#e6db74">&#34;math&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;math:&#34;</span>,<span style="color:#a6e22e">v2</span>,<span style="color:#a6e22e">ok</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 加载或存储
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">v3</span>,<span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">LoadOrStore</span>(<span style="color:#e6db74">&#34;math&#34;</span>, <span style="color:#ae81ff">77</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;math:&#34;</span>,<span style="color:#a6e22e">v3</span>,<span style="color:#a6e22e">ok</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 遍历
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Range</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">value</span> <span style="color:#a6e22e">any</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">k</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">key</span>.(<span style="color:#66d9ef">string</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">value</span>.(<span style="color:#66d9ef">int</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">k</span>, <span style="color:#a6e22e">v</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//math: 99 true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//math: 99 true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//math: 77 false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//math 77
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//chemistry 88
+</span></span></span></code></pre></div><h5 id="syncpool缓存池">sync.Pool（缓存池）</h5>
+<p><a href="https://qcrao.com/post/dive-into-go-sync-pool/">https://qcrao.com/post/dive-into-go-sync-pool/</a></p>
+<h5 id="contextcontext上下文">context.Context（上下文）</h5>
+<p>包类型</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Context接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Context</span> <span style="color:#66d9ef">interface</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Deadline</span>() (<span style="color:#a6e22e">deadline</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>, <span style="color:#a6e22e">ok</span> <span style="color:#66d9ef">bool</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Done</span>() <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Err</span>() <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Value</span>(<span style="color:#a6e22e">key</span> <span style="color:#a6e22e">any</span>) <span style="color:#a6e22e">any</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 空的context，实现了Context接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">emptyCtx</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// background、todo是emptyCtx的具体实例，所以也实现了Context接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span>	<span style="color:#a6e22e">background</span> = new(<span style="color:#a6e22e">emptyCtx</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span>	<span style="color:#a6e22e">todo</span>       = new(<span style="color:#a6e22e">emptyCtx</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Background</span>() <span style="color:#a6e22e">Context</span> {<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">background</span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">TODO</span>() <span style="color:#a6e22e">Context</span> {<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">todo</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 取消信号、设置截止/超时时间、传递共享数据
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">CancelFunc</span> <span style="color:#66d9ef">func</span>()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">WithCancel</span>(<span style="color:#a6e22e">parent</span> <span style="color:#a6e22e">Context</span>) (<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">cancel</span> <span style="color:#a6e22e">CancelFunc</span>) {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">WithDeadline</span>(<span style="color:#a6e22e">parent</span> <span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">d</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>) (<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">CancelFunc</span>) {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">WithTimeout</span>(<span style="color:#a6e22e">parent</span> <span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">timeout</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>) (<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">CancelFunc</span>) {<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">WithDeadline</span>(<span style="color:#a6e22e">parent</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">timeout</span>))}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">WithValue</span>(<span style="color:#a6e22e">parent</span> <span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">val</span> <span style="color:#a6e22e">any</span>) <span style="color:#a6e22e">Context</span> {}
+</span></span></code></pre></div><p>传递共享数据</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;context&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ctx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">WithValue</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(), <span style="color:#e6db74">&#34;hello&#34;</span>, <span style="color:#e6db74">&#34;world&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">ctx</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v</span>,<span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Value</span>(<span style="color:#e6db74">&#34;hello&#34;</span>).(<span style="color:#66d9ef">string</span>); <span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;value:%v\n&#34;</span>, <span style="color:#a6e22e">v</span>)
+</span></span><span style="display:flex;"><span>	}<span style="color:#66d9ef">else</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;no value&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//value:world
+</span></span></span></code></pre></div><p>发送取消信号</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;context&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">cancel</span><span style="color:#f92672">:=</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">WithCancel</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>())
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">f1</span>(<span style="color:#a6e22e">ctx</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 发送取消信号
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cancel</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f1</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">select</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">After</span>(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span><span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>):
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;f1 say hello&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Done</span>():		<span style="color:#75715e">// 处理取消信号
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;f1 done!&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//f1 say hello
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//f1 say hello
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//f1 done!
+</span></span></span></code></pre></div><h3 id="并发范式">并发范式</h3>
+<h5 id="控制并发数">控制并发数</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;runtime&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>			<span style="color:#75715e">// 同步协程
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">maxNum</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">3</span>					<span style="color:#75715e">// 最大并发数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>, <span style="color:#a6e22e">maxNum</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#ae81ff">50</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">true</span>					<span style="color:#75715e">// 通道满时阻塞，控制创建协程的数量
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">doSomething</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">wg</span>, <span style="color:#a6e22e">ch</span>, <span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;end!&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSomething</span>(<span style="color:#a6e22e">wg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>, <span style="color:#a6e22e">ch</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>, <span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;go func %d goroutine count %d\n&#34;</span>, <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">NumGoroutine</span>())
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://juejin.cn/post/7017286487502766093">https://juejin.cn/post/7017286487502766093</a></p>
+<h5 id="生产者消费者模型">生产者/消费者模型</h5>
+<h5 id="发布订阅模型">发布/订阅模型</h5>
+<h3 id="参考">参考</h3>
+<p><a href="https://lailin.xyz/post/go-training-week3-goroutine.html">https://lailin.xyz/post/go-training-week3-goroutine.html</a></p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>

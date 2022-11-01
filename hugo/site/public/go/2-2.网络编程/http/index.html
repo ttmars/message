@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>HTTP2协议 &middot; Blog</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Home</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>The winner takes it all.</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1>HTTP2协议</h1>
+  <time datetime=2022-05-06T10:26:00&#43;0800 class="post-date">Fri, May 6, 2022</time>
+  <h3 id="http2历史">HTTP2历史</h3>
+<ul>
+<li>2009年，谷歌的SPDY协议问世，主要特性：流多路利用、请求优先级、HTTP首部压缩</li>
+<li>2015年，基于SPDY的HTTP2协议正式成为标准问世</li>
+</ul>
+<h3 id="http2新增概念">HTTP2新增概念</h3>
+<ul>
+<li>二进制协议</li>
+<li>多路复用</li>
+<li>流量控制功能</li>
+<li>数据流优先级</li>
+<li>首部压缩</li>
+<li>服务端推送</li>
+</ul>
+<h3 id="组合">组合</h3>
+<ul>
+<li>HTTP/1.1+http</li>
+<li>HTTP/1.1+https</li>
+<li>HTTP/2+https=h2</li>
+<li>HTTP/2+http=h2c</li>
+</ul>
+<h3 id="命令">命令</h3>
+<ul>
+<li>telnet，使用telnet模拟tcp连接和发送http请求</li>
+<li>nc(netcat)</li>
+</ul>
+<h3 id="http版本区别">HTTP版本区别</h3>
+<p><a href="https://www.cnblogs.com/yjh1995/p/16368320.html">https://www.cnblogs.com/yjh1995/p/16368320.html</a></p>
+<ul>
+<li>HTTP/0.9：只有一个命令GET</li>
+<li>HTTP/1.0：增加了请求方法、HTTP版本号、HTTP首部、响应状态码</li>
+<li>HTTP/1.1：强制添加host首部、支持持久连接</li>
+<li>HTTP/2：host首部改为:authority伪首部，可通过这个字段区别1.1和2版本；HTTP/2请求中未明确声明版本号</li>
+</ul>
+<h3 id="https">HTTPS</h3>
+<ul>
+<li>HTTPS在HTTP的基础上，添加了TLS加密</li>
+<li>TLS的前身是SSL</li>
+<li>HTTPS提供了消息加密、消息完整性验证、服务器身份验证</li>
+</ul>
+<h3 id="模拟发送http请求">模拟发送HTTP请求</h3>
+<ul>
+<li>telnet、nc（netcat）、curl、wget</li>
+<li>浏览器、postman</li>
+</ul>
+<h3 id="其他">其他</h3>
+<p>优化http/1.1</p>
+<ul>
+<li>使用多个http连接</li>
+<li>合并http请求</li>
+</ul>
+<h3 id="网站测试瀑布图">网站测试瀑布图</h3>
+<p><a href="https://www.webpagetest.org/">https://www.webpagetest.org/</a></p>
+<h3 id="升级到http2">升级到HTTP/2</h3>
+<h3 id="负载均衡">负载均衡</h3>
+<ul>
+<li>HTTP负载均衡器，也称7层负载均衡器</li>
+<li>TCP负载均衡器，也称4层负载均衡器</li>
+</ul>
+<h3 id="tcp队头阻塞">TCP队头阻塞</h3>
+<p><a href="https://blog.csdn.net/weixin_44260459/article/details/120797655">https://blog.csdn.net/weixin_44260459/article/details/120797655</a></p>
+<p>HTTP/2解决了http层的队头阻塞，但TCP层的队头阻塞依然存在</p>
+<p>因为tcp要保证有序，如果前面的包丢失，尽管后边的包成功收到，仍无法向上交付，必须等丢失的包重传后才能向应用层交付</p>
+<h3 id="quic协议">QUIC协议</h3>
+<ul>
+<li>谷歌提出，全称：Quick UDP Internet Connections</li>
+<li>基于UDP</li>
+</ul>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>

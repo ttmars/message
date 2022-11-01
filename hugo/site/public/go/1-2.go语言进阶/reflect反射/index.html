@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>reflect反射 &middot; Blog</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Home</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>The winner takes it all.</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1>reflect反射</h1>
+  <time datetime=2022-05-06T10:26:00&#43;0800 class="post-date">Fri, May 6, 2022</time>
+  <h3 id="基本概念">基本概念</h3>
+<ol>
+<li>反射：支持程序在运行中，动态地访问和修改变量的类型和值</li>
+</ol>
+<h3 id="反射规则">反射规则</h3>
+<ul>
+<li>实例、Value、Type之间可以相互转换</li>
+<li>reflect.Type表示实例的类型信息</li>
+<li>reflect.Value表示实例的值信息</li>
+</ul>
+<h4 id="实例type互转">实例、Type互转</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// src/reflect/type.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Type</span> <span style="color:#66d9ef">interface</span> {<span style="color:#f92672">...</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 实例转Type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 若i传入的是具体类型，则返回具体类型信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 若i传入的是接口类型，且绑定了具体实例，则返回接口的动态类型信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 若i传入的是接口类型，其未绑定具体实例，则返回接口的静态类型信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">TypeOf</span>(<span style="color:#a6e22e">i</span> <span style="color:#a6e22e">any</span>) <span style="color:#a6e22e">Type</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Type转实例？
+</span></span></span></code></pre></div><h4 id="实例value互转">实例、Value互转</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// src/reflect/value.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Value</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">typ</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">rtype</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ptr</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">flag</span>
+</span></span><span style="display:flex;"><span>} 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 实例转Value
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ValueOf</span>(<span style="color:#a6e22e">i</span> <span style="color:#a6e22e">any</span>) <span style="color:#a6e22e">Value</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Value转实例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">v</span> <span style="color:#a6e22e">Value</span>) <span style="color:#a6e22e">Interface</span>() (<span style="color:#a6e22e">i</span> <span style="color:#a6e22e">any</span>) {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">v</span> <span style="color:#a6e22e">Value</span>) <span style="color:#a6e22e">Int</span>() <span style="color:#66d9ef">int64</span> {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">v</span> <span style="color:#a6e22e">Value</span>) <span style="color:#a6e22e">Float</span>() <span style="color:#66d9ef">float64</span> {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">v</span> <span style="color:#a6e22e">Value</span>) <span style="color:#a6e22e">Bool</span>() <span style="color:#66d9ef">bool</span> {}
+</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>
+</span></span></code></pre></div><h4 id="typevalue互转">Type、Value互转</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Value转Type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">v</span> <span style="color:#a6e22e">Value</span>) <span style="color:#a6e22e">Type</span>() <span style="color:#a6e22e">Type</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Type转Value
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">typ</span> <span style="color:#a6e22e">Type</span>) <span style="color:#a6e22e">Value</span> {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewAt</span>(<span style="color:#a6e22e">typ</span> <span style="color:#a6e22e">Type</span>, <span style="color:#a6e22e">p</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>) <span style="color:#a6e22e">Value</span> {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Zero</span>(<span style="color:#a6e22e">typ</span> <span style="color:#a6e22e">Type</span>) <span style="color:#a6e22e">Value</span> {}
+</span></span></code></pre></div><h4 id="value到value">Value到Value</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 指针类型Value到值类型Value
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">v</span> <span style="color:#a6e22e">Value</span>) <span style="color:#a6e22e">Elem</span>() <span style="color:#a6e22e">Value</span> {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Indirect</span>(<span style="color:#a6e22e">v</span> <span style="color:#a6e22e">Value</span>) <span style="color:#a6e22e">Value</span> {}
+</span></span></code></pre></div><h4 id="type到type">Type到Type</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 指针类型Type到值类型Type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// Elem returns a type&#39;s element type.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// It panics if the type&#39;s Kind is not Array, Chan, Map, Pointer, or Slice.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Type</span> <span style="color:#66d9ef">interface</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Elem</span>() <span style="color:#a6e22e">Type</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 值类型Type到指针类型Type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">PtrTo</span>(<span style="color:#a6e22e">t</span> <span style="color:#a6e22e">Type</span>) <span style="color:#a6e22e">Type</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">PointerTo</span>(<span style="color:#a6e22e">t</span>) }
+</span></span></code></pre></div><h4 id="value值的可修改性">Value值的可修改性</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;reflect&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">User</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Id</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Age</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">u</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">User</span>{<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;Bob&#34;</span>, <span style="color:#ae81ff">25</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">u</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">va</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#a6e22e">u</span>)	<span style="color:#75715e">// va是Value值类型，不可修改原值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">vb</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">u</span>)	<span style="color:#75715e">// va是Value指针类型，可修改原值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">va</span>.<span style="color:#a6e22e">CanSet</span>(), <span style="color:#a6e22e">va</span>.<span style="color:#a6e22e">FieldByName</span>(<span style="color:#e6db74">&#34;Name&#34;</span>).<span style="color:#a6e22e">CanSet</span>())
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//fmt.Println(vb.CanSet(), vb.FieldByName(&#34;Name&#34;).CanSet())				// vb是指针类型，FieldByName是值方法，会panic
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">vb</span>.<span style="color:#a6e22e">CanSet</span>(), <span style="color:#a6e22e">vb</span>.<span style="color:#a6e22e">Elem</span>().<span style="color:#a6e22e">FieldByName</span>(<span style="color:#e6db74">&#34;Name&#34;</span>).<span style="color:#a6e22e">CanSet</span>())	<span style="color:#75715e">// 通过Elem()将指针类型Value转换为值类型Value
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 修改指针类型的Name字段
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">name</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;Alic&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">vname</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#a6e22e">name</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">vb</span>.<span style="color:#a6e22e">Elem</span>().<span style="color:#a6e22e">FieldByName</span>(<span style="color:#e6db74">&#34;Name&#34;</span>).<span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">vname</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">vb</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">u</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//{1 Bob 25}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//false false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//false true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//&amp;{1 Alic 25}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//{1 Alic 25}
+</span></span></span></code></pre></div>
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>

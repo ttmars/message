@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Redis &middot; Blog</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Home</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>The winner takes it all.</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1>Redis</h1>
+  <time datetime=2022-05-06T10:26:00&#43;0800 class="post-date">Fri, May 6, 2022</time>
+  <h3 id="redis文档">redis文档</h3>
+<ul>
+<li>DOC：<a href="https://redis.io/docs/">https://redis.io/docs/</a></li>
+<li>安装：<a href="https://redis.io/docs/getting-started/installation/install-redis-from-source/">https://redis.io/docs/getting-started/installation/install-redis-from-source/</a></li>
+<li>命令：<a href="https://redis.io/commands/">https://redis.io/commands/</a></li>
+</ul>
+<h3 id="redis基础">redis基础</h3>
+<h4 id="数据库">数据库</h4>
+<ul>
+<li>redis默认会创建16个数据库，编号为0~15</li>
+<li>数据库可以理解为命名空间，不同的数据库中的键可以相等</li>
+<li>可以使用select切换数据库（select 7）</li>
+</ul>
+<h4 id="键">键</h4>
+<p><a href="https://redis.io/docs/data-types/tutorial/">https://redis.io/docs/data-types/tutorial/</a></p>
+<h4 id="值">值</h4>
+<p>即数据结构</p>
+<h3 id="redis数据结构">redis数据结构</h3>
+<h4 id="string字符串">String（字符串）</h4>
+<table>
+<thead>
+<tr>
+<th>set</th>
+<th>默认</th>
+<th>NX</th>
+<th>XX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>键不存在</td>
+<td>OK</td>
+<td>OK</td>
+<td>nil</td>
+</tr>
+<tr>
+<td>键存在</td>
+<td>OK</td>
+<td>nil</td>
+<td>OK</td>
+</tr>
+</tbody>
+</table>
+<h4 id="hash散列">Hash（散列）</h4>
+<h4 id="list列表">List（列表）</h4>
+<h5 id="消息队列">消息队列</h5>
+<h4 id="set集合">Set（集合）</h4>
+<h5 id="抽奖">抽奖</h5>
+<h4 id="sorted-set有序集合">Sorted Set（有序集合）</h4>
+<h5 id="排行榜">排行榜</h5>
+<h4 id="hyperloglog计数">HyperLogLog（计数）</h4>
+<h5 id="唯一计数器">唯一计数器</h5>
+<h4 id="bitmap位图">Bitmap（位图）</h4>
+<h5 id="记录用户行为">记录用户行为</h5>
+<h4 id="geospatial-indices地理坐标">Geospatial indices（地理坐标）</h4>
+<h5 id="查找附近用户">查找附近用户</h5>
+<h4 id="stream流">Stream（流）</h4>
+<h5 id="实现消息队列">实现消息队列</h5>
+<h4 id="pubsub发布订阅">Pub/Sub（发布订阅）</h4>
+<h3 id="redis扩展">redis扩展</h3>
+<h4 id="流水线和事务">流水线和事务</h4>
+<h4 id="lua脚本">Lua脚本</h4>
+<h4 id="模块">模块</h4>
+<h3 id="redis持久化">redis持久化</h3>
+<h4 id="rdb持久化默认">RDB持久化（默认）</h4>
+<h4 id="aof持久化">AOF持久化</h4>
+<h4 id="rdb-aof混合持久化">RDB-AOF混合持久化</h4>
+<h3 id="redis高可用">redis高可用</h3>
+<h4 id="redis主从复制">Redis主从复制</h4>
+<h4 id="redis-sentinel模式">Redis Sentinel模式</h4>
+<h4 id="redis集群">Redis集群</h4>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>

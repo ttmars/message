@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nginx &middot; Blog</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Home</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>The winner takes it all.</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1>Nginx</h1>
+  <time datetime=2022-05-06T10:26:00&#43;0800 class="post-date">Fri, May 6, 2022</time>
+  <h2 id="nginx概述">Nginx概述</h2>
+<h3 id="nginx版本">nginx版本</h3>
+<ul>
+<li>开源版Nginx：<a href="https://nginx.org/en/download.html">https://nginx.org/en/download.html</a></li>
+<li>商业版Nginx Plus：<a href="https://www.nginx.com/products/nginx">https://www.nginx.com/products/nginx</a></li>
+<li>分支版本Tengine：<a href="https://tengine.taobao.org/">https://tengine.taobao.org/</a></li>
+<li>扩展版本OpenResty：<a href="https://openresty.org/en/">https://openresty.org/en/</a></li>
+</ul>
+<h3 id="nginx架构">nginx架构</h3>
+<ul>
+<li>事件驱动、异步非阻塞、固定数量的多进程模型</li>
+<li>由一个主进程和多个工作进程组成</li>
+<li>主进程通过频道（channel）传递信号的方式控制工作进程</li>
+<li>工作进程之间共享内存并处理请求，工作进程数量等于CPU核数</li>
+</ul>
+<h3 id="信号">信号</h3>
+<table>
+<thead>
+<tr>
+<th>信号</th>
+<th>命令行参数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TERM、INT</td>
+<td>stop</td>
+<td>快速关闭nginx服务</td>
+</tr>
+<tr>
+<td>QUIT</td>
+<td>quit</td>
+<td>安全关闭nginx服务</td>
+</tr>
+<tr>
+<td>HUP</td>
+<td>reload</td>
+<td>热加载配置文件</td>
+</tr>
+<tr>
+<td>WINCH</td>
+<td></td>
+<td>安全关闭工作进程</td>
+</tr>
+<tr>
+<td>USR1</td>
+<td>reopen</td>
+<td>重新创建日志文件</td>
+</tr>
+<tr>
+<td>USR2</td>
+<td></td>
+<td>平滑更新nginx执行文件</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kill -HUP &lt;pid&gt;
+</span></span><span style="display:flex;"><span>nginx -s reload
+</span></span></code></pre></div><h3 id="工作进程的调度方式">工作进程的调度方式</h3>
+<ol>
+<li>无调度模式：所有工作进程会争相与客户端建立连接，会造成资源消耗（惊群现象）</li>
+<li>互斥锁模式：所有工作进程周期性的争抢互斥锁，抢到锁的进程可以与客户端建立连接。工作进程可能负载不均衡，导致QPS下降</li>
+<li>套接字分片：每个工作进程都有一组相同的监听套接字，哪个进程建立连接由内核决定，性能最好（listen指令启用reuseport参数）</li>
+</ol>
+<h3 id="工作流机制">工作流机制</h3>
+<p>每个请求会经过多个阶段的处理，请求在不同阶段由功能模块进行处理</p>
+<ul>
+<li>http请求会经过11个处理阶段</li>
+<li>TCP/UDP会话会经过7个处理阶段</li>
+</ul>
+<h3 id="模块化">模块化</h3>
+<p>模块化的设计为nginx提供了高度的可配置、可扩展、可定制特性。模块分为核心模块和功能模块。在编译时添加dynamic，支持模块动态加载</p>
+<h2 id="nginx编译及部署">Nginx编译及部署</h2>
+<h3 id="参数调优">参数调优</h3>
+<h4 id="dns缓存">DNS缓存</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 缓存DNS，提高域名解析响应速度</span>
+</span></span><span style="display:flex;"><span>yum install nscd -y
+</span></span><span style="display:flex;"><span>systemctl start nscd
+</span></span><span style="display:flex;"><span>systemctl enable nscd
+</span></span></code></pre></div><h4 id="修改文件打开数限制">修改文件打开数限制</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost security<span style="color:#f92672">]</span><span style="color:#75715e"># sysctl -a|grep fs.file-max</span>
+</span></span><span style="display:flex;"><span>fs.file-max <span style="color:#f92672">=</span> <span style="color:#ae81ff">180977</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost security<span style="color:#f92672">]</span><span style="color:#75715e"># ulimit -n</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1024</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;* soft nofile 65536\n* hard nofile 65536&#34;</span> &gt;&gt;/etc/security/limits.conf
+</span></span></code></pre></div><h3 id="编译">编译</h3>
+<h4 id="下载源码">下载源码</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir /data
+</span></span><span style="display:flex;"><span>cd /data
+</span></span><span style="display:flex;"><span>wget https://nginx.org/download/nginx-1.22.0.tar.gz
+</span></span><span style="display:flex;"><span>tar -zxvf nginx-1.22.0.tar.gz
+</span></span><span style="display:flex;"><span>cd nginx-1.22.0
+</span></span><span style="display:flex;"><span>yum install pcre-devel zlib-devel gcc gcc-c++ make -y
+</span></span></code></pre></div><h4 id="配置编译参数">配置编译参数</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>./configure --help
+</span></span><span style="display:flex;"><span>./configure
+</span></span><span style="display:flex;"><span>./configure --add-module<span style="color:#f92672">=</span>/data/module/echo-nginx-module-master --with-http_dav_module --add-module<span style="color:#f92672">=</span>/data/module/nginx-dav-ext-module-master --add-module<span style="color:#f92672">=</span>/data/module/headers-more-nginx-module-master
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 添加第三方静态模块</span>
+</span></span><span style="display:flex;"><span>./configure --add-module<span style="color:#f92672">=</span>PATH
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 添加第三方动态模块</span>
+</span></span><span style="display:flex;"><span>./configure --add-dynamic-module<span style="color:#f92672">=</span>PATH
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 默认配置如下</span>
+</span></span><span style="display:flex;"><span>nginx path prefix: <span style="color:#e6db74">&#34;/usr/local/nginx&#34;</span>
+</span></span><span style="display:flex;"><span>nginx binary file: <span style="color:#e6db74">&#34;/usr/local/nginx/sbin/nginx&#34;</span>
+</span></span><span style="display:flex;"><span>nginx modules path: <span style="color:#e6db74">&#34;/usr/local/nginx/modules&#34;</span>
+</span></span><span style="display:flex;"><span>nginx configuration prefix: <span style="color:#e6db74">&#34;/usr/local/nginx/conf&#34;</span>
+</span></span><span style="display:flex;"><span>nginx configuration file: <span style="color:#e6db74">&#34;/usr/local/nginx/conf/nginx.conf&#34;</span>
+</span></span><span style="display:flex;"><span>nginx pid file: <span style="color:#e6db74">&#34;/usr/local/nginx/logs/nginx.pid&#34;</span>
+</span></span><span style="display:flex;"><span>nginx error log file: <span style="color:#e6db74">&#34;/usr/local/nginx/logs/error.log&#34;</span>
+</span></span><span style="display:flex;"><span>nginx http access log file: <span style="color:#e6db74">&#34;/usr/local/nginx/logs/access.log&#34;</span>
+</span></span><span style="display:flex;"><span>nginx http client request body temporary files: <span style="color:#e6db74">&#34;client_body_temp&#34;</span>
+</span></span><span style="display:flex;"><span>nginx http proxy temporary files: <span style="color:#e6db74">&#34;proxy_temp&#34;</span>
+</span></span><span style="display:flex;"><span>nginx http fastcgi temporary files: <span style="color:#e6db74">&#34;fastcgi_temp&#34;</span>
+</span></span><span style="display:flex;"><span>nginx http uwsgi temporary files: <span style="color:#e6db74">&#34;uwsgi_temp&#34;</span>
+</span></span><span style="display:flex;"><span>nginx http scgi temporary files: <span style="color:#e6db74">&#34;scgi_temp&#34;</span>
+</span></span></code></pre></div><h4 id="编译安装">编译安装</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>make <span style="color:#f92672">&amp;&amp;</span> make install
+</span></span></code></pre></div><h3 id="部署">部署</h3>
+<h4 id="添加环境变量">添加环境变量</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;export PATH=</span>$PATH<span style="color:#e6db74">:/usr/local/nginx/sbin&#34;</span> &gt;&gt;/etc/profile
+</span></span><span style="display:flex;"><span>source /etc/profile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ln -s /usr/local/nginx/conf /etc/nginx
+</span></span></code></pre></div><h4 id="nginx命令选项">nginx命令选项</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span><span style="color:#75715e"># nginx -h</span>
+</span></span><span style="display:flex;"><span>nginx version: nginx/1.22.0
+</span></span><span style="display:flex;"><span>Usage: nginx <span style="color:#f92672">[</span>-?hvVtTq<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-s signal<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-p prefix<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>             <span style="color:#f92672">[</span>-e filename<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-c filename<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-g directives<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Options:
+</span></span><span style="display:flex;"><span>  -?,-h         : this help
+</span></span><span style="display:flex;"><span>  -v            : show version and exit
+</span></span><span style="display:flex;"><span>  -V            : show version and configure options <span style="color:#66d9ef">then</span> exit
+</span></span><span style="display:flex;"><span>  -t            : test configuration and exit
+</span></span><span style="display:flex;"><span>  -T            : test configuration, dump it and exit
+</span></span><span style="display:flex;"><span>  -q            : suppress non-error messages during configuration testing
+</span></span><span style="display:flex;"><span>  -s signal     : send signal to a master process: stop, quit, reopen, reload
+</span></span><span style="display:flex;"><span>  -p prefix     : set prefix path <span style="color:#f92672">(</span>default: /usr/local/nginx/<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  -e filename   : set error log file <span style="color:#f92672">(</span>default: logs/error.log<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  -c filename   : set configuration file <span style="color:#f92672">(</span>default: conf/nginx.conf<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  -g directives : set global directives out of configuration file
+</span></span></code></pre></div><h4 id="注册系统服务">注册系统服务</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span><span style="color:#75715e"># cat /usr/lib/systemd/system/nginx.service</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Unit<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Description<span style="color:#f92672">=</span>nginx - high performance web server
+</span></span><span style="display:flex;"><span>Documentation<span style="color:#f92672">=</span>http://nginx.org/en/docs/
+</span></span><span style="display:flex;"><span>After<span style="color:#f92672">=</span>network-online.target remote-fs.target nss-lookup.target
+</span></span><span style="display:flex;"><span>Wants<span style="color:#f92672">=</span>network-online.target
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Service<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Type<span style="color:#f92672">=</span>forking
+</span></span><span style="display:flex;"><span>PIDFile<span style="color:#f92672">=</span>/var/run/nginx.pid
+</span></span><span style="display:flex;"><span>ExecStart<span style="color:#f92672">=</span>/usr/sbin/nginx -c /etc/nginx/nginx.conf
+</span></span><span style="display:flex;"><span>ExecReload<span style="color:#f92672">=</span>/bin/sh -c <span style="color:#e6db74">&#34;/bin/kill -s HUP </span><span style="color:#66d9ef">$(</span>/bin/cat /var/run/nginx.pid<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>ExecStop<span style="color:#f92672">=</span>/bin/sh -c <span style="color:#e6db74">&#34;/bin/kill -s TERM </span><span style="color:#66d9ef">$(</span>/bin/cat /var/run/nginx.pid<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Install<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>WantedBy<span style="color:#f92672">=</span>multi-user.target
+</span></span></code></pre></div><h4 id="docker容器化部署">docker容器化部署</h4>
+<h3 id="配置指令">配置指令</h3>
+<h4 id="核心配置指令">核心配置指令</h4>
+<h5 id="事件核心配置指令">事件核心配置指令</h5>
+<h5 id="http核心配置指令">http核心配置指令</h5>
+<h4 id="模块配置指令">模块配置指令</h4>
+<h2 id="实战">实战</h2>
+<h3 id="web服务">WEB服务</h3>
+<h4 id="静态服务器">静态服务器</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost foo<span style="color:#f92672">]</span><span style="color:#75715e"># cat /data/foo/test.txt </span>
+</span></span><span style="display:flex;"><span>hello,world
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost foo<span style="color:#f92672">]</span><span style="color:#75715e"># curl 127.0.0.1/foo/test.txt</span>
+</span></span><span style="display:flex;"><span>hello,world
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 两种方式：root指令、alias指令</span>
+</span></span><span style="display:flex;"><span>server<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    listen 80;
+</span></span><span style="display:flex;"><span>    location /foo <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#alias /data/foo;</span>
+</span></span><span style="display:flex;"><span>        root /data;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h4 id="文件下载服务器">文件下载服务器</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>server<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    listen 80;
+</span></span><span style="display:flex;"><span>    location / <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        root /data;					<span style="color:#75715e"># 文件目录</span>
+</span></span><span style="display:flex;"><span>        autoindex on;				<span style="color:#75715e"># 自动开启一个首页</span>
+</span></span><span style="display:flex;"><span>        autoindex_exact_size off;    <span style="color:#75715e"># 自动换算文件大小				</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h4 id="配置https">*配置HTTPS</h4>
+<h4 id="配置http2">*配置HTTP/2</h4>
+<h4 id="文件共享服务器webdav">*文件共享服务器（WebDAV）</h4>
+<p>为什么认证失败！！！</p>
+<p><a href="https://www.nixops.me/articles/ngnix-full-webdav-server-setup.html">https://www.nixops.me/articles/ngnix-full-webdav-server-setup.html</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 安装依赖</span>
+</span></span><span style="display:flex;"><span>yum -y install libxml2 libxml2-dev
+</span></span><span style="display:flex;"><span>yum -y install libxslt-devel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置模块</span>
+</span></span><span style="display:flex;"><span>https://github.com/openresty/headers-more-nginx-module
+</span></span><span style="display:flex;"><span>https://github.com/arut/nginx-dav-ext-module
+</span></span><span style="display:flex;"><span>./configure --with-http_dav_module --add-module<span style="color:#f92672">=</span>/data/module/nginx-dav-ext-module-master --add-module<span style="color:#f92672">=</span>/data/module/headers-more-nginx-module-master 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置目录权限</span>
+</span></span><span style="display:flex;"><span>chown -R nobody:nobody /opt/files
+</span></span><span style="display:flex;"><span>chmod -R <span style="color:#ae81ff">700</span> /opt/files
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置账号密码</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;admin:admin&#34;</span> &gt;/usr/local/nginx/conf/davpasswd
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置nginx</span>
+</span></span><span style="display:flex;"><span>dav_ext_lock_zone zone<span style="color:#f92672">=</span>davlock:10m;
+</span></span><span style="display:flex;"><span>server<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    listen 80;
+</span></span><span style="display:flex;"><span>    root /opt;
+</span></span><span style="display:flex;"><span>    client_max_body_size 20G;
+</span></span><span style="display:flex;"><span>    location / <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        autoindex on;
+</span></span><span style="display:flex;"><span>        autoindex_localtime on;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        set $dest $http_destination;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>-d $request_filename<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            rewrite ^<span style="color:#f92672">(</span>.*<span style="color:#f92672">[</span>^/<span style="color:#f92672">])</span>$ $1/;
+</span></span><span style="display:flex;"><span>            set $dest $dest/;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$request_method ~ <span style="color:#f92672">(</span>MOVE|COPY<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            more_set_input_headers <span style="color:#e6db74">&#39;Destination: $dest&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$request_method ~ MKCOL<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            rewrite ^<span style="color:#f92672">(</span>.*<span style="color:#f92672">[</span>^/<span style="color:#f92672">])</span>$ $1/ break;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        dav_methods PUT DELETE MKCOL COPY MOVE;
+</span></span><span style="display:flex;"><span>        dav_ext_methods PROPFIND OPTIONS LOCK UNLOCK;
+</span></span><span style="display:flex;"><span>        dav_ext_lock zone<span style="color:#f92672">=</span>davlock;
+</span></span><span style="display:flex;"><span>        create_full_put_path  on;
+</span></span><span style="display:flex;"><span>        dav_access user:rw group:r all:r;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        auth_basic <span style="color:#e6db74">&#34;Authorized Users WebDAV&#34;</span>;
+</span></span><span style="display:flex;"><span>        auth_basic_user_file /usr/local/nginx/conf/davpasswd;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="nginx代理">nginx代理</h3>
+<h4 id="httphttps正向代理">http/https正向代理</h4>
+<h4 id="httphttps反向代理">http/https反向代理</h4>
+<h4 id="tcpudp代理">tcp/udp代理</h4>
+<h4 id="grpc代理">grpc代理</h4>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>2.字符串 &middot; Blog</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Home</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>The winner takes it all.</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1>2.字符串</h1>
+  <time datetime=2022-05-06T10:26:00&#43;0800 class="post-date">Fri, May 6, 2022</time>
+  <h3 id="标准库">标准库</h3>
+<p><a href="https://pkg.go.dev/strings">https://pkg.go.dev/strings</a></p>
+<h3 id="字符串内存模型">字符串内存模型</h3>
+<p>字符串的底层表示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// src/reflect/value.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">StringHeader</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Data</span> <span style="color:#66d9ef">uintptr</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Len</span>  <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// src/runtime/string.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">stringStruct</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">str</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">len</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>unsafe.Sizeof(s)、len(s)两者的区别：unsafe.Sizeof(s)表示字符串运行时结构体的大小，len(s)表示字符串的长度</p>
+<p>s和s.Data的地址相同，都是0xc00004a250，但输出的值不一样，因为内存地址仅代表内存的一个位置，具体的值由类型决定，s是string类型而s.Data是uintptr类型，故输出结果不一致</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;reflect&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;unsafe&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;hello&#34;</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;s:地址=%p 值=%v 类型=%T 大小=%v 长度=%v\n&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s</span>,<span style="color:#a6e22e">s</span>,<span style="color:#a6e22e">s</span>,<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">s</span>),len(<span style="color:#a6e22e">s</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span><span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">StringHeader</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;s.Data:地址=%p 值=%v 类型=%T 大小=%v\n&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Data</span>, <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Data</span>, <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Data</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Data</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;s.Len:地址=%p 值=%v 类型=%T 大小=%v\n&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Len</span>, <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Len</span>, <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Len</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Len</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//s:地址=0xc00004a250 值=hello 类型=string 大小=16 长度=5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//s.Data:地址=0xc00004a250 值=2578424 类型=uintptr 大小=8
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//s.Len:地址=0xc00004a258 值=5 类型=int 大小=8
+</span></span></span></code></pre></div><h3 id="字符串遍历">字符串遍历</h3>
+<ul>
+<li>字符串的本质是一个只读的字节数组</li>
+<li>byte是uint8类型的别名，rune是int32类型的别名</li>
+<li>string、[]byte、[]rune之间可以相互转换</li>
+<li>range遍历字符串，轮询的不是单字节byte，而是符文类型rune</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;Go语言&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 转换为[]byte类型
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">s1</span> <span style="color:#f92672">:=</span> []byte(<span style="color:#a6e22e">s</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">s1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 转换为[]rune类型
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">s2</span> <span style="color:#f92672">:=</span> []rune(<span style="color:#a6e22e">s</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">s2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 以byte数组方式遍历
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;len(<span style="color:#a6e22e">s</span>);<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;索引：%v 类型：%T 值：%#U\n&#34;</span>, <span style="color:#a6e22e">i</span>,<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>],<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>])
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 以rune数组方式遍历
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k</span>,<span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">s</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;索引：%v 类型：%T 值：%#U\n&#34;</span>, <span style="color:#a6e22e">k</span>,<span style="color:#a6e22e">v</span>,<span style="color:#a6e22e">v</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//[71 111 232 175 173 232 168 128]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[71 111 35821 35328]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：0 类型：uint8 值：U+0047 &#39;G&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：1 类型：uint8 值：U+006F &#39;o&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：2 类型：uint8 值：U+00E8 &#39;è&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：3 类型：uint8 值：U+00AF &#39;¯&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：4 类型：uint8 值：U+00AD
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：5 类型：uint8 值：U+00E8 &#39;è&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：6 类型：uint8 值：U+00A8 &#39;¨&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：7 类型：uint8 值：U+0080
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：0 类型：int32 值：U+0047 &#39;G&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：1 类型：int32 值：U+006F &#39;o&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：2 类型：int32 值：U+8BED &#39;语&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//索引：5 类型：int32 值：U+8A00 &#39;言&#39;
+</span></span></span></code></pre></div><h3 id="各种引号的区别">各种引号的区别</h3>
+<ul>
+<li>双引号表示字符串，可以识别转义符</li>
+<li>反引号表示原生字符串，转义符失效</li>
+<li>单引号表示符文类型(rune)</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">v1</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;a&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">v2</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#39;a&#39;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">v3</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;hello\tworld&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">v4</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">`hello\tworld`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%T %T\n&#34;</span>, <span style="color:#a6e22e">v1</span>, <span style="color:#a6e22e">v2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">v3</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">v4</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//string int32
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//hello	world
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//hello\tworld
+</span></span></span></code></pre></div>
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>

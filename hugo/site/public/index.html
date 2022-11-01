@@ -135,6 +135,158 @@
   
 </article><article class="post">
   <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/0.%E6%A0%87%E8%AF%86%E7%AC%A6%E4%B8%8E%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F/">0.标识符与类型系统</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  内置标识符 25个关键字    break default func interface select     case defer go map struct   chan else goto package switch   const fallthrough if range type   continue for import return var    15个函数 func append(slice []Type, elems ...Type) []Type func copy(dst, src []Type) int func delete(m map[Type]Type1, key Type) func close(c chan&lt;- Type)  func len(v Type) int func cap(v Type) int  func make(t Type, size .
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/0.%E6%A0%87%E8%AF%86%E7%AC%A6%E4%B8%8E%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/1.%E8%BF%90%E7%AE%97%E7%AC%A6/">1.运算符</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  算术运算符  加（+） 减（-） 乘（*） 除（/） 取余（%） 自增（++） 自减（&ndash;）  关系运算符  大于（&gt;） 大于等于（&gt;=） 小于（&lt;） 小于等于（&lt;=） 等于等于（==） 不等于（!=）  逻辑运算符  逻辑与（&amp;&amp;） 逻辑或（||） 逻辑取反（!）  位运算符 https://blog.csdn.net/qq_27870421/article/details/118493562
+ 按位与（&amp;） 按位或（|） 按位异或（^） 位清空（&amp;^） 左移（&laquo;） 右移（&raquo;）  
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/10.io/">10.IO</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  Go 的 IO 流怎么并发？小技巧分享
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/11.%E6%98%93%E9%94%99%E9%A2%98/">11.应用</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  1.map 1.1 package main  import &#34;fmt&#34;  func main() { 	pairs := [][2]string{ 	{&#34;a&#34;, &#34;apple&#34;}, 	{&#34;a&#34;, &#34;ant&#34;}, 	{&#34;b&#34;, &#34;bee&#34;}, 	}  	m := map[string]string{ 	pairs[0][0]: pairs[0][1], 	pairs[1][0]: pairs[1][1], 	pairs[2][0]: pairs[2][1], 	} 	fmt.Println(m[&#34;a&#34;]) } 1.2 package main  import &#34;fmt&#34;  func main() { 	var m map[string]int 	delete(m, &#34;oh noes!&#34;) 	fmt.Println(m) } 2.slice 2.1 package main  import &#34;fmt&#34;  func main() { 	s := []string{&#34;A&#34;, &#34;B&#34;, &#34;C&#34;}  	t := s[:1] 	fmt.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/11.%E6%98%93%E9%94%99%E9%A2%98/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/2.%E5%AD%97%E7%AC%A6%E4%B8%B2/">2.字符串</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  标准库 https://pkg.go.dev/strings
+字符串内存模型 字符串的底层表示：
+// src/reflect/value.go type StringHeader struct { 	Data uintptr 	Len int }  // src/runtime/string.go type stringStruct struct { 	str unsafe.Pointer 	len int } unsafe.Sizeof(s)、len(s)两者的区别：unsafe.Sizeof(s)表示字符串运行时结构体的大小，len(s)表示字符串的长度
+s和s.Data的地址相同，都是0xc00004a250，但输出的值不一样，因为内存地址仅代表内存的一个位置，具体的值由类型决定，s是string类型而s.Data是uintptr类型，故输出结果不一致
+package main  import ( 	&#34;fmt&#34; 	&#34;reflect&#34; 	&#34;unsafe&#34; )  func main() { 	s := &#34;hello&#34; 		fmt.Printf(&#34;s:地址=%p 值=%v 类型=%T 大小=%v 长度=%v\n&#34;, &amp;s,s,s,unsafe.Sizeof(s),len(s)) 	v := (*reflect.StringHeader)(unsafe.Pointer(&amp;s)) 	fmt.Printf(&#34;s.Data:地址=%p 值=%v 类型=%T 大小=%v\n&#34;, &amp;v.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/2.%E5%AD%97%E7%AC%A6%E4%B8%B2/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/3.%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">3.数组和切片</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  数组 初始化 arr1 := [3]int{1,2,3} arr2 := [...]int{1,2,3} 数组比较 对于两个数组，只有元素的类型和长度都相等时，才是同一类型
+在编译时创建数组类型
+// cmd/compile/internal/types/type.go func NewArray(elem *Type, bound int64) *Type {} 内存模型 package main  import ( 	&#34;fmt&#34; 	&#34;unsafe&#34; )  func main() { 	//arr := [5]bool{true, true, true, true, true} 	arr := [5]int{11, 22, 33, 44, 55} 	fmt.Printf(&#34;首地址=%p 值=%v 长度=%v 容量=%v 大小=%v\n&#34;, &amp;arr, arr, len(arr), cap(arr), unsafe.Sizeof(arr)) 	for i:=0;i&lt;len(arr);i++{ 	fmt.Printf(&#34;地址=%p 索引=%d 值=%v\n&#34;, &amp;arr[i], i, arr[i]) 	} }  //首地址=0xc00000c360 值=[11 22 33 44 55] 长度=5 容量=5 大小=40 //地址=0xc00000c360 索引=0 值=11 //地址=0xc00000c368 索引=1 值=22 //地址=0xc00000c370 索引=2 值=33 //地址=0xc00000c378 索引=3 值=44 //地址=0xc00000c380 索引=4 值=55 切片 初始化 s1 := array[0:3] s2 := slice[0:3] s3 := []int{1,2,3} s4 := make([]int, 3) 运行时表示 // src/runtime/slice.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/3.%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/4.%E6%95%A3%E5%88%97%E8%A1%A8map/">4.散列表map</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  初始化 m1 := map[string]int{&#34;aa&#34;:1, &#34;bb&#34;:2} m2 := make(map[string]int, 100)  // src/runtime/map.go // 通过断点调试，为什么hint的值固定为137? func makemap(t *maptype, hint int, h *hmap) *hmap {} map基础  map中的key是唯一的，且无序 map是非线程安全的，并发访问应使用sync.Map map中的value不可取址 使用cap参数创建map可提升性能  运行时表示 // src/runtime/map.go type hmap struct { 	// Note: the format of the hmap is also encoded in cmd/compile/internal/reflectdata/reflect.go. 	// Make sure this stays in sync with the compiler&#39;s definition. 	count int // # live cells == size of map.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/4.%E6%95%A3%E5%88%97%E8%A1%A8map/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/5.%E5%87%BD%E6%95%B0/">5.函数</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  函数基础  函数定义：关键字func、函数名、输入、输出、函数体 函数参数的传递永远是值拷贝 函数类型又叫函数签名，两个函数类型相同的条件是：参数和返回值的次序、个数、类型都相同 函数名首字母大小写决定函数是否导出 支持多个返回值，C语言只能返回一个值 支持不定参数，相当于一个切片  匿名函数与闭包  匿名函数可以看作函数的字面量 匿名函数引用外部变量就成了闭包 普通函数中不可以嵌套定义普通函数，但可以定义匿名函数 普通函数通过参数传递变量，而闭包可以直接引用外部函数的局部变量 闭包是由函数及其相关引用环境组合而成的实体，即：闭包=函数+引用环境 闭包捕获的变量、常量都是是引用传递 闭包最初的目的是减少全局变量 对象是附有行为的数据，而闭包是附有数据的行为  装饰器  定义一个有名函数类型 为有名函数类型添加方法  defer defer基本用法 延迟执行，按先进后出的顺序执行
+package main  import &#34;fmt&#34;  func main() { 	defer fmt.Println(&#34;AAA&#34;) 	defer fmt.Println(&#34;BBB&#34;) 	fmt.Println(&#34;CCC&#34;) }  //CCC //BBB //AAA defer遇到闭包 defer函数对外部变量的引用有两种方式：
+ 函数参数：defer定义时，参数已进行初始化赋值 闭包引用：在真正调用时，根据上下文确定  package main  import &#34;fmt&#34;  func main() { 	x := 10  	// 通过闭包引用外部变量，函数真正执行时，通过上下文确定参数值，输出defer1: 11 	defer func() { 	fmt.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/5.%E5%87%BD%E6%95%B0/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/6.%E6%8E%A5%E5%8F%A3/">6.接口</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  接口概念  变量：变量包含值、类型 实例：实例包含值、类型、方法 接口：接口包含值、类型（静态类型、动态类型）、动态类型绑定的方法 接口静态类型：在接口定义时确定，静态类型的本质就是接口的方法签名集合 接口动态类型：接口绑定的具体实例类型为接口的动态类型 接口初始化：为接口绑定具体类型的实例，有两种方式：将具体类型实例赋值给接口、将接口直接赋值给接口 接口方法调用：间接调用所绑定实例的方法  底层实现 接口调用分析：
+ 接口实例化，即iface数据结构的初始化过程 间接调用实例的方法  // src/runtime/runtime2.go  // 空接口表示 type eface struct { 	_type *_type 	data unsafe.Pointer }  // 非空接口表示 type iface struct { 	tab *itab	// 静态类型、动态类型、方法 	data unsafe.Pointer // 动态类型的值 }  // 类型信息 type itab struct { 	inter *interfacetype	// 静态类型 	_type *_type	// 动态类型 	hash uint32 // copy of _type.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/6.%E6%8E%A5%E5%8F%A3/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/8.for-range%E8%A1%A8%E8%BE%BE%E5%BC%8F/">8.for range表达式</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  range闭包 每次迭代，i、v都是同一个变量
+package main  import ( 	&#34;fmt&#34; 	&#34;time&#34; )  func main() { 	var s = []int{1,2,3,4,5} 	for i,v := range s { 	go func() { 	time.Sleep(time.Second*1) 	fmt.Println(i,v) 	}() 	} 	time.Sleep(time.Second*3) }  //4 5 //4 5 //4 5 //4 5 //4 5 range数组、切片 package main  import &#34;fmt&#34;  func main() { 	var arr = [5]int{1,2,3,4,5} 	var arr1 [5]int 	for i,v := range arr {	// 理解此处range迭代的arr是arr的一个副本！ 	if i == 0 { 	arr[1] = 11 	arr[2] = 12 	} 		arr1[i] = v 	}  	fmt.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/8.for-range%E8%A1%A8%E8%BE%BE%E5%BC%8F/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/9.%E5%B7%A5%E5%85%B7%E9%93%BE/">9.工具链</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  31个！Golang常用工具来啦（建议收藏）
+Go语言历史  2009-11-10，Go语言正式开源 2015-8-19，Go1.5版本发布，实现自举  包管理 // 单个导入 import &#34;fmt&#34;  // 一次导入多个 import ( 	&#34;fmt&#34;  &#34;os&#34; )  // 取别名 import (  crand &#34;crypto/rand&#34; 	&#34;math/rand&#34; )  // 加点，引用时可以省略包名 import . &#34;fmt&#34;  // 加下划线，空的导入，只执行对应包中的init函数 import ( 	&#34;database/sql&#34;  _ &#34;github.com/go-sql-driver/mysql&#34; ) Go项目结构 构建二进制可执行文件的项目结构：
+projectName/	// 项目名称 	LICENSE	// 许可证文件 	Makefile	// 构建脚本 	README.md // 项目介绍 	go.mod	// 依赖管理文件 	go.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/9.%E5%B7%A5%E5%85%B7%E9%93%BE/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%BA%90%E7%A0%81gpm%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B/">GPM调度模型</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  例1 https://www.bilibili.com/video/BV19b4y1i74w
+goroutine调度优先级
+ runnext中的g 本地队列runq中的g，大小为256 全局队列runq中的g  package main  import ( 	&#34;runtime&#34; 	&#34;sync&#34; )  func main() { 	runtime.GOMAXPROCS(1) 	var wg sync.WaitGroup 	wg.Add(3)  	go func(n int) { 	println(n) 	wg.Done() 	}(1)  	go func(n int) { 	println(n) 	wg.Done() 	}(2)  	go func(n int) { 	println(n) 	wg.Done() 	}(3)  	wg.Wait() }  //3 //1 //2 例2 package main  import ( 	&#34;runtime&#34; 	&#34;sync&#34; )  func main() { 	runtime.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%BA%90%E7%A0%81gpm%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/http/">HTTP2协议</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  HTTP2历史  2009年，谷歌的SPDY协议问世，主要特性：流多路利用、请求优先级、HTTP首部压缩 2015年，基于SPDY的HTTP2协议正式成为标准问世  HTTP2新增概念  二进制协议 多路复用 流量控制功能 数据流优先级 首部压缩 服务端推送  组合  HTTP/1.1+http HTTP/1.1+https HTTP/2+https=h2 HTTP/2+http=h2c  命令  telnet，使用telnet模拟tcp连接和发送http请求 nc(netcat)  HTTP版本区别 https://www.cnblogs.com/yjh1995/p/16368320.html
+ HTTP/0.9：只有一个命令GET HTTP/1.0：增加了请求方法、HTTP版本号、HTTP首部、响应状态码 HTTP/1.1：强制添加host首部、支持持久连接 HTTP/2：host首部改为:authority伪首部，可通过这个字段区别1.1和2版本；HTTP/2请求中未明确声明版本号  HTTPS  HTTPS在HTTP的基础上，添加了TLS加密 TLS的前身是SSL HTTPS提供了消息加密、消息完整性验证、服务器身份验证  模拟发送HTTP请求  telnet、nc（netcat）、curl、wget 浏览器、postman  其他 优化http/1.1
+ 使用多个http连接 合并http请求  网站测试瀑布图 https://www.webpagetest.org/
+升级到HTTP/2 负载均衡  HTTP负载均衡器，也称7层负载均衡器 TCP负载均衡器，也称4层负载均衡器  TCP队头阻塞 https://blog.csdn.net/weixin_44260459/article/details/120797655
+HTTP/2解决了http层的队头阻塞，但TCP层的队头阻塞依然存在
+因为tcp要保证有序，如果前面的包丢失，尽管后边的包成功收到，仍无法向上交付，必须等丢失的包重传后才能向应用层交付
+QUIC协议  谷歌提出，全称：Quick UDP Internet Connections 基于UDP  
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="/public/k8s/ingress-nginx%E4%B8%AD%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E5%93%8D%E5%BA%94%E5%A4%B4/">Ingress-nginx中如何配置自定义响应头</a>
   </h1>
   <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
@@ -151,6 +303,160 @@ apiVersion: v1 kind: ConfigMap metadata:  name: ingress-nginx-controller  namesp
   
 </article><article class="post">
   <h1 class="post-title">
+    <a href="/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/1.mysql/">MySQL</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  安装 YUM安装 https://dev.mysql.com/downloads/repo/yum/
+# 添加yum仓库 rpm -ivh https://repo.mysql.com//mysql80-community-release-el7-6.noarch.rpm  # 安装mysql yum install mysql-community-server  # 默认安装8.0版本，此处开启5.7版本 [root@localhost yum.repos.d]# cat mysql-community.repo  # Enable to use MySQL 5.7 [mysql57-community] name=MySQL 5.7 Community Server baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/7/$basearch enabled=1 gpgcheck=1 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2022  file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql  [mysql80-community] name=MySQL 8.0 Community Server baseurl=http://repo.mysql.com/yum/mysql-8.0-community/el/7/$basearch enabled=0 gpgcheck=1 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2022  file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql  # 启动 systemctl start mysqld  # 首次启动会生成临时密码 [root@localhost ~]# cat /var/log/mysqld.log |grep password 2022-08-22T12:33:59.016946Z 1 [Note] A temporary password is generated for root@localhost: jkVb2X4qU;t%  # 修改密码 mysql&gt; alter user &#39;root&#39;@&#39;localhost&#39; identified by &#34;Test@123&#34;; Query OK, 0 rows affected (0.
+  
+  <div class="read-more-link">
+    <a href="/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/1.mysql/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/3.nginx/">Nginx</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  Nginx概述 nginx版本  开源版Nginx：https://nginx.org/en/download.html 商业版Nginx Plus：https://www.nginx.com/products/nginx 分支版本Tengine：https://tengine.taobao.org/ 扩展版本OpenResty：https://openresty.org/en/  nginx架构  事件驱动、异步非阻塞、固定数量的多进程模型 由一个主进程和多个工作进程组成 主进程通过频道（channel）传递信号的方式控制工作进程 工作进程之间共享内存并处理请求，工作进程数量等于CPU核数  信号    信号 命令行参数 功能     TERM、INT stop 快速关闭nginx服务   QUIT quit 安全关闭nginx服务   HUP reload 热加载配置文件   WINCH  安全关闭工作进程   USR1 reopen 重新创建日志文件   USR2  平滑更新nginx执行文件    kill -HUP &lt;pid&gt; nginx -s reload 工作进程的调度方式  无调度模式：所有工作进程会争相与客户端建立连接，会造成资源消耗（惊群现象） 互斥锁模式：所有工作进程周期性的争抢互斥锁，抢到锁的进程可以与客户端建立连接。工作进程可能负载不均衡，导致QPS下降 套接字分片：每个工作进程都有一组相同的监听套接字，哪个进程建立连接由内核决定，性能最好（listen指令启用reuseport参数）  工作流机制 每个请求会经过多个阶段的处理，请求在不同阶段由功能模块进行处理
+  
+  <div class="read-more-link">
+    <a href="/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/3.nginx/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/2.redis/">Redis</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  redis文档  DOC：https://redis.io/docs/ 安装：https://redis.io/docs/getting-started/installation/install-redis-from-source/ 命令：https://redis.io/commands/  redis基础 数据库  redis默认会创建16个数据库，编号为0~15 数据库可以理解为命名空间，不同的数据库中的键可以相等 可以使用select切换数据库（select 7）  键 https://redis.io/docs/data-types/tutorial/
+值 即数据结构
+redis数据结构 String（字符串）    set 默认 NX XX     键不存在 OK OK nil   键存在 OK nil OK    Hash（散列） List（列表） 消息队列 Set（集合） 抽奖 Sorted Set（有序集合） 排行榜 HyperLogLog（计数） 唯一计数器 Bitmap（位图） 记录用户行为 Geospatial indices（地理坐标） 查找附近用户 Stream（流） 实现消息队列 Pub/Sub（发布订阅） redis扩展 流水线和事务 Lua脚本 模块 redis持久化 RDB持久化（默认） AOF持久化 RDB-AOF混合持久化 redis高可用 Redis主从复制 Redis Sentinel模式 Redis集群 
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/reflect%E5%8F%8D%E5%B0%84/">reflect反射</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  基本概念  反射：支持程序在运行中，动态地访问和修改变量的类型和值  反射规则  实例、Value、Type之间可以相互转换 reflect.Type表示实例的类型信息 reflect.Value表示实例的值信息  实例、Type互转 // src/reflect/type.go type Type interface {...}  // 实例转Type // 若i传入的是具体类型，则返回具体类型信息 // 若i传入的是接口类型，且绑定了具体实例，则返回接口的动态类型信息 // 若i传入的是接口类型，其未绑定具体实例，则返回接口的静态类型信息 func TypeOf(i any) Type {}  // Type转实例？ 实例、Value互转 // src/reflect/value.go type Value struct { 	typ *rtype 	ptr unsafe.Pointer 	flag }  // 实例转Value func ValueOf(i any) Value {}  // Value转实例 func (v Value) Interface() (i any) {} func (v Value) Int() int64 {} func (v Value) Float() float64 {} func (v Value) Bool() bool {} .
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/reflect%E5%8F%8D%E5%B0%84/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/tcp/">TCP协议</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  https://liuyehcf.github.io/2019/10/28/TCP-IP%E8%AF%A6%E8%A7%A3-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/
+术语  ARQ（Automatic repeat request）：自动重复请求 面向连接、可靠的字节流、全双工 一个TCP连接由一个套接字（四元组）标识，四元组：由IP头中的源ip和目的ip、tcp头中的源端口和目的端口组成  抓包 wireshark 常用过滤规则：https://blog.csdn.net/liu_yanxiaobai/article/details/124943492
+tcpdump 命令 telnet telnet可以建立tcp连接，一般用于端口探测
+https://blog.csdn.net/weixin_45322291/article/details/116780620
+netstat [root@iZ8vb8qjajxkxytobaq81hZ ~]# netstat -h -n, --numeric don&#39;t resolve names	# 显示ip地址而不是域名 -l, --listening display listening server sockets	# 只显示监听套接字 -a, --all display all sockets (default: connected)	# 显示所有套接字 {-t|--tcp} {-u|--udp}	# 显示TCP/UDP连接 -p, --programs display PID/Program name for sockets	# 显示对应的应用程序 常用组合
+# 显示所有tcp监听套接字 netstat -nltp  # 显示所有tcp套接字 netstat -natp  # 同理udp netstat -nlup netstat -naup TCP头部组成  16位源端口+16位目的端口 32位序列号：代表每个分组的第一个字节在整个数据流中的字节偏移，ISN初始序列号是随机的 32位确认号：表示该序列号的字节已成功接收，期待接收下一个字节，即序列号+1（只有标志位ACK开启才生效） 4位头部长度+4位保留+8位标志号+16位窗口大小 16位TCP校验和+16紧急指针（只有标志位URG开启才生效） 选项  头部长度 tcp头部占20字节，选项部分最多占40字节，总长度最大为60字节 为什么总长度最大为60字节？头部长度用4位表示，最大值为15，且以4字节为单位，故15*4=60
+  
+  <div class="read-more-link">
+    <a href="/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/tcp/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/unsafe%E6%8C%87%E9%92%88%E8%BF%90%E7%AE%97/">unsafe指针运算</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  Go中的三种指针类型  普通类型的指针 unsafe.Pointer指针 uintptr指针  普通类型的指针和unsafe.Pointer指针可以相互转换，因此不同普通类型的指针可以互转
+unsafe.Pointer指针可以和uintptr指针相互转换，且uintptr指针可以运算，因此可以实现普通类型的指针运算
+package main  import ( 	&#34;fmt&#34; 	&#34;unsafe&#34; )  func main() { 	s := &#34;hello&#34; 	fmt.Printf(&#34;%p %p %v\n&#34;, &amp;s, unsafe.Pointer(&amp;s), uintptr(unsafe.Pointer(&amp;s))) }  // 0xc00004a250 0xc00004a250 824634024528 转换关系 普通指针类型 &lt;==&gt; unsafe.Pointer &lt;==&gt; uintptr
+ 通过unsafe.Pointer，可以实现不同指针类型相互转换 通过unsafe.Pointer+uintptr，可以实现指针运算  修改私有成员 // src/strings/reader.go type Reader struct { 	s string 	i int64 // current reading index 	prevRune int // index of previous rune; or &lt; 0 } package main  import ( 	&#34;fmt&#34; 	&#34;strings&#34; 	&#34;unsafe&#34; )  func main() { 	r := strings.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/unsafe%E6%8C%87%E9%92%88%E8%BF%90%E7%AE%97/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%BA%90%E7%A0%81%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E4%B8%8Egc/">内存管理与GC</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  堆栈区别  堆在运行过程中动态分配内存，需要通过GC回收，分配速度慢 栈内存自动释放，分配速度快  逃逸分析 package main  import &#34;fmt&#34;  func foo() *int { 	t := 3 	return &amp;t }  func main() { 	x := foo() 	fmt.Println(*x) } $ go build -gcflags &#39;-m -l&#39; main.go # command-line-arguments .\main.go:6:2: moved to heap: t .\main.go:12:13: ... argument does not escape .\main.go:12:14: *x escapes to heap 参数说明：
+ -gcflags 启动编译器支持的额外标志 -m 输出编译器的优化细节 -N 禁用优化 -l 禁用内联  https://stackoverflow.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%BA%90%E7%A0%81%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E4%B8%8Egc/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E9%94%81%E5%B9%B6%E5%8F%91/">并发编程</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  传统多进程编程 进程 进程通信 通信方式  管道 消息队列 信号量 共享内存 信号 socket  Go语言支持：管道、信号、socket
+管道 匿名管道，实现命令：ps -ef|grep nginx
+package main  import ( 	&#34;bytes&#34; 	&#34;fmt&#34; 	&#34;log&#34; 	&#34;os/exec&#34; )  func main() { 	// 将cmd1的标准输出作为cmd2的标准输入 	cmd1 := exec.Command(&#34;ps&#34;, &#34;-ef&#34;) 	cmd2 := exec.Command(&#34;grep&#34;, &#34;nginx&#34;)  	var outputBuf1 bytes.Buffer 	cmd1.Stdout = &amp;outputBuf1	// 将cmd1的标准输出指定为outputBuf1 	if err := cmd1.Start(); err != nil { 	log.Fatalln(&#34;cmd1 start error!
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E9%94%81%E5%B9%B6%E5%8F%91/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/2-1.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%8E%92%E5%BA%8F/">排序算法</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  选择排序 每次遍历找到一个最大值，将最大值与最后一个元素交换
+package main  import &#34;fmt&#34;  func main() { 	s := []int{22, 36, 11, 9, 59, 41, 32, 61, 83, 17} 	fmt.Println(s) 	fmt.Println() 	Sort(s) }  func Sort(s []int) { 	for j:=len(s)-1;j&gt;0;j--{ 	max := s[0] 	maxIdx := 0 	for i:=0;i&lt;=j;i++{ 	if s[i] &gt; max { 	max = s[i] 	maxIdx = i 	} 	} 	if j!
+  
+  <div class="read-more-link">
+    <a href="/public/go/2-1.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%8E%92%E5%BA%8F/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%9C%AA%E5%BD%92%E7%B1%BB/">未归类</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  noCopy机制 https://blog.csdn.net/EDDYCJY/article/details/125883888
+WaitGroup源码中的结构体定义如下，这个noCopy有什么用呢？
+type WaitGroup struct { 	noCopy noCopy  	// 64-bit value: high 32 bits are counter, low 32 bits are waiter count. 	// 64-bit atomic operations require 64-bit alignment, but 32-bit 	// compilers only guarantee that 64-bit fields are 32-bit aligned. 	// For this reason on 32 bit architectures we need to check in state() 	// if state1 is aligned or not, and dynamically &#34;swap&#34; the field order if 	// needed.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%9C%AA%E5%BD%92%E7%B1%BB/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%B1%87%E7%BC%96/">汇编</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  寄存器 通用寄存器  FLAGS（状态寄存器）：CMP、TEST指令会修改FLAGS寄存器，实现流程控制 IP（指令寄存器）：保存下一条将要被执行的指令地址，不能直接引用；由JMP、CALL、RET等指令间接修改 AX、BX、CX、DX（通用寄存器） ESI、EDI（通用寄存器）：扩展源索引寄存器、扩展目标索引寄存器 BP（通用寄存器）：记录当前函数帧的开始位置，用来引用栈上的函数参数和局部变量 SP（通用寄存器）：记录当前栈指针的位置，用于寻址栈上的数据 R8~R15（通用寄存器）  伪寄存器  伪PC：IP寄存器的别名 伪FP（frame pointer）：1.栈帧寄存器，执行当前函数调用栈帧的栈底；2.对应函数的帧指针，用于访问函数的参数和返回值 伪SP（stack pointer）：指向当前函数栈帧的底部（高地址），用于定位局部变量；真SP，指向当前函数栈帧的顶部（低地址），用于定位参数和返回值 伪SB（static base pointer）：静态基址寄存器，它和全局符号一起表示全局变量的地址  辨别真伪SP寄存器：  没有标识符前缀的表示真SP寄存器：(SP)、+8(SP) 有标识符前缀的表示伪SP寄存器：a(SP)、b+8(SP)  区别FP、真SP、伪SP作用  伪FP：定位参数和返回值 伪SP：定位局部变量 真SP：定位调用其他函数的参数和返回值  X86-64指令集  数据传输指令：MOVB、MOVW、MOVL、MOVQ 算数指令：ADD、SUB、MUL、DIV、AND、OR、NOT 流程控制指令：CMP、JMP、JMP-if-x、CALL、RET 取地址、压栈、出栈：LEA、PUSH、POP  函数栈帧布局 &hellip; args to callee（当前函数的参数和返回值，由调用者分配空间） return address BP指针 locals args to callee（调用下个函数时，分配的参数、返回值空间） &hellip;
+操作数宽度 B:表示BYTE，字节，8位 W:表示WORD，字，16位 L:表示LONG，长字，32位 Q:表示QuadWord，四字，64位 输出汇编 正向生成汇编 go tool compile -l -N -S main.go go build -gcflags=&#34;-S -N -l&#34; main.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%B1%87%E7%BC%96/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/2-1.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%93%BE%E8%A1%A8/">链表</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  链表翻转 package main  import &#34;fmt&#34;  type Node struct { 	Data int 	Next *Node }  // CreateList 通过切片初始化链表 func CreateList(data []int, head *Node) { 	p := head 	for _,v := range data { 	p.Next = &amp;Node{v, nil} 	p = p.Next 	}  }  // PrintList 打印链表 func PrintList(head *Node) { 	p := head.Next 	for p!=nil { 	fmt.Printf(&#34;%d &#34;, p.
+  
+  <div class="read-more-link">
+    <a href="/public/go/2-1.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%93%BE%E8%A1%A8/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/">错误处理</a>
+  </h1>
+  <time datetime="2022-05-06T10:26:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
+  panic  panic会打印堆栈并终止程序运行 发生panic的两种情况：1.程序主动执行panic 2.运行时产生的panic 对于大型程序，为保证程序的健壮性，需使用recover()拦截来自运行时的panic recover()函数只有在defer函数中直接调用才有效 父goroutine无法捕获子goroutine的panic，故每个goroutine需要单独处理panic  error  多个返回值的函数中，error作为最后一个返回值 先处理error，后执行defer 错误向上传递时，错误信息应不断完善和丰富  如何处理第三方库出现的panic? 最佳实践 https://lailin.xyz/post/go-training-03.html
+panic blame 机器人 https://qcrao.com/post/panic-blame-robot/
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="/public/k8s/%E8%A7%A3%E5%86%B3ingress-nginx%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/">解决Ingress-nginx路由配置问题</a>
   </h1>
   <time datetime="2022-05-06T09:33:00&#43;0800" class="post-date">Fri, May 6, 2022</time>
@@ -163,6 +469,136 @@ https://stackoverflow.com/questions/50871970/kubernetes-ingress-nginx-loading-re
   <div class="read-more-link">
     <a href="/public/k8s/%E8%A7%A3%E5%86%B3ingress-nginx%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/">Read More…</a>
   </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E7%9B%B2%E5%8C%BAcgo%E7%BC%96%E7%A8%8B/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-3.go%E8%AF%AD%E8%A8%80%E6%A0%87%E5%87%86%E5%BA%93/filepath%E5%8C%85-%E5%A4%84%E7%90%86%E8%B7%AF%E5%BE%84/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  获取当前路径 filepath.Abs(&#34;.&#34;) 路径截取 path := &#34;/aa/bb/cc/dd.js&#34; filepath.Dir(path)	// \aa\bb\cc 截取前部分 filepath.Base(path)	// dd.js 截取后部分 filepath.Ext(path)	// .js 截取扩展名 filepath.Split(path)	// /aa/bb/cc/ dd.js 路径拼接 // 跨平台兼容 filepath.Join(&#34;aa&#34;, &#34;bb&#34;)	//linux:aa/bb windowns:aa\bb 路径匹配 filepath.Match(&#34;/home/catch/*&#34;, &#34;/home/catch/foo&#34;)	// true nil 路径斜杠转换 filepath.FromSlash(&#34;/aa/bb/cc/dd.js&#34;)	// \aa\bb\cc\dd.js filepath.ToSlash(&#34;\\aa\\bb\\cc\\dd.js&#34;)	// /aa/bb/cc/dd.js 路径遍历并回调 // Walk调用了os.Lstat返回更详细的文件信息，因此效率比WalkDir要低 func Walk(root string, fn WalkFunc) error {} func WalkDir(root string, fn fs.WalkDirFunc) error {} 
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-3.go%E8%AF%AD%E8%A8%80%E6%A0%87%E5%87%86%E5%BA%93/io/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  理解io.Reader // 从Reader中读取数据到切片中，返回值n&lt;=len(p) // 若传入的切片长度为0，则不会读取任何数据，如：p := make([]byte, 0 ,10) type Reader interface { 	Read(p []byte) (n int, err error) } package main  import ( 	&#34;fmt&#34; 	&#34;log&#34; 	&#34;os&#34; )  func main() { 	b := make([]byte, 0, 10) 	//b := make([]byte, 10) 	fmt.Println(len(b), cap(b), b) 	f,err := os.Open(&#34;text.txt&#34;) 	if err != nil { 	log.Fatal(err) 	} 	//n,err := f.Read(b[len(b):cap(b)]) 	n,err := f.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-3.go%E8%AF%AD%E8%A8%80%E6%A0%87%E5%87%86%E5%BA%93/io/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/1-3.go%E8%AF%AD%E8%A8%80%E6%A0%87%E5%87%86%E5%BA%93/os%E5%8C%85/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  文件 // 链接文件 func Link(oldname, newname string) error	// 创建硬链接 func Symlink(oldname, newname string) error	// 创建软连接（符号链接） func Readlink(name string) (string, error)	// 读取符号链接指向的文件名  // 管道文件 func Pipe() (r *File, w *File, err error)	// 创建管道  // 文件读写 func ReadFile(name string) ([]byte, error)	// 读取整个文件到内存 func WriteFile(name string, data []byte, perm FileMode) error	// 将数据保存到文件  // 文件删除 func Remove(name string) error	// 删除文件或目录 func RemoveAll(path string) error	// 递归删除文件、目录，相当于rm -rf，慎用！  // 文件权限修改 func Getgid() int	// 获取gid func Getegid() int	// 获取有效gid func Getuid() int	// 获取uid func Geteuid() int	// 获取有效uid  func Chown(name string, uid, gid int) error	// 更改文件所有者，更改符号链接指向的文件 func Lchown(name string, uid, gid int) error	// 更改文件所有者，更改符号链接本身  // 文件信息修改 func Rename(oldpath, newpath string) error	// 重命名文件 func Truncate(name string, size int64) error	// 更改文件大小 func Chtimes(name string, atime time.
+  
+  <div class="read-more-link">
+    <a href="/public/go/1-3.go%E8%AF%AD%E8%A8%80%E6%A0%87%E5%87%86%E5%BA%93/os%E5%8C%85/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/2-1.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  数组 查找数组中唯一的重复元素 题目描述：将数字1~1000放在长度为1001的数组中，其中还有一个唯一的重复元素，其他元素均只出现一次。找出这个元素，要求每个元素只能访问一次，并且不能使用辅助存储空间。
+分析：将数组累加求和，减去1+2+3+&hellip;+1000的和，结果即为重复元素
+时间复杂度：O(n)
+空间复杂度：O(1)
+package main  import &#34;fmt&#34;  func main() { 	arr := []int{3, 6, 1, 9, 2, 5, 7, 4, 8, 10, 9} 	fmt.Println(f(arr)) }  func f(arr []int) int { 	l := len(arr) 	sum := 0  // 累加过程中，直接加上1~1000的相反数，避免sum溢出 	for i:=0;i&lt;l-1;i++{ 	sum += arr[i] + (i+1)*-1 	} 	return sum + arr[l-1] }  // 9 求数组中两个元素的最小距离（动态规划） 分析：蛮力法，通过两次遍历数组，找出两个元素的位置并计算距离，保存最小值。时间复杂度：O(n*n)
+  
+  <div class="read-more-link">
+    <a href="/public/go/2-1.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/1.tcp%E5%8D%8F%E8%AE%AE/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  net包 net.Conn接口 // Conn表示一个连接 type Conn interface { 	Read(b []byte) (n int, err error) 	Write(b []byte) (n int, err error) 	Close() error 	LocalAddr() Addr 	RemoteAddr() Addr 	SetDeadline(t time.Time) error 	SetReadDeadline(t time.Time) error 	SetWriteDeadline(t time.Time) error } net.Listener接口 // Listener表示一个监听器，用于服务端监听连接 type Listener interface { 	Accept() (Conn, error) 	Close() error 	Addr() Addr } // 初始化监听器 func Listen(network, address string) (Listener, error) {}  // 处理conn Accept() (Conn, error) net.
+  
+  <div class="read-more-link">
+    <a href="/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/1.tcp%E5%8D%8F%E8%AE%AE/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/2.http%E5%8D%8F%E8%AE%AE/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  net/http包 http.Request // Request表示一个http请求 type Request struct { 	Method string 	URL *url.URL 	Proto string // &#34;HTTP/1.0&#34; 	ProtoMajor int // 1 	ProtoMinor int // 0 	Header Header 	Body io.ReadCloser 	GetBody func() (io.ReadCloser, error) 	ContentLength int64 	TransferEncoding []string 	Close bool 	Host string 	Form url.Values 	PostForm url.Values 	MultipartForm *multipart.Form 	Trailer Header 	RemoteAddr string 	RequestURI string 	TLS *tls.
+  
+  <div class="read-more-link">
+    <a href="/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/2.http%E5%8D%8F%E8%AE%AE/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/3.websocket%E5%8D%8F%E8%AE%AE/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/4.rpc%E5%8D%8F%E8%AE%AE/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  教程 GitHub：https://github.com/golang/protobuf
+官方指南：https://developers.google.com/protocol-buffers/docs/gotutorial
+protobuf序列化与反序列化 Go微服务报错protoc-gen-go: unable to determine Go import path for
+https://www.jianshu.com/p/cad2660cf04b
+panic: protobuf tag not enough fields in Message.state:
+包的版本问题
+&ldquo;github.com/gogo/protobuf/proto&quot;替换为&quot;github.com/golang/protobuf/proto&rdquo;
+http://dicey.ink/archives/151
+protocol文件
+syntax = &#34;proto3&#34;; package protocol; option go_package = &#34;./;protocol&#34;;  enum FOO {  X = 0; };  message UserInfo{  string message = 1;  int32 length = 2; } 编译
+protoc --go_out=./ *.proto 测试：
+package main  import ( 	&#34;demo/protocol&#34; 	&#34;fmt&#34; 	&#34;log&#34; ) import &#34;github.
+  
+  <div class="read-more-link">
+    <a href="/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/4.rpc%E5%8D%8F%E8%AE%AE/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/4.mq/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/5.mongodb/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/6.es/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="/public/go/4.%E5%85%B6%E4%BB%96%E5%BA%94%E7%94%A8/%E5%BA%94%E7%94%A8/"></a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+   外挂 GUI 游戏 爬虫  
   
 </article>
 </div>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>9.工具链 &middot; Blog</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Home</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>The winner takes it all.</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1>9.工具链</h1>
+  <time datetime=2022-05-06T10:26:00&#43;0800 class="post-date">Fri, May 6, 2022</time>
+  <p><a href="https://mp.weixin.qq.com/s/JH6_UB1NJ5HWquN7biBLRQ">31个！Golang常用工具来啦（建议收藏）</a></p>
+<h3 id="go语言历史">Go语言历史</h3>
+<ol>
+<li>2009-11-10，Go语言正式开源</li>
+<li>2015-8-19，Go1.5版本发布，实现自举</li>
+</ol>
+<h3 id="包管理">包管理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 单个导入
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 一次导入多个
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;os&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 取别名
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">crand</span> <span style="color:#e6db74">&#34;crypto/rand&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;math/rand&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 加点，引用时可以省略包名
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">import</span> . <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 加下划线，空的导入，只执行对应包中的init函数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;database/sql&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_</span> <span style="color:#e6db74">&#34;github.com/go-sql-driver/mysql&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h3 id="go项目结构">Go项目结构</h3>
+<p>构建二进制可执行文件的项目结构：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">projectName</span><span style="color:#f92672">/</span>				 <span style="color:#75715e">// 项目名称
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">LICENSE</span>					<span style="color:#75715e">// 许可证文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">Makefile</span>				<span style="color:#75715e">// 构建脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">README</span>.<span style="color:#a6e22e">md</span> 				<span style="color:#75715e">//  项目介绍
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">go</span>.<span style="color:#a6e22e">mod</span>					<span style="color:#75715e">// 依赖管理文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">go</span>.<span style="color:#a6e22e">sum</span>					<span style="color:#75715e">// 依赖管理文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cmd</span><span style="color:#f92672">/</span>					<span style="color:#75715e">// 可执行文件目录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">app1</span><span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">main</span>.<span style="color:#66d9ef">go</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">app2</span><span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">main</span>.<span style="color:#66d9ef">go</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">pkg</span><span style="color:#f92672">/</span>					<span style="color:#75715e">// 库文件目录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">lib1</span><span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">lib1</span>.<span style="color:#66d9ef">go</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">lib2</span><span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">lib2</span>.<span style="color:#66d9ef">go</span>
+</span></span></code></pre></div><p>构建第三方库的项目结构：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">projectName</span><span style="color:#f92672">/</span>				 <span style="color:#75715e">// 项目名称
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">LICENSE</span>					<span style="color:#75715e">// 许可证文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">Makefile</span>				<span style="color:#75715e">// 构建脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">README</span>.<span style="color:#a6e22e">md</span> 				<span style="color:#75715e">//  项目介绍
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">go</span>.<span style="color:#a6e22e">mod</span>					<span style="color:#75715e">// 依赖管理文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">go</span>.<span style="color:#a6e22e">sum</span>					<span style="color:#75715e">// 依赖管理文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">lib</span>.<span style="color:#66d9ef">go</span>					<span style="color:#75715e">// 库文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">lib1</span><span style="color:#f92672">/</span>					<span style="color:#75715e">// 库目录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">lib1</span>.<span style="color:#66d9ef">go</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">lib2</span><span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">lib2</span>.<span style="color:#66d9ef">go</span>
+</span></span></code></pre></div><p>internal目录：</p>
+<p>不想暴露到外部的包应放在internal目录下</p>
+<p><a href="https://blog.csdn.net/kevin_tech/article/details/115610512">https://blog.csdn.net/kevin_tech/article/details/115610512</a></p>
+<h3 id="go工具链">go工具链</h3>
+<ol>
+<li>gofmt格式化代码</li>
+<li>goimport是对gofmt封装，格式化代码的同时，会自动对导入的包进行检查</li>
+</ol>
+<h3 id="测试">测试</h3>
+<h4 id="单元测试">单元测试</h4>
+<ul>
+<li>测试逻辑：给定输入数据，执行被测函数逻辑，将返回值与预期值比较，若不一致则测试失败</li>
+<li>testdata目录存放测试依赖的外部数据文件</li>
+<li>模糊测试工具：<a href="https://github.com/dvyukov/go-fuzz">go-fuzz</a></li>
+<li>包内测试：测试文件的包名等于被测文件的包名，即为包内测试，如标准库中src/net/http/pprof/pprof_test.go</li>
+<li>包外测试：测试文件的包名等于被测文件的包名+&ldquo;test&rdquo;，即为包外测试，如标准库中src/net/http/client_test.go</li>
+<li>包内测试存在包循环引用问题，包外测试存在测试盲区</li>
+</ul>
+<h4 id="性能基准测试">性能基准测试</h4>
+<ul>
+<li>单元测试函数以Test开头，性能基准测试函数以Benchmark开头，如src/net/http/server_test.go</li>
+<li>性能基准比较工具：benchcmp、benchstat</li>
+</ul>
+<h3 id="性能剖析">性能剖析</h3>
+<h4 id="数据采集类型">数据采集类型</h4>
+<ul>
+<li>CPU数据</li>
+<li>堆内存分配数据</li>
+<li>锁竞争数据</li>
+<li>阻塞时间数据</li>
+</ul>
+<h4 id="数据采集方式">数据采集方式</h4>
+<ul>
+<li>
+<p>通过性能基准测试进行采集</p>
+</li>
+<li>
+<p>通过独立程序进行采集</p>
+</li>
+</ul>
+<h4 id="pprof数据剖析">pprof数据剖析</h4>
+<ul>
+<li>命令行交互方式</li>
+<li>web图形化方式</li>
+</ul>
+<h4 id="expvar输出自定义性能度量数据">expvar输出自定义性能度量数据</h4>
+<h3 id="调试">调试</h3>
+<h4 id="调试工具">调试工具</h4>
+<ul>
+<li>print打印</li>
+<li><a href="https://github.com/go-delve/delve">delve</a>工具</li>
+</ul>
+<h4 id="delve调试">Delve调试</h4>
+<ul>
+<li>调试普通程序</li>
+<li>调试并发程序</li>
+<li>调试core dump文件</li>
+<li>调试正在运行的进程</li>
+</ul>
+<h3 id="调试源码">调试源码</h3>
+<h4 id="编译基础">编译基础</h4>
+<ol>
+<li>编译四阶段：词法、语法分析、类型检查、中间代码生成、机器码生成</li>
+<li>词法、语法分析：源代码-&gt;AST（抽象语法树）</li>
+<li>类型检查：遍历AST检查类型</li>
+<li>生成中间代码：AST-&gt;SSA</li>
+<li>生成机器码：SSA-&gt;机器码</li>
+</ol>
+<h4 id="编译源码">编译源码</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 克隆源码
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">git</span> <span style="color:#a6e22e">clone</span> <span style="color:#a6e22e">https</span>:<span style="color:#75715e">//github.com/golang/go.git
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 修改源码
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span> <span style="color:#f92672">...</span><span style="color:#a6e22e">any</span>) (<span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>    println(<span style="color:#e6db74">&#34;hello&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">Fprintln</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>, <span style="color:#a6e22e">a</span><span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 编译源码
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>.<span style="color:#f92672">/</span><span style="color:#a6e22e">src</span><span style="color:#f92672">/</span><span style="color:#a6e22e">make</span>.<span style="color:#a6e22e">bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 测试
+</span></span></span></code></pre></div><h4 id="生成中间代码">生成中间代码</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 生成汇编
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">go</span> <span style="color:#a6e22e">build</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">gcflags</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">S</span> <span style="color:#a6e22e">main</span>.<span style="color:#66d9ef">go</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">GOOS</span>=<span style="color:#a6e22e">linux</span> <span style="color:#a6e22e">GOARCH</span>=<span style="color:#a6e22e">amd64</span> <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">tool</span> <span style="color:#a6e22e">compile</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">S</span> <span style="color:#a6e22e">main</span>.<span style="color:#66d9ef">go</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#a6e22e">tool</span> <span style="color:#a6e22e">compile</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">S</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">N</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">l</span> <span style="color:#a6e22e">main</span>.<span style="color:#66d9ef">go</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 获取汇编指令的优化过程
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">GOSSAFUNC</span>=<span style="color:#a6e22e">main</span> <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">build</span> <span style="color:#a6e22e">main</span>.<span style="color:#66d9ef">go</span>
+</span></span></code></pre></div><h3 id="vscode插件">vscode插件</h3>
+<p><a href="https://mp.weixin.qq.com/s/o52N_rajZFKXciP712rHiw">https://mp.weixin.qq.com/s/o52N_rajZFKXciP712rHiw</a></p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>

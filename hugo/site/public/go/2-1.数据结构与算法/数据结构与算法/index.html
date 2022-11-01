@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Blog</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Home</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>The winner takes it all.</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  <h1 id="数组">数组</h1>
+<h3 id="查找数组中唯一的重复元素">查找数组中唯一的重复元素</h3>
+<p>题目描述：将数字1~1000放在长度为1001的数组中，其中还有一个唯一的重复元素，其他元素均只出现一次。找出这个元素，要求每个元素只能访问一次，并且不能使用辅助存储空间。</p>
+<p>分析：将数组累加求和，减去1+2+3+&hellip;+1000的和，结果即为重复元素</p>
+<p>时间复杂度：O(n)</p>
+<p>空间复杂度：O(1)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">arr</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">9</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">arr</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">arr</span> []<span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">arr</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sum</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 累加过程中，直接加上1~1000的相反数，避免sum溢出
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#a6e22e">l</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">sum</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">arr</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">+</span> (<span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">*-</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">sum</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">arr</span>[<span style="color:#a6e22e">l</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 9
+</span></span></span></code></pre></div><h3 id="求数组中两个元素的最小距离动态规划">求数组中两个元素的最小距离（动态规划）</h3>
+<p>分析：蛮力法，通过两次遍历数组，找出两个元素的位置并计算距离，保存最小值。时间复杂度：O(n*n)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;math&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">arr</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">8</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">arr</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">8</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">arr</span> []<span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">n</span>,<span style="color:#a6e22e">m</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">result</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">arr</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k1</span>,<span style="color:#a6e22e">v1</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">arr</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v1</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">n</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k2</span>,<span style="color:#a6e22e">v2</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">arr</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v2</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">m</span> {
+</span></span><span style="display:flex;"><span>					<span style="color:#a6e22e">tmp</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Abs</span>(float64(<span style="color:#a6e22e">k2</span><span style="color:#f92672">-</span><span style="color:#a6e22e">k1</span>)))
+</span></span><span style="display:flex;"><span>					<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">tmp</span> &lt; <span style="color:#a6e22e">result</span> {
+</span></span><span style="display:flex;"><span>						<span style="color:#a6e22e">result</span> = <span style="color:#a6e22e">tmp</span>
+</span></span><span style="display:flex;"><span>					}
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">result</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>分析：动态规划，记录遍历的位置。时间复杂度：O(n)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;math&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">arr</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">8</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">arr</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">8</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">arr</span> []<span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">n</span>,<span style="color:#a6e22e">m</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">pos1</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">pos2</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">result</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">arr</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k</span>,<span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">arr</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">n</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">pos1</span> = <span style="color:#a6e22e">k</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">pos2</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">tmp</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Abs</span>(float64(<span style="color:#a6e22e">pos1</span><span style="color:#f92672">-</span><span style="color:#a6e22e">pos2</span>)))
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">tmp</span> &lt; <span style="color:#a6e22e">result</span> {
+</span></span><span style="display:flex;"><span>					<span style="color:#a6e22e">result</span> = <span style="color:#a6e22e">tmp</span>
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">m</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">pos2</span> = <span style="color:#a6e22e">k</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">pos1</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">tmp</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Abs</span>(float64(<span style="color:#a6e22e">pos1</span><span style="color:#f92672">-</span><span style="color:#a6e22e">pos2</span>)))
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">tmp</span> &lt; <span style="color:#a6e22e">result</span> {
+</span></span><span style="display:flex;"><span>					<span style="color:#a6e22e">result</span> = <span style="color:#a6e22e">tmp</span>
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">result</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="求解最大子数组动态规划">求解最大子数组（动态规划）</h3>
+<p>分析：蛮力法。时间复杂度：O(n * n * n)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">arr</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">8</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">7</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">arr</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">arr</span> []<span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">result</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">n</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">1</span>;<span style="color:#a6e22e">n</span><span style="color:#f92672">&lt;=</span>len(<span style="color:#a6e22e">arr</span>);<span style="color:#a6e22e">n</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;len(<span style="color:#a6e22e">arr</span>)<span style="color:#f92672">-</span><span style="color:#a6e22e">n</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">sum</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span><span style="color:#f92672">:=</span><span style="color:#a6e22e">i</span>;<span style="color:#a6e22e">j</span>&lt;<span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#a6e22e">n</span>;<span style="color:#a6e22e">j</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">sum</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">arr</span>[<span style="color:#a6e22e">j</span>]
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">sum</span> &gt; <span style="color:#a6e22e">result</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">result</span> = <span style="color:#a6e22e">sum</span>
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">result</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>分析：动态规划。时间复杂度：O(n)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">...</span>
+</span></span></code></pre></div><h3 id="数组循环位移k位">数组循环位移K位</h3>
+<p>题目描述：假设数组[1, 2, 3, 4, 5]，循环右移2位，得[4, 5, 1, 2, 3]</p>
+<p>分析：翻转法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">arr</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">8</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">7</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">arr</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">arr</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 三次翻转即为结果
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">arr</span> []<span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">k</span> <span style="color:#66d9ef">int</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">arr</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ff</span>(<span style="color:#a6e22e">arr</span>[<span style="color:#ae81ff">0</span>:<span style="color:#a6e22e">l</span><span style="color:#f92672">-</span><span style="color:#a6e22e">k</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ff</span>(<span style="color:#a6e22e">arr</span>[<span style="color:#a6e22e">l</span><span style="color:#f92672">-</span><span style="color:#a6e22e">k</span>:])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ff</span>(<span style="color:#a6e22e">arr</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 翻转数组
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ff</span>(<span style="color:#a6e22e">arr</span> []<span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">arr</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#a6e22e">l</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">arr</span>[<span style="color:#a6e22e">i</span>],<span style="color:#a6e22e">arr</span>[<span style="color:#a6e22e">l</span><span style="color:#f92672">-</span><span style="color:#a6e22e">i</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] = <span style="color:#a6e22e">arr</span>[<span style="color:#a6e22e">l</span><span style="color:#f92672">-</span><span style="color:#a6e22e">i</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>],<span style="color:#a6e22e">arr</span>[<span style="color:#a6e22e">i</span>]
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="链表">链表</h1>
+<h3 id="翻转链表">翻转链表</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">LNode</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Data</span> <span style="color:#66d9ef">interface</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Next</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">LNode</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sli</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">11</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">list</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">LNode</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">CreateNode</span>(<span style="color:#a6e22e">list</span>, <span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;翻转前：&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">PrintNode</span>(<span style="color:#a6e22e">list</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f1</span>(<span style="color:#a6e22e">list</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;翻转整个链表：&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">PrintNode</span>(<span style="color:#a6e22e">list</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f2</span>(<span style="color:#a6e22e">list</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;再翻转相邻元素：&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">PrintNode</span>(<span style="color:#a6e22e">list</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 翻转相邻元素
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f2</span>(<span style="color:#a6e22e">list</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">LNode</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">pre</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">list</span>			<span style="color:#75715e">// 指向头结点
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cur</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">pre</span>.<span style="color:#a6e22e">Next</span>		<span style="color:#75715e">// 指向第一个节点
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">cur</span><span style="color:#f92672">!=</span><span style="color:#66d9ef">nil</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">next</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span>.<span style="color:#a6e22e">Next</span>		<span style="color:#75715e">// 指向cur的下下个节点
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 核心逻辑
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">pre</span>.<span style="color:#a6e22e">Next</span> = <span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span>.<span style="color:#a6e22e">Next</span> = <span style="color:#a6e22e">cur</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span> = <span style="color:#a6e22e">next</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 迭代后移
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">pre</span> = <span style="color:#a6e22e">cur</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cur</span> = <span style="color:#a6e22e">next</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 翻转整个链表
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f1</span>(<span style="color:#a6e22e">list</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">LNode</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 初始化节点，pre为第一个节点，cur为第二个节点
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">pre</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Next</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cur</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">pre</span>.<span style="color:#a6e22e">Next</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 第一个节点的指针域要置空，因为翻转后，第一个节点就是最后一个节点，最后一个节点的指针域为nil，否则会造成循环链表
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">pre</span>.<span style="color:#a6e22e">Next</span> = <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">next</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span>	<span style="color:#75715e">// next临时存储cur的后继节点，防止后继节点丢失
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span> = <span style="color:#a6e22e">pre</span>		<span style="color:#75715e">// 核心转变过程，将当前节点的指针域指向前驱节点
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// pre、cur迭代后移，注意终止条件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">pre</span> = <span style="color:#a6e22e">cur</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cur</span> = <span style="color:#a6e22e">next</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 假设当前循环pre、cur已经是最后的两个节点，后移后，pre指向最后一个节点，cur为nil
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cur</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Next</span> = <span style="color:#a6e22e">pre</span>		<span style="color:#75715e">// 将头结点的指针域指向最后一个节点，此处很容易写错为：list=pre
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// CreateNode 通过切片元素初始化链表
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CreateNode</span>(<span style="color:#a6e22e">list</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">LNode</span>, <span style="color:#a6e22e">sli</span> []<span style="color:#66d9ef">int</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cur</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">list</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>,<span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">sli</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">LNode</span>{}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span>.<span style="color:#a6e22e">Data</span> = <span style="color:#a6e22e">v</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cur</span> = <span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// PrintNode 打印链表
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">PrintNode</span>(<span style="color:#a6e22e">list</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">LNode</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">cur</span><span style="color:#f92672">:=</span><span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Next</span>;<span style="color:#a6e22e">cur</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span>;<span style="color:#a6e22e">cur</span>=<span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Next</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%v &#34;</span>, <span style="color:#a6e22e">cur</span>.<span style="color:#a6e22e">Data</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>输出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">翻转前</span><span style="color:#960050;background-color:#1e0010">：</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">7</span> <span style="color:#ae81ff">9</span> <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">11</span> 
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">翻转整个链表</span><span style="color:#960050;background-color:#1e0010">：</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">9</span> <span style="color:#ae81ff">7</span> <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">1</span> 
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">再翻转相邻元素</span><span style="color:#960050;background-color:#1e0010">：</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">10</span> <span style="color:#ae81ff">11</span> <span style="color:#ae81ff">7</span> <span style="color:#ae81ff">9</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">1</span> 
+</span></span></code></pre></div><p>​</p>
+<h1 id="排序算法">排序算法</h1>
+<h3 id="选择排序">选择排序</h3>
+<p>算法描述：每次遍历找出一个最小值与第一个元素交换</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sli</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">38</span>, <span style="color:#ae81ff">65</span>, <span style="color:#ae81ff">97</span>, <span style="color:#ae81ff">76</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">49</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">SelectSort</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">SelectSort</span>(<span style="color:#a6e22e">sli</span> []<span style="color:#66d9ef">int</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#a6e22e">l</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">min</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">i</span>]
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">minIdx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">i</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 找出最小值和索引
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span><span style="color:#f92672">:=</span><span style="color:#a6e22e">i</span>;<span style="color:#a6e22e">j</span>&lt;<span style="color:#a6e22e">l</span>;<span style="color:#a6e22e">j</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span>]&lt;<span style="color:#a6e22e">min</span>{
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">min</span> = <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span>]
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">minIdx</span> = <span style="color:#a6e22e">j</span>
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">i</span>],<span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">minIdx</span>] = <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">minIdx</span>],<span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">i</span>]		 <span style="color:#75715e">// 交换最小值和第一个元素
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//[38 65 97 76 13 27 49]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//[13 65 97 76 38 27 49]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[13 27 97 76 38 65 49]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[13 27 38 76 97 65 49]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[13 27 38 49 97 65 76]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[13 27 38 49 65 97 76]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[13 27 38 49 65 76 97]
+</span></span></span></code></pre></div><h3 id="插入排序">插入排序</h3>
+<p>算法描述：将数组看成两部分，第一部分已排好序，初始值为第一个元素；每次将未排序的数组的第一个元素插入到已排好序的数组中</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sli</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">38</span>, <span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">97</span>, <span style="color:#ae81ff">76</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">49</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">InsertSort</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">InsertSort</span>(<span style="color:#a6e22e">sli</span> []<span style="color:#66d9ef">int</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">1</span>;<span style="color:#a6e22e">i</span>&lt;<span style="color:#a6e22e">l</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">tmp</span>,<span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">i</span>],<span style="color:#a6e22e">i</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span><span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">&amp;&amp;</span><span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]&gt;<span style="color:#a6e22e">tmp</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]		<span style="color:#75715e">// 一直往右挪位置
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">j</span><span style="color:#f92672">--</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">tmp</span>				<span style="color:#75715e">// 插入值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//[38 11 97 76 13 27 49]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//[11 38 97 76 13 27 49]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[11 38 97 76 13 27 49]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[11 38 76 97 13 27 49]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[11 13 38 76 97 27 49]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[11 13 27 38 76 97 49]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[11 13 27 38 49 76 97]
+</span></span></span></code></pre></div><h3 id="冒泡排序">冒泡排序</h3>
+<p>算法描述：每趟遍历，相邻元素两两比较，当前元素比相邻元素大时，交换位置；一趟遍历完成后，最大元素达到最后一个位置</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sli</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">48</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">65</span>, <span style="color:#ae81ff">43</span>, <span style="color:#ae81ff">57</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">BubbleSort</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">BubbleSort</span>(<span style="color:#a6e22e">sli</span> []<span style="color:#66d9ef">int</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#a6e22e">l</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">1</span>;<span style="color:#a6e22e">i</span><span style="color:#f92672">--</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>;<span style="color:#a6e22e">j</span>&lt;<span style="color:#a6e22e">i</span>;<span style="color:#a6e22e">j</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span>] &gt; <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>]{
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span>],<span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>] = <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>],<span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span>]		<span style="color:#75715e">// 两两交换，注意数组越界
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//[36 25 48 12 25 65 43 57]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[25 36 12 25 48 43 57 65]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[25 12 25 36 43 48 57 65]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[12 25 25 36 43 48 57 65]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[12 25 25 36 43 48 57 65]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[12 25 25 36 43 48 57 65]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[12 25 25 36 43 48 57 65]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//[12 25 25 36 43 48 57 65]
+</span></span></span></code></pre></div><h3 id="快速排序">快速排序</h3>
+<p>算法描述：通过一趟排序后，原序列分为两部分，前一部分的所有元素都比后一部分小，然后分别对这两部分元素进行快速排序，递归该过程</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sli</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">48</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">88</span>, <span style="color:#ae81ff">65</span>, <span style="color:#ae81ff">43</span>, <span style="color:#ae81ff">57</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">QuickSort</span>(<span style="color:#a6e22e">sli</span>, <span style="color:#ae81ff">0</span>, len(<span style="color:#a6e22e">sli</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sli</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">QuickSort</span>(<span style="color:#a6e22e">sli</span> []<span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">left</span>,<span style="color:#a6e22e">right</span> <span style="color:#66d9ef">int</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">left</span> &gt; <span style="color:#a6e22e">right</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">left</span>, <span style="color:#a6e22e">right</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">tmp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">i</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">j</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span>] <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">tmp</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">j</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">j</span><span style="color:#f92672">--</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">&lt;=</span> <span style="color:#a6e22e">tmp</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">j</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">j</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">j</span>], <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">i</span>]
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">left</span>], <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">sli</span>[<span style="color:#a6e22e">left</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">QuickSort</span>(<span style="color:#a6e22e">sli</span>, <span style="color:#a6e22e">left</span>, <span style="color:#a6e22e">i</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">QuickSort</span>(<span style="color:#a6e22e">sli</span>, <span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">right</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//[36 25 48 12 88 65 43 57]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//[12 25 36 43 48 57 65 88]
+</span></span></span></code></pre></div><p><a href="https://blog.csdn.net/qq_34303423/article/details/104319987">https://blog.csdn.net/qq_34303423/article/details/104319987</a></p>
+<h3 id="归并排序">*归并排序</h3>
+<h3 id="希尔排序">*希尔排序</h3>
+<h3 id="堆排序">*堆排序</h3>
+<h3 id="排序算法比较">排序算法比较</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>平均时间</th>
+<th>最坏时间</th>
+<th>稳定性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选择排序</td>
+<td>n*n</td>
+<td>n*n</td>
+<td>不稳定</td>
+</tr>
+<tr>
+<td>插入排序</td>
+<td>n*n</td>
+<td>n*n</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>冒泡排序</td>
+<td>n*n</td>
+<td>n*n</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>快速排序</td>
+<td>n*logn</td>
+<td>n*n</td>
+<td>不稳定</td>
+</tr>
+<tr>
+<td>归并排序</td>
+<td>n*logn</td>
+<td>n*logn</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>希尔排序</td>
+<td>n*logn</td>
+<td>n*s(1&lt;s&lt;2)</td>
+<td>不稳定</td>
+</tr>
+<tr>
+<td>堆排序</td>
+<td>n*logn</td>
+<td>n*logn</td>
+<td>不稳定</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>

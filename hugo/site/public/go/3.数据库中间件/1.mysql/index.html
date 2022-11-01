@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MySQL &middot; Blog</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/public/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/public/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/hyde.css">
+  <link type="text/css" rel="stylesheet" href="/public/css/bootstrap-iso.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body style="background-color: #e8e8e8;">
+	<div class="bootstrap-iso">
+		<div class="container-fluid">
+			<div class="row">
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+				<div class="col-md-8">
+					<nav class="navbar navbar-default  nav-stacked" role="navigation">
+					    <div class="container-fluid">
+							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse"
+										data-target="#example-navbar-collapse">
+									<span class="sr-only">切换导航</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<a class="navbar-brand" href="/">Home</a>
+							</div>
+							<div class="collapse navbar-collapse" id="example-navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li id="hot"><a href="/hot">资讯</a></li>
+									<li id="tool"><a href="/tool">导航</a></li>
+									<li id="public"><a href="/public">随笔</a></li>
+									<li><a href="#">关于</a></li>
+								</ul>
+								<i class="navbar-text navbar-right" style="color: #AC2925;"><b>The winner takes it all.</b></i>
+							</div>
+							
+					    </div>
+					</nav>
+				</div>
+				
+				<div class="col-md-2">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="theme-base-08 ">
+		
+		<main class="content container">
+		<div class="post">
+  <h1>MySQL</h1>
+  <time datetime=2022-05-06T10:26:00&#43;0800 class="post-date">Fri, May 6, 2022</time>
+  <h3 id="安装">安装</h3>
+<h4 id="yum安装">YUM安装</h4>
+<p><a href="https://dev.mysql.com/downloads/repo/yum/">https://dev.mysql.com/downloads/repo/yum/</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 添加yum仓库</span>
+</span></span><span style="display:flex;"><span>rpm -ivh https://repo.mysql.com//mysql80-community-release-el7-6.noarch.rpm
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装mysql</span>
+</span></span><span style="display:flex;"><span>yum install mysql-community-server
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 默认安装8.0版本，此处开启5.7版本</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost yum.repos.d<span style="color:#f92672">]</span><span style="color:#75715e"># cat mysql-community.repo </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Enable to use MySQL 5.7</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>mysql57-community<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>name<span style="color:#f92672">=</span>MySQL 5.7 Community Server
+</span></span><span style="display:flex;"><span>baseurl<span style="color:#f92672">=</span>http://repo.mysql.com/yum/mysql-5.7-community/el/7/$basearch
+</span></span><span style="display:flex;"><span>enabled<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>gpgcheck<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>gpgkey<span style="color:#f92672">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2022
+</span></span><span style="display:flex;"><span>       file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>mysql80-community<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>name<span style="color:#f92672">=</span>MySQL 8.0 Community Server
+</span></span><span style="display:flex;"><span>baseurl<span style="color:#f92672">=</span>http://repo.mysql.com/yum/mysql-8.0-community/el/7/$basearch
+</span></span><span style="display:flex;"><span>enabled<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>gpgcheck<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>gpgkey<span style="color:#f92672">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2022
+</span></span><span style="display:flex;"><span>       file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+</span></span><span style="display:flex;"><span>       
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 启动</span>
+</span></span><span style="display:flex;"><span>systemctl start mysqld
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 首次启动会生成临时密码</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span><span style="color:#75715e"># cat /var/log/mysqld.log |grep password</span>
+</span></span><span style="display:flex;"><span>2022-08-22T12:33:59.016946Z <span style="color:#ae81ff">1</span> <span style="color:#f92672">[</span>Note<span style="color:#f92672">]</span> A temporary password is generated <span style="color:#66d9ef">for</span> root@localhost: jkVb2X4qU;t%
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 修改密码</span>
+</span></span><span style="display:flex;"><span>mysql&gt; alter user <span style="color:#e6db74">&#39;root&#39;</span>@<span style="color:#e6db74">&#39;localhost&#39;</span> identified by <span style="color:#e6db74">&#34;Test@123&#34;</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#ae81ff">0</span> rows affected <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 默认配置文件</span>
+</span></span><span style="display:flex;"><span>/etc/my.cnf
+</span></span></code></pre></div><h4 id="通用二进制包">通用二进制包</h4>
+<p><a href="https://blog.csdn.net/qq_34303423/article/details/107249531">https://blog.csdn.net/qq_34303423/article/details/107249531</a></p>
+<h4 id="源码编译安装">源码编译安装</h4>
+<p><a href="https://blog.csdn.net/qq_34303423/article/details/107284104">https://blog.csdn.net/qq_34303423/article/details/107284104</a></p>
+<h3 id="存储引擎">存储引擎</h3>
+<ul>
+<li>MyISAM：5.5版本之前的默认存储引擎</li>
+<li>InnoDB：5.5版本之后的默认存储引擎，支持事务和外键</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 查看默认存储引擎</span>
+</span></span><span style="display:flex;"><span>mysql&gt; show variables like <span style="color:#e6db74">&#39;default_storage_engine&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 查看支持的存储引擎</span>
+</span></span><span style="display:flex;"><span>mysql&gt; show engines;
+</span></span></code></pre></div><h4 id="innodb">InnoDB</h4>
+<ul>
+<li>.frm存储表结构</li>
+<li>.ibd存储数据和索引</li>
+<li>如果是一个多分区表，则每个分区对应一个ibd文件</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 查看数据目录配置</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost test<span style="color:#f92672">]</span><span style="color:#75715e"># cat /etc/my.cnf</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>mysqld<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>datadir<span style="color:#f92672">=</span>/var/lib/mysql
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># test为数据库名</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ai、bi为单文件表，emp为多分区表</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost test<span style="color:#f92672">]</span><span style="color:#75715e"># pwd</span>
+</span></span><span style="display:flex;"><span>/var/lib/mysql/test
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost test<span style="color:#f92672">]</span><span style="color:#75715e"># ls</span>
+</span></span><span style="display:flex;"><span>ai.frm  ai.ibd  bi.frm  bi.ibd  db.opt  emp.frm  emp#P#p0.ibd  emp#P#p1.ibd  emp#P#p2.ibd  emp#P#p3.ibd  emp#P#p4.ibd  emp#P#p5.ibd
+</span></span></code></pre></div><h3 id="用户管理">用户管理</h3>
+<ul>
+<li>权限表：mysql.user、mysql.db</li>
+<li>用户定义：User@Host</li>
+</ul>
+<h4 id="创建账号并授权">创建账号并授权</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysql&gt; grant all privileges on *.* to <span style="color:#e6db74">&#39;emp&#39;</span>@<span style="color:#e6db74">&#39;%&#39;</span> identified by <span style="color:#e6db74">&#39;Test@123&#39;</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#ae81ff">0</span> rows affected, <span style="color:#ae81ff">1</span> warning <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span></code></pre></div><h4 id="配置远程访问">配置远程访问</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysql&gt; <span style="color:#66d9ef">select</span> user,host from user;
+</span></span><span style="display:flex;"><span>+---------------+-----------+
+</span></span><span style="display:flex;"><span>| user          | host      |
+</span></span><span style="display:flex;"><span>+---------------+-----------+
+</span></span><span style="display:flex;"><span>| mysql.session | localhost |
+</span></span><span style="display:flex;"><span>| mysql.sys     | localhost |
+</span></span><span style="display:flex;"><span>| root          | localhost |
+</span></span><span style="display:flex;"><span>+---------------+-----------+
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3</span> rows in set <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql&gt; update user set host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;%&#39;</span> where user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#ae81ff">1</span> row affected <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Rows matched: <span style="color:#ae81ff">1</span>  Changed: <span style="color:#ae81ff">1</span>  Warnings: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql&gt; <span style="color:#66d9ef">select</span> user,host from user;
+</span></span><span style="display:flex;"><span>+---------------+-----------+
+</span></span><span style="display:flex;"><span>| user          | host      |
+</span></span><span style="display:flex;"><span>+---------------+-----------+
+</span></span><span style="display:flex;"><span>| root          | %         |
+</span></span><span style="display:flex;"><span>| mysql.session | localhost |
+</span></span><span style="display:flex;"><span>| mysql.sys     | localhost |
+</span></span><span style="display:flex;"><span>+---------------+-----------+
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3</span> rows in set <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql&gt; flush privileges;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#ae81ff">0</span> rows affected <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span></code></pre></div><h4 id="修改账号密码">修改账号密码</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span><span style="color:#75715e"># mysqladmin -uroot -pTest@123 password &#39;Root@123&#39;;</span>
+</span></span><span style="display:flex;"><span>mysqladmin: <span style="color:#f92672">[</span>Warning<span style="color:#f92672">]</span> Using a password on the command line interface can be insecure.
+</span></span><span style="display:flex;"><span>Warning: Since password will be sent to server in plain text, use ssl connection to ensure password safety.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql&gt; alter user root@<span style="color:#e6db74">&#39;%&#39;</span> identified by <span style="color:#e6db74">&#39;Test@123&#39;</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#ae81ff">0</span> rows affected <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql&gt; set password <span style="color:#66d9ef">for</span> root@<span style="color:#e6db74">&#39;%&#39;</span> <span style="color:#f92672">=</span> password<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;Root@123&#39;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#ae81ff">0</span> rows affected, <span style="color:#ae81ff">1</span> warning <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql&gt; update mysql.user set authentication_string <span style="color:#f92672">=</span> password<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;Test@123&#39;</span><span style="color:#f92672">)</span> where user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#ae81ff">1</span> row affected, <span style="color:#ae81ff">1</span> warning <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Rows matched: <span style="color:#ae81ff">1</span>  Changed: <span style="color:#ae81ff">1</span>  Warnings: <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><h4 id="忘记密码">忘记密码</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span><span style="color:#75715e"># cat /etc/my.cnf</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>mysqld<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>skip-grant-tables
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span><span style="color:#75715e"># systemctl restart mysqld</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span><span style="color:#75715e"># mysql -uroot</span>
+</span></span><span style="display:flex;"><span>Welcome to the MySQL monitor.  Commands end with ; or <span style="color:#ae81ff">\g</span>.
+</span></span><span style="display:flex;"><span>Your MySQL connection id is <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>Server version: 5.7.39 MySQL Community Server <span style="color:#f92672">(</span>GPL<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> 2000, 2022, Oracle and/or its affiliates.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Oracle is a registered trademark of Oracle Corporation and/or its
+</span></span><span style="display:flex;"><span>affiliates. Other names may be trademarks of their respective
+</span></span><span style="display:flex;"><span>owners.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Type <span style="color:#e6db74">&#39;help;&#39;</span> or <span style="color:#e6db74">&#39;\h&#39;</span> <span style="color:#66d9ef">for</span> help. Type <span style="color:#e6db74">&#39;\c&#39;</span> to clear the current input statement.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql&gt; set password <span style="color:#66d9ef">for</span> root@<span style="color:#e6db74">&#39;%&#39;</span> <span style="color:#f92672">=</span> password<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;Godman@123&#39;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>ERROR <span style="color:#ae81ff">1290</span> <span style="color:#f92672">(</span>HY000<span style="color:#f92672">)</span>: The MySQL server is running with the --skip-grant-tables option so it cannot execute this statement
+</span></span><span style="display:flex;"><span>mysql&gt; alter user root@<span style="color:#e6db74">&#39;%&#39;</span> identified by <span style="color:#e6db74">&#39;Godman@123&#39;</span>;
+</span></span><span style="display:flex;"><span>ERROR <span style="color:#ae81ff">1290</span> <span style="color:#f92672">(</span>HY000<span style="color:#f92672">)</span>: The MySQL server is running with the --skip-grant-tables option so it cannot execute this statement
+</span></span><span style="display:flex;"><span>mysql&gt; update mysql.user set authentication_string <span style="color:#f92672">=</span> password<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;Godman@123&#39;</span><span style="color:#f92672">)</span> where user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#ae81ff">1</span> row affected, <span style="color:#ae81ff">1</span> warning <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Rows matched: <span style="color:#ae81ff">1</span>  Changed: <span style="color:#ae81ff">1</span>  Warnings: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql&gt; flush privileges;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#ae81ff">0</span> rows affected <span style="color:#f92672">(</span>0.00 sec<span style="color:#f92672">)</span>
+</span></span></code></pre></div><h3 id="索引">*索引</h3>
+<h3 id="事务和锁">事务和锁</h3>
+<h4 id="事务的acid属性">事务的ACID属性</h4>
+<ul>
+<li>原子性：要么都执行，要么都不执行</li>
+<li>一致性：在事务开始和完成时，数据都必须保持一致的状态</li>
+<li>隔离性：事务之间互不影响（隔离级别）</li>
+<li>持久性：对数据的修改是永久性的</li>
+</ul>
+<h4 id="事务的隔离级别">事务的隔离级别</h4>
+<p><a href="https://www.cnblogs.com/xialigang/p/16426621.html">https://www.cnblogs.com/xialigang/p/16426621.html</a></p>
+<ul>
+<li>读未提交：可以读取到另一个事务未提交的更改（脏读问题）</li>
+<li>读已提交：可以读取到另一个事务已提交的更改（不可重复读问题）</li>
+<li>可重复读（默认）：当自身提交后，才能读取到另一个事务已提交的更改（幻读问题）</li>
+<li>串行：没有问题，但并发效率最低</li>
+</ul>
+<h4 id="锁类型">锁类型</h4>
+<ul>
+<li>MyISAM、MEMORY采用表级锁</li>
+<li>BDB采用页级锁，也支持表级锁</li>
+<li>InnoDB采用行级锁，也支持表级锁</li>
+</ul>
+<h3 id="分区">分区</h3>
+<h4 id="查看分区支持">查看分区支持</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysql&gt; show plugins;
+</span></span><span style="display:flex;"><span>+----------------------------+----------+--------------------+----------------------+---------+
+</span></span><span style="display:flex;"><span>| Name                       | Status   | Type               | Library              | License |
+</span></span><span style="display:flex;"><span>+----------------------------+----------+--------------------+----------------------+---------+
+</span></span><span style="display:flex;"><span>| partition                  | ACTIVE   | STORAGE ENGINE     | NULL                 | GPL     |
+</span></span></code></pre></div><h4 id="分区类型">分区类型</h4>
+<ul>
+<li>RANGE分区</li>
+<li>LIST分区</li>
+<li>COLUMNS分区</li>
+<li>HASH分区</li>
+<li>KEY分区</li>
+<li>子分区</li>
+</ul>
+<h3 id="其他">其他</h3>
+<h4 id="数据库对象">数据库对象</h4>
+<ul>
+<li>视图</li>
+<li>存储过程和函数</li>
+<li>触发器</li>
+</ul>
+<h4 id="sql-mode">SQL Mode</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 查看默认值</span>
+</span></span><span style="display:flex;"><span>mysql&gt; <span style="color:#66d9ef">select</span> @@sql_mode;
+</span></span></code></pre></div>
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		</main>
+		
+		
+		  
+		
+	</div>
+	
+  </body>
+</html>
