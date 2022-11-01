@@ -3,7 +3,7 @@ package core
 import (
 	"bytes"
 	"github.com/antchfx/htmlquery"
-	"io/ioutil"
+	"io"
 	"log"
 	"message/model"
 	"strconv"
@@ -47,7 +47,7 @@ func F(url string, k string)  {
 		return
 	}
 	defer resp.Body.Close()
-	bodyText, err := ioutil.ReadAll(resp.Body)
+	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Printf("github err:%v\n", err)
 		return
@@ -58,7 +58,7 @@ func F(url string, k string)  {
 		log.Printf("github err:%v\n", err)
 		return
 	}
-	nodes := htmlquery.Find(doc, "//*[@id=\"js-pjax-container\"]/div[3]/div/div[2]/article")
+	nodes := htmlquery.Find(doc, "//article")
 	for _,node := range nodes{
 		n1,_ := htmlquery.Query(node, "//h1/a")
 		n2,_ := htmlquery.Query(node, "//p")

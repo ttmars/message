@@ -42,7 +42,7 @@ func FFF(url, k string)()  {
 		log.Printf("Kr36 err:%v\n", err)
 		return
 	}
-	nodes := htmlquery.Find(doc, "//*[@id=\"app\"]/div/div[2]/div[3]/div[2]/div/div[2]/div[1]/div/div/div/div/div[2]/div[2]/p/a")
+	nodes := htmlquery.Find(doc, "//*[@id=\"app\"]/div/div[2]/div[3]/div/div/div[2]/div[1]/div/div/div/div/div[2]/div[2]/p/a")
 	for _,node := range nodes{
 		title := htmlquery.InnerText(node)
 		link := "https://www.36kr.com" + htmlquery.SelectAttr(node, "href")

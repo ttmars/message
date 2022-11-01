@@ -24,6 +24,7 @@ type S1 struct {
 
 func main()  {
 	Run()
+	//core.Github()
 }
 
 func Run(){
