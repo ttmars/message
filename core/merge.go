@@ -221,6 +221,11 @@ func Acfun()(result []model.Item, err error){
 }
 
 func Zhihu()  {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("Zhihu panic:%v\n", err)
+		}
+	}()
 	defer wg.Done()
 	url := "https://www.zhihu.com/billboard"
 	r,_ := http.NewRequest("GET", url, nil)
