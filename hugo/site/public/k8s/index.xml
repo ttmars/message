@@ -13,7 +13,7 @@
       <pubDate>Sun, 05 Jun 2022 15:27:00 +0800</pubDate>
       
       <guid>/public/k8s/kubectl/</guid>
-      <description>get # 详细输出 kubectl get pods -o wide  # 输出yaml格式 kubectl get svc nginx -o yaml  # 输出json格式 kubectl get svc nginx -o json  # 实时输出 kubectl get pods -w config # 切换命名空间 kubectl config set-context --current --namespace default  # 查看当前上下文 kubectl config get-contexts  # 切换上下文 kubectl config use-context kubernetes-admin@kubernetes  # 查看集群信息 kubectl cluster-info  # 查看集群资源使用率，依赖metrics-server插件（https://blog.csdn.net/liuyanwuyu/article/details/119793631） kubectl top nodes explain # 递归获取资源定义 kubectl explain pods --recursive  # 获取资源模板 kubectl create deploy demo --image=busybox:1.</description>
+      <description>get # 详细输出 kubectl get pods -o wide # 输出yaml格式 kubectl get svc nginx -o yaml # 输出json格式 kubectl get svc nginx -o json # 实时输出 kubectl get pods -w config # 切换命名空间 kubectl config set-context --current --namespace default # 查看当前上下文 kubectl config get-contexts # 切换上下文 kubectl config use-context kubernetes-admin@kubernetes # 查看集群信息 kubectl cluster-info # 查看集群资源使用率，依赖metrics-server插件（https://blog.csdn.net/liuyanwuyu/article/details/119793631） kubectl top nodes explain # 递归获取资源定义 kubectl explain pods --recursive # 获取资源模板 kubectl create deploy demo --image=busybox:1.</description>
     </item>
     
     <item>
@@ -22,7 +22,7 @@
       <pubDate>Sun, 05 Jun 2022 13:11:00 +0800</pubDate>
       
       <guid>/public/k8s/k8s%E8%AE%A4%E8%AF%81%E6%9C%BA%E5%88%B6/</guid>
-      <description>APIServer三重认证  身份认证：决定用户能不能访问 授权：决定用户能访问的资源 准入控制器：决定用户访问资源的规范、准则  身份认证  常规用户认证 ServiceAccount认证，集群内部Pod使用  RBAC授权 准入控制器 </description>
+      <description>APIServer三重认证 身份认证：决定用户能不能访问 授权：决定用户能访问的资源 准入控制器：决定用户访问资源的规范、准则 身份认证 常规用户认证 ServiceAccount认证，集群内部Pod使用 RBAC授权 准入控制器 </description>
     </item>
     
     <item>
@@ -31,7 +31,7 @@
       <pubDate>Sat, 04 Jun 2022 21:46:00 +0800</pubDate>
       
       <guid>/public/k8s/k8s%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/</guid>
-      <description>一、本地存储卷 emptyDir  将主机的临时目录映射到容器里 与pod同生命周期，pod销毁，存储卷同时销毁  # 基于磁盘的临时存储 volumes:  - name: cache-volume  emptyDir: {}  # 基于内存的临时存储 volumes:  - name: cache-volume  emptyDir:  medium: Memory hostPath  将主机上的指定目录映射到容器里 永久保存  volumes:  - name: cache-volume  hostPath:  path: /data 二、网络存储卷  可以跨节点共享存储 支持多种存储方案，如NFS  volumes:  - name: cache-volume  nfs:  path: /data  server: 192.168.66.100 三、持久存储卷 静态PV # NFS服务==&amp;gt;持久卷（PersistentVolume）==&amp;gt;持久卷声明（PersistentVolumeClaim）==&amp;gt;Pod引用 volumes:  - name: cache-volume  persistentVolumeClaim:  claimName: &amp;lt;pvcName&amp;gt; 动态PV # NFS服务==&amp;gt;存储分配器（provisioner）==&amp;gt;持久卷类（StorageClass）==&amp;gt;持久卷声明（PersistentVolumeClaim）==&amp;gt;Pod引用（自动绑定PV） volumes:  - name: cache-volume  persistentVolumeClaim:  claimName: &amp;lt;scName&amp;gt; 四、配置存储卷 ConfigMap  模板示例  apiVersion: v1 kind: ConfigMap metadata:  name: example-configmap data:  name: valar  age: 25  hobby: |game=LOL movie=Titanic 通过环境变量引用  # 依次引用 env:  - name: NAME  valueFrom:  configMapKeyRef:  name: example-configmap  key: name  - name: AGE  valueFrom:  configMapKeyRef:  name: example-configmap  key: age  - name: HOBBY  valueFrom:  configMapKeyRef:  name: example-configmap  key: hobby # 一次引用所有 envFrom:  - configMapRef:  name: example-configmap 通过存储卷引用  # 会将configMap中的键值对映射到容器的指定目录，键-&amp;gt;文件名，值-&amp;gt;文件内容 volumes:  - name: volume-config  configMap:  name: example-configmap Secret  OpaqueSecret，对数据进行base64编码  加密：echo &amp;#34;hello&amp;#34; | base64 解密：echo &amp;#34;aGVsbG8K&amp;#34; | base64 --decode  ImagePullSecret，用于存储私有仓库的认证信息</description>
+      <description>一、本地存储卷 emptyDir 将主机的临时目录映射到容器里 与pod同生命周期，pod销毁，存储卷同时销毁 # 基于磁盘的临时存储 volumes: - name: cache-volume emptyDir: {} # 基于内存的临时存储 volumes: - name: cache-volume emptyDir: medium: Memory hostPath 将主机上的指定目录映射到容器里 永久保存 volumes: - name: cache-volume hostPath: path: /data 二、网络存储卷 可以跨节点共享存储 支持多种存储方案，如NFS volumes: - name: cache-volume nfs: path: /data server: 192.168.66.100 三、持久存储卷 静态PV # NFS服务==&amp;gt;持久卷（PersistentVolume）==&amp;gt;持久卷声明（PersistentVolumeClaim）==&amp;gt;Pod引用 volumes: - name: cache-volume persistentVolumeClaim: claimName: &amp;lt;pvcName&amp;gt; 动态PV # NFS服务==&amp;gt;存储分配器（provisioner）==&amp;gt;持久卷类（StorageClass）==&amp;gt;持久卷声明（PersistentVolumeClaim）==&amp;gt;Pod引用（自动绑定PV） volumes: - name: cache-volume persistentVolumeClaim: claimName: &amp;lt;scName&amp;gt; 四、配置存储卷 ConfigMap 模板示例 apiVersion: v1 kind: ConfigMap metadata: name: example-configmap data: name: valar age: 25 hobby: | game=LOL movie=Titanic 通过环境变量引用 # 依次引用 env: - name: NAME valueFrom: configMapKeyRef: name: example-configmap key: name - name: AGE valueFrom: configMapKeyRef: name: example-configmap key: age - name: HOBBY valueFrom: configMapKeyRef: name: example-configmap key: hobby # 一次引用所有 envFrom: - configMapRef: name: example-configmap 通过存储卷引用 # 会将configMap中的键值对映射到容器的指定目录，键-&amp;gt;文件名，值-&amp;gt;文件内容 volumes: - name: volume-config configMap: name: example-configmap Secret OpaqueSecret，对数据进行base64编码 加密：echo &amp;#34;hello&amp;#34; | base64 解密：echo &amp;#34;aGVsbG8K&amp;#34; | base64 --decode ImagePullSecret，用于存储私有仓库的认证信息</description>
     </item>
     
     <item>
@@ -41,9 +41,9 @@
       
       <guid>/public/k8s/k8s%E6%9C%8D%E5%8A%A1/</guid>
       <description>一、服务类型 向外发布服务
- ClusterIP NodePort LoadBalancer  向内发布服务
- 无头服务 ExternalName  服务发现方式
- 环境变量 DNS服务器  二、ClusterIP  通过kube-proxy组件实现负载均衡 自动分配集群IP  # https://kubernetes.io/docs/concepts/services-networking/service/ apiVersion: v1 kind: Service metadata:  name: service-simple-service spec:  selector:  app: service-simple-app  ports:  - protocol: TCP  port: 80  targetPort: 8080 三、NodePort  基于ClusterIP模式 端口范围：30000-32767  # https://kubernetes.io/docs/concepts/services-networking/service/#nodeport apiVersion: v1 kind: Service metadata:  name: service-node-port-service spec:  type: NodePort  selector:  app: MyApp  ports:  - port: 80 # By default and for convenience, the `targetPort` is set to the same value as the `port` field.</description>
+ClusterIP NodePort LoadBalancer 向内发布服务
+无头服务 ExternalName 服务发现方式
+环境变量 DNS服务器 二、ClusterIP 通过kube-proxy组件实现负载均衡 自动分配集群IP # https://kubernetes.io/docs/concepts/services-networking/service/ apiVersion: v1 kind: Service metadata: name: service-simple-service spec: selector: app: service-simple-app ports: - protocol: TCP port: 80 targetPort: 8080 三、NodePort 基于ClusterIP模式 端口范围：30000-32767 # https://kubernetes.io/docs/concepts/services-networking/service/#nodeport apiVersion: v1 kind: Service metadata: name: service-node-port-service spec: type: NodePort selector: app: MyApp ports: - port: 80 # By default and for convenience, the `targetPort` is set to the same value as the `port` field.</description>
     </item>
     
     <item>
@@ -53,8 +53,9 @@
       
       <guid>/public/k8s/kubeadm%E9%83%A8%E7%BD%B2k8s%E9%9B%86%E7%BE%A4/</guid>
       <description>官方部署文档
-一、环境准备  准备两台全新的虚拟机     主机名 IP 系统类型 配置     master 192.168.66.100 centos7.6 2c2g   node1 192.168.66.101 centos7.6 4c4g    配置主机名  hostnamectl set-hostname master  [root@master ~]# cat /etc/hosts 127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4 ::1 localhost localhost.localdomain localhost6 localhost6.localdomain6  192.168.66.100 master 192.168.66.101 node1 网卡配置  VMware网络适配器选择NAT模式，网卡配置为静态IP
-[root@master ~]# cat /etc/sysconfig/network-scripts/ifcfg-ens33  TYPE=Ethernet PROXY_METHOD=none BROWSER_ONLY=no BOOTPROTO=static DEFROUTE=yes IPV4_FAILURE_FATAL=no IPV6INIT=yes IPV6_AUTOCONF=yes IPV6_DEFROUTE=yes IPV6_FAILURE_FATAL=no IPV6_ADDR_GEN_MODE=stable-privacy NAME=ens33 UUID=443eb4f6-645e-4eee-ab28-21f5cde8026f DEVICE=ens33 ONBOOT=yes IPADDR=192.</description>
+一、环境准备 准备两台全新的虚拟机 主机名 IP 系统类型 配置 master 192.168.66.100 centos7.6 2c2g node1 192.168.66.101 centos7.6 4c4g 配置主机名 hostnamectl set-hostname master [root@master ~]# cat /etc/hosts 127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4 ::1 localhost localhost.localdomain localhost6 localhost6.localdomain6 192.168.66.100 master 192.168.66.101 node1 网卡配置 VMware网络适配器选择NAT模式，网卡配置为静态IP
+[root@master ~]# cat /etc/sysconfig/network-scripts/ifcfg-ens33 TYPE=Ethernet PROXY_METHOD=none BROWSER_ONLY=no BOOTPROTO=static DEFROUTE=yes IPV4_FAILURE_FATAL=no IPV6INIT=yes IPV6_AUTOCONF=yes IPV6_DEFROUTE=yes IPV6_FAILURE_FATAL=no IPV6_ADDR_GEN_MODE=stable-privacy NAME=ens33 UUID=443eb4f6-645e-4eee-ab28-21f5cde8026f DEVICE=ens33 ONBOOT=yes IPADDR=192.168.66.100 NETMASK=255.255.255.0 GATEWAY=192.168.66.2 DNS1=8.8.8.8 DNS2=8.8.4.4 配置yum源 https://developer.aliyun.com/mirror/
+curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo sed -i -e &amp;#39;/mirrors.</description>
     </item>
     
     <item>
@@ -67,12 +68,12 @@
 方式一 通过Ingress注释配置，add_header指令会映射到nginx配置文件中的localtion模块中，只对单个服务生效
 https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#configuration-snippet
 示例：
-apiVersion: extensions/v1betal kind: Ingress metadata:  annotations:  kubernetes.io/ingress.class: nginx  nginx.ingress.kubernetes.io/configuration-snippet: | add_header &amp;#34;**&amp;#34; &amp;#34;**&amp;#34;; spec:  rules:  ** 方式二 将配置存储在configmap中，在Ingress中间接引用，此方式会将add_header指令映射到nginx配置文件中的http模块中，对所有服务生效
+apiVersion: extensions/v1betal kind: Ingress metadata: annotations: kubernetes.io/ingress.class: nginx nginx.ingress.kubernetes.io/configuration-snippet: | add_header &amp;#34;**&amp;#34; &amp;#34;**&amp;#34;; spec: rules: ** 方式二 将配置存储在configmap中，在Ingress中间接引用，此方式会将add_header指令映射到nginx配置文件中的http模块中，对所有服务生效
 https://kubernetes.github.io/ingress-nginx/examples/customization/custom-headers/
 示例：
 自定义custom-headers文件，存储响应头
-apiVersion: v1 kind: ConfigMap metadata:  name: custom-headers  namespace: ingress-nginx data:  X-Different-Name: &amp;#34;true&amp;#34;  X-Using-Nginx-Controller: &amp;#34;true&amp;#34; 在Ingress-nginx默认配置文件中，间接引用custom-headers
-apiVersion: v1 kind: ConfigMap metadata:  name: ingress-nginx-controller  namespace: ingress-nginx data:  add-headers: &amp;#34;ingress-nginx/custom-headers&amp;#34; 注意事项  方式二修改配置文件后，需要重启nginx-ingress-controller，配置才能生效！ 由于nginx指令add_header的继承性问题，两种方式不能同时配置，否则方式二会失效！请参考：https://juejin.cn/post/6844904041126838286  </description>
+apiVersion: v1 kind: ConfigMap metadata: name: custom-headers namespace: ingress-nginx data: X-Different-Name: &amp;#34;true&amp;#34; X-Using-Nginx-Controller: &amp;#34;true&amp;#34; 在Ingress-nginx默认配置文件中，间接引用custom-headers
+apiVersion: v1 kind: ConfigMap metadata: name: ingress-nginx-controller namespace: ingress-nginx data: add-headers: &amp;#34;ingress-nginx/custom-headers&amp;#34; 注意事项 方式二修改配置文件后，需要重启nginx-ingress-controller，配置才能生效！ 由于nginx指令add_header的继承性问题，两种方式不能同时配置，否则方式二会失效！请参考：https://juejin.cn/post/6844904041126838286 </description>
     </item>
     
     <item>
@@ -84,8 +85,8 @@ apiVersion: v1 kind: ConfigMap metadata:  name: ingress-nginx-controller  namesp
       <description>Ingress-nginx路由配置 官方文档：https://kubernetes.github.io/ingress-nginx/examples/rewrite/
 静态文件404问题 https://www.qikqiak.com/post/url-rewrite-on-ingress-nginx/
 https://stackoverflow.com/questions/50871970/kubernetes-ingress-nginx-loading-resources-404
-配置示例 kind: Ingress apiVersion: extensions/v1beta1 metadata:  name: **  namespace: **  annotations:  kubernetes.io/ingress.class: nginx  nginx.ingress.kubernetes.io/rewrite-target: /$1	# $1为正则匹配占位符  nginx.ingress.kubernetes.io/configuration-snippet: | rewrite ^/css/(.*)$ /app/css/$1 redirect; # 给静态文件目录添加app前缀 spec:  rules:  - host: **  http:  paths:  - path: /app/(.*)	# 添加app路径，以路径区别后端服务  pathType: Prefix  backend:  serviceName: **  servicePort: 80 注意事项 后端对静态资源的引用，要删除前导斜杠
-如: &amp;lt;script src=/public/js/example.js&amp;gt;&amp;lt;/script&amp;gt; 删除前导斜杠: &amp;lt;script src=js/example.</description>
+配置示例 kind: Ingress apiVersion: extensions/v1beta1 metadata: name: ** namespace: ** annotations: kubernetes.io/ingress.class: nginx nginx.ingress.kubernetes.io/rewrite-target: /$1	# $1为正则匹配占位符 nginx.ingress.kubernetes.io/configuration-snippet: | rewrite ^/css/(.*)$ /app/css/$1 redirect; # 给静态文件目录添加app前缀 spec: rules: - host: ** http: paths: - path: /app/(.*)	# 添加app路径，以路径区别后端服务 pathType: Prefix backend: serviceName: ** servicePort: 80 注意事项 后端对静态资源的引用，要删除前导斜杠
+如: &amp;lt;script src=/public/js/example.js&amp;gt;&amp;lt;/script&amp;gt; 删除前导斜杠: &amp;lt;script src=js/example.js&amp;gt;&amp;lt;/script&amp;gt; </description>
     </item>
     
   </channel>

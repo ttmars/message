@@ -13,7 +13,7 @@
       <pubDate>Sun, 05 Jun 2022 15:27:00 +0800</pubDate>
       
       <guid>/public/k8s/kubectl/</guid>
-      <description>get # 详细输出 kubectl get pods -o wide  # 输出yaml格式 kubectl get svc nginx -o yaml  # 输出json格式 kubectl get svc nginx -o json  # 实时输出 kubectl get pods -w config # 切换命名空间 kubectl config set-context --current --namespace default  # 查看当前上下文 kubectl config get-contexts  # 切换上下文 kubectl config use-context kubernetes-admin@kubernetes  # 查看集群信息 kubectl cluster-info  # 查看集群资源使用率，依赖metrics-server插件（https://blog.csdn.net/liuyanwuyu/article/details/119793631） kubectl top nodes explain # 递归获取资源定义 kubectl explain pods --recursive  # 获取资源模板 kubectl create deploy demo --image=busybox:1.</description>
+      <description>get # 详细输出 kubectl get pods -o wide # 输出yaml格式 kubectl get svc nginx -o yaml # 输出json格式 kubectl get svc nginx -o json # 实时输出 kubectl get pods -w config # 切换命名空间 kubectl config set-context --current --namespace default # 查看当前上下文 kubectl config get-contexts # 切换上下文 kubectl config use-context kubernetes-admin@kubernetes # 查看集群信息 kubectl cluster-info # 查看集群资源使用率，依赖metrics-server插件（https://blog.csdn.net/liuyanwuyu/article/details/119793631） kubectl top nodes explain # 递归获取资源定义 kubectl explain pods --recursive # 获取资源模板 kubectl create deploy demo --image=busybox:1.</description>
     </item>
     
     <item>
@@ -22,7 +22,7 @@
       <pubDate>Sun, 05 Jun 2022 13:11:00 +0800</pubDate>
       
       <guid>/public/k8s/k8s%E8%AE%A4%E8%AF%81%E6%9C%BA%E5%88%B6/</guid>
-      <description>APIServer三重认证  身份认证：决定用户能不能访问 授权：决定用户能访问的资源 准入控制器：决定用户访问资源的规范、准则  身份认证  常规用户认证 ServiceAccount认证，集群内部Pod使用  RBAC授权 准入控制器 </description>
+      <description>APIServer三重认证 身份认证：决定用户能不能访问 授权：决定用户能访问的资源 准入控制器：决定用户访问资源的规范、准则 身份认证 常规用户认证 ServiceAccount认证，集群内部Pod使用 RBAC授权 准入控制器 </description>
     </item>
     
     <item>
@@ -31,7 +31,7 @@
       <pubDate>Sat, 04 Jun 2022 21:46:00 +0800</pubDate>
       
       <guid>/public/k8s/k8s%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/</guid>
-      <description>一、本地存储卷 emptyDir  将主机的临时目录映射到容器里 与pod同生命周期，pod销毁，存储卷同时销毁  # 基于磁盘的临时存储 volumes:  - name: cache-volume  emptyDir: {}  # 基于内存的临时存储 volumes:  - name: cache-volume  emptyDir:  medium: Memory hostPath  将主机上的指定目录映射到容器里 永久保存  volumes:  - name: cache-volume  hostPath:  path: /data 二、网络存储卷  可以跨节点共享存储 支持多种存储方案，如NFS  volumes:  - name: cache-volume  nfs:  path: /data  server: 192.168.66.100 三、持久存储卷 静态PV # NFS服务==&amp;gt;持久卷（PersistentVolume）==&amp;gt;持久卷声明（PersistentVolumeClaim）==&amp;gt;Pod引用 volumes:  - name: cache-volume  persistentVolumeClaim:  claimName: &amp;lt;pvcName&amp;gt; 动态PV # NFS服务==&amp;gt;存储分配器（provisioner）==&amp;gt;持久卷类（StorageClass）==&amp;gt;持久卷声明（PersistentVolumeClaim）==&amp;gt;Pod引用（自动绑定PV） volumes:  - name: cache-volume  persistentVolumeClaim:  claimName: &amp;lt;scName&amp;gt; 四、配置存储卷 ConfigMap  模板示例  apiVersion: v1 kind: ConfigMap metadata:  name: example-configmap data:  name: valar  age: 25  hobby: |game=LOL movie=Titanic 通过环境变量引用  # 依次引用 env:  - name: NAME  valueFrom:  configMapKeyRef:  name: example-configmap  key: name  - name: AGE  valueFrom:  configMapKeyRef:  name: example-configmap  key: age  - name: HOBBY  valueFrom:  configMapKeyRef:  name: example-configmap  key: hobby # 一次引用所有 envFrom:  - configMapRef:  name: example-configmap 通过存储卷引用  # 会将configMap中的键值对映射到容器的指定目录，键-&amp;gt;文件名，值-&amp;gt;文件内容 volumes:  - name: volume-config  configMap:  name: example-configmap Secret  OpaqueSecret，对数据进行base64编码  加密：echo &amp;#34;hello&amp;#34; | base64 解密：echo &amp;#34;aGVsbG8K&amp;#34; | base64 --decode  ImagePullSecret，用于存储私有仓库的认证信息</description>
+      <description>一、本地存储卷 emptyDir 将主机的临时目录映射到容器里 与pod同生命周期，pod销毁，存储卷同时销毁 # 基于磁盘的临时存储 volumes: - name: cache-volume emptyDir: {} # 基于内存的临时存储 volumes: - name: cache-volume emptyDir: medium: Memory hostPath 将主机上的指定目录映射到容器里 永久保存 volumes: - name: cache-volume hostPath: path: /data 二、网络存储卷 可以跨节点共享存储 支持多种存储方案，如NFS volumes: - name: cache-volume nfs: path: /data server: 192.168.66.100 三、持久存储卷 静态PV # NFS服务==&amp;gt;持久卷（PersistentVolume）==&amp;gt;持久卷声明（PersistentVolumeClaim）==&amp;gt;Pod引用 volumes: - name: cache-volume persistentVolumeClaim: claimName: &amp;lt;pvcName&amp;gt; 动态PV # NFS服务==&amp;gt;存储分配器（provisioner）==&amp;gt;持久卷类（StorageClass）==&amp;gt;持久卷声明（PersistentVolumeClaim）==&amp;gt;Pod引用（自动绑定PV） volumes: - name: cache-volume persistentVolumeClaim: claimName: &amp;lt;scName&amp;gt; 四、配置存储卷 ConfigMap 模板示例 apiVersion: v1 kind: ConfigMap metadata: name: example-configmap data: name: valar age: 25 hobby: | game=LOL movie=Titanic 通过环境变量引用 # 依次引用 env: - name: NAME valueFrom: configMapKeyRef: name: example-configmap key: name - name: AGE valueFrom: configMapKeyRef: name: example-configmap key: age - name: HOBBY valueFrom: configMapKeyRef: name: example-configmap key: hobby # 一次引用所有 envFrom: - configMapRef: name: example-configmap 通过存储卷引用 # 会将configMap中的键值对映射到容器的指定目录，键-&amp;gt;文件名，值-&amp;gt;文件内容 volumes: - name: volume-config configMap: name: example-configmap Secret OpaqueSecret，对数据进行base64编码 加密：echo &amp;#34;hello&amp;#34; | base64 解密：echo &amp;#34;aGVsbG8K&amp;#34; | base64 --decode ImagePullSecret，用于存储私有仓库的认证信息</description>
     </item>
     
     <item>
@@ -41,9 +41,9 @@
       
       <guid>/public/k8s/k8s%E6%9C%8D%E5%8A%A1/</guid>
       <description>一、服务类型 向外发布服务
- ClusterIP NodePort LoadBalancer  向内发布服务
- 无头服务 ExternalName  服务发现方式
- 环境变量 DNS服务器  二、ClusterIP  通过kube-proxy组件实现负载均衡 自动分配集群IP  # https://kubernetes.io/docs/concepts/services-networking/service/ apiVersion: v1 kind: Service metadata:  name: service-simple-service spec:  selector:  app: service-simple-app  ports:  - protocol: TCP  port: 80  targetPort: 8080 三、NodePort  基于ClusterIP模式 端口范围：30000-32767  # https://kubernetes.io/docs/concepts/services-networking/service/#nodeport apiVersion: v1 kind: Service metadata:  name: service-node-port-service spec:  type: NodePort  selector:  app: MyApp  ports:  - port: 80 # By default and for convenience, the `targetPort` is set to the same value as the `port` field.</description>
+ClusterIP NodePort LoadBalancer 向内发布服务
+无头服务 ExternalName 服务发现方式
+环境变量 DNS服务器 二、ClusterIP 通过kube-proxy组件实现负载均衡 自动分配集群IP # https://kubernetes.io/docs/concepts/services-networking/service/ apiVersion: v1 kind: Service metadata: name: service-simple-service spec: selector: app: service-simple-app ports: - protocol: TCP port: 80 targetPort: 8080 三、NodePort 基于ClusterIP模式 端口范围：30000-32767 # https://kubernetes.io/docs/concepts/services-networking/service/#nodeport apiVersion: v1 kind: Service metadata: name: service-node-port-service spec: type: NodePort selector: app: MyApp ports: - port: 80 # By default and for convenience, the `targetPort` is set to the same value as the `port` field.</description>
     </item>
     
     <item>
@@ -53,8 +53,9 @@
       
       <guid>/public/k8s/kubeadm%E9%83%A8%E7%BD%B2k8s%E9%9B%86%E7%BE%A4/</guid>
       <description>官方部署文档
-一、环境准备  准备两台全新的虚拟机     主机名 IP 系统类型 配置     master 192.168.66.100 centos7.6 2c2g   node1 192.168.66.101 centos7.6 4c4g    配置主机名  hostnamectl set-hostname master  [root@master ~]# cat /etc/hosts 127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4 ::1 localhost localhost.localdomain localhost6 localhost6.localdomain6  192.168.66.100 master 192.168.66.101 node1 网卡配置  VMware网络适配器选择NAT模式，网卡配置为静态IP
-[root@master ~]# cat /etc/sysconfig/network-scripts/ifcfg-ens33  TYPE=Ethernet PROXY_METHOD=none BROWSER_ONLY=no BOOTPROTO=static DEFROUTE=yes IPV4_FAILURE_FATAL=no IPV6INIT=yes IPV6_AUTOCONF=yes IPV6_DEFROUTE=yes IPV6_FAILURE_FATAL=no IPV6_ADDR_GEN_MODE=stable-privacy NAME=ens33 UUID=443eb4f6-645e-4eee-ab28-21f5cde8026f DEVICE=ens33 ONBOOT=yes IPADDR=192.</description>
+一、环境准备 准备两台全新的虚拟机 主机名 IP 系统类型 配置 master 192.168.66.100 centos7.6 2c2g node1 192.168.66.101 centos7.6 4c4g 配置主机名 hostnamectl set-hostname master [root@master ~]# cat /etc/hosts 127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4 ::1 localhost localhost.localdomain localhost6 localhost6.localdomain6 192.168.66.100 master 192.168.66.101 node1 网卡配置 VMware网络适配器选择NAT模式，网卡配置为静态IP
+[root@master ~]# cat /etc/sysconfig/network-scripts/ifcfg-ens33 TYPE=Ethernet PROXY_METHOD=none BROWSER_ONLY=no BOOTPROTO=static DEFROUTE=yes IPV4_FAILURE_FATAL=no IPV6INIT=yes IPV6_AUTOCONF=yes IPV6_DEFROUTE=yes IPV6_FAILURE_FATAL=no IPV6_ADDR_GEN_MODE=stable-privacy NAME=ens33 UUID=443eb4f6-645e-4eee-ab28-21f5cde8026f DEVICE=ens33 ONBOOT=yes IPADDR=192.168.66.100 NETMASK=255.255.255.0 GATEWAY=192.168.66.2 DNS1=8.8.8.8 DNS2=8.8.4.4 配置yum源 https://developer.aliyun.com/mirror/
+curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo sed -i -e &amp;#39;/mirrors.</description>
     </item>
     
     <item>
@@ -63,7 +64,7 @@
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/0.%E6%A0%87%E8%AF%86%E7%AC%A6%E4%B8%8E%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F/</guid>
-      <description>内置标识符 25个关键字    break default func interface select     case defer go map struct   chan else goto package switch   const fallthrough if range type   continue for import return var    15个函数 func append(slice []Type, elems ...Type) []Type func copy(dst, src []Type) int func delete(m map[Type]Type1, key Type) func close(c chan&amp;lt;- Type)  func len(v Type) int func cap(v Type) int  func make(t Type, size .</description>
+      <description>内置标识符 25个关键字 break default func interface select case defer go map struct chan else goto package switch const fallthrough if range type continue for import return var 15个函数 func append(slice []Type, elems ...Type) []Type func copy(dst, src []Type) int func delete(m map[Type]Type1, key Type) func close(c chan&amp;lt;- Type) func len(v Type) int func cap(v Type) int func make(t Type, size ...IntegerType) Type func new(Type) *Type func complex(r, i FloatType) ComplexType func real(c ComplexType) FloatType func imag(c ComplexType) FloatType func panic(v any) func recover() any func print(args .</description>
     </item>
     
     <item>
@@ -72,8 +73,8 @@
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/1.%E8%BF%90%E7%AE%97%E7%AC%A6/</guid>
-      <description>算术运算符  加（+） 减（-） 乘（*） 除（/） 取余（%） 自增（++） 自减（&amp;ndash;）  关系运算符  大于（&amp;gt;） 大于等于（&amp;gt;=） 小于（&amp;lt;） 小于等于（&amp;lt;=） 等于等于（==） 不等于（!=）  逻辑运算符  逻辑与（&amp;amp;&amp;amp;） 逻辑或（||） 逻辑取反（!）  位运算符 https://blog.csdn.net/qq_27870421/article/details/118493562
- 按位与（&amp;amp;） 按位或（|） 按位异或（^） 位清空（&amp;amp;^） 左移（&amp;laquo;） 右移（&amp;raquo;）  </description>
+      <description>算术运算符 加（+） 减（-） 乘（*） 除（/） 取余（%） 自增（++） 自减（&amp;ndash;） 关系运算符 大于（&amp;gt;） 大于等于（&amp;gt;=） 小于（&amp;lt;） 小于等于（&amp;lt;=） 等于等于（==） 不等于（!=） 逻辑运算符 逻辑与（&amp;amp;&amp;amp;） 逻辑或（||） 逻辑取反（!） 位运算符 https://blog.csdn.net/qq_27870421/article/details/118493562
+按位与（&amp;amp;） 按位或（|） 按位异或（^） 位清空（&amp;amp;^） 左移（&amp;laquo;） 右移（&amp;raquo;） </description>
     </item>
     
     <item>
@@ -91,7 +92,7 @@
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/11.%E6%98%93%E9%94%99%E9%A2%98/</guid>
-      <description>1.map 1.1 package main  import &amp;#34;fmt&amp;#34;  func main() { 	pairs := [][2]string{ 	{&amp;#34;a&amp;#34;, &amp;#34;apple&amp;#34;}, 	{&amp;#34;a&amp;#34;, &amp;#34;ant&amp;#34;}, 	{&amp;#34;b&amp;#34;, &amp;#34;bee&amp;#34;}, 	}  	m := map[string]string{ 	pairs[0][0]: pairs[0][1], 	pairs[1][0]: pairs[1][1], 	pairs[2][0]: pairs[2][1], 	} 	fmt.Println(m[&amp;#34;a&amp;#34;]) } 1.2 package main  import &amp;#34;fmt&amp;#34;  func main() { 	var m map[string]int 	delete(m, &amp;#34;oh noes!&amp;#34;) 	fmt.Println(m) } 2.slice 2.1 package main  import &amp;#34;fmt&amp;#34;  func main() { 	s := []string{&amp;#34;A&amp;#34;, &amp;#34;B&amp;#34;, &amp;#34;C&amp;#34;}  	t := s[:1] 	fmt.</description>
+      <description>1.map 1.1 package main import &amp;#34;fmt&amp;#34; func main() { pairs := [][2]string{ {&amp;#34;a&amp;#34;, &amp;#34;apple&amp;#34;}, {&amp;#34;a&amp;#34;, &amp;#34;ant&amp;#34;}, {&amp;#34;b&amp;#34;, &amp;#34;bee&amp;#34;}, } m := map[string]string{ pairs[0][0]: pairs[0][1], pairs[1][0]: pairs[1][1], pairs[2][0]: pairs[2][1], } fmt.Println(m[&amp;#34;a&amp;#34;]) } 1.2 package main import &amp;#34;fmt&amp;#34; func main() { var m map[string]int delete(m, &amp;#34;oh noes!&amp;#34;) fmt.Println(m) } 2.slice 2.1 package main import &amp;#34;fmt&amp;#34; func main() { s := []string{&amp;#34;A&amp;#34;, &amp;#34;B&amp;#34;, &amp;#34;C&amp;#34;} t := s[:1] fmt.Println(&amp;amp;s[0] == &amp;amp;t[0]) u := append(s[:1], s[2:].</description>
     </item>
     
     <item>
@@ -102,9 +103,9 @@
       <guid>/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/2.%E5%AD%97%E7%AC%A6%E4%B8%B2/</guid>
       <description>标准库 https://pkg.go.dev/strings
 字符串内存模型 字符串的底层表示：
-// src/reflect/value.go type StringHeader struct { 	Data uintptr 	Len int }  // src/runtime/string.go type stringStruct struct { 	str unsafe.Pointer 	len int } unsafe.Sizeof(s)、len(s)两者的区别：unsafe.Sizeof(s)表示字符串运行时结构体的大小，len(s)表示字符串的长度
+// src/reflect/value.go type StringHeader struct { Data uintptr Len int } // src/runtime/string.go type stringStruct struct { str unsafe.Pointer len int } unsafe.Sizeof(s)、len(s)两者的区别：unsafe.Sizeof(s)表示字符串运行时结构体的大小，len(s)表示字符串的长度
 s和s.Data的地址相同，都是0xc00004a250，但输出的值不一样，因为内存地址仅代表内存的一个位置，具体的值由类型决定，s是string类型而s.Data是uintptr类型，故输出结果不一致
-package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;reflect&amp;#34; 	&amp;#34;unsafe&amp;#34; )  func main() { 	s := &amp;#34;hello&amp;#34; 		fmt.Printf(&amp;#34;s:地址=%p 值=%v 类型=%T 大小=%v 长度=%v\n&amp;#34;, &amp;amp;s,s,s,unsafe.Sizeof(s),len(s)) 	v := (*reflect.StringHeader)(unsafe.Pointer(&amp;amp;s)) 	fmt.Printf(&amp;#34;s.Data:地址=%p 值=%v 类型=%T 大小=%v\n&amp;#34;, &amp;amp;v.</description>
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;reflect&amp;#34; &amp;#34;unsafe&amp;#34; ) func main() { s := &amp;#34;hello&amp;#34; fmt.Printf(&amp;#34;s:地址=%p 值=%v 类型=%T 大小=%v 长度=%v\n&amp;#34;, &amp;amp;s,s,s,unsafe.Sizeof(s),len(s)) v := (*reflect.StringHeader)(unsafe.Pointer(&amp;amp;s)) fmt.Printf(&amp;#34;s.Data:地址=%p 值=%v 类型=%T 大小=%v\n&amp;#34;, &amp;amp;v.Data, v.Data, v.Data, unsafe.Sizeof(v.Data)) fmt.Printf(&amp;#34;s.Len:地址=%p 值=%v 类型=%T 大小=%v\n&amp;#34;, &amp;amp;v.Len, v.Len, v.Len, unsafe.Sizeof(v.Len)) } //s:地址=0xc00004a250 值=hello 类型=string 大小=16 长度=5 //s.</description>
     </item>
     
     <item>
@@ -115,7 +116,7 @@ package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;reflect&amp;#34; 	&amp;#
       <guid>/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/3.%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/</guid>
       <description>数组 初始化 arr1 := [3]int{1,2,3} arr2 := [...]int{1,2,3} 数组比较 对于两个数组，只有元素的类型和长度都相等时，才是同一类型
 在编译时创建数组类型
-// cmd/compile/internal/types/type.go func NewArray(elem *Type, bound int64) *Type {} 内存模型 package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;unsafe&amp;#34; )  func main() { 	//arr := [5]bool{true, true, true, true, true} 	arr := [5]int{11, 22, 33, 44, 55} 	fmt.Printf(&amp;#34;首地址=%p 值=%v 长度=%v 容量=%v 大小=%v\n&amp;#34;, &amp;amp;arr, arr, len(arr), cap(arr), unsafe.Sizeof(arr)) 	for i:=0;i&amp;lt;len(arr);i++{ 	fmt.Printf(&amp;#34;地址=%p 索引=%d 值=%v\n&amp;#34;, &amp;amp;arr[i], i, arr[i]) 	} }  //首地址=0xc00000c360 值=[11 22 33 44 55] 长度=5 容量=5 大小=40 //地址=0xc00000c360 索引=0 值=11 //地址=0xc00000c368 索引=1 值=22 //地址=0xc00000c370 索引=2 值=33 //地址=0xc00000c378 索引=3 值=44 //地址=0xc00000c380 索引=4 值=55 切片 初始化 s1 := array[0:3] s2 := slice[0:3] s3 := []int{1,2,3} s4 := make([]int, 3) 运行时表示 // src/runtime/slice.</description>
+// cmd/compile/internal/types/type.go func NewArray(elem *Type, bound int64) *Type {} 内存模型 package main import ( &amp;#34;fmt&amp;#34; &amp;#34;unsafe&amp;#34; ) func main() { //arr := [5]bool{true, true, true, true, true} arr := [5]int{11, 22, 33, 44, 55} fmt.Printf(&amp;#34;首地址=%p 值=%v 长度=%v 容量=%v 大小=%v\n&amp;#34;, &amp;amp;arr, arr, len(arr), cap(arr), unsafe.Sizeof(arr)) for i:=0;i&amp;lt;len(arr);i++{ fmt.Printf(&amp;#34;地址=%p 索引=%d 值=%v\n&amp;#34;, &amp;amp;arr[i], i, arr[i]) } } //首地址=0xc00000c360 值=[11 22 33 44 55] 长度=5 容量=5 大小=40 //地址=0xc00000c360 索引=0 值=11 //地址=0xc00000c368 索引=1 值=22 //地址=0xc00000c370 索引=2 值=33 //地址=0xc00000c378 索引=3 值=44 //地址=0xc00000c380 索引=4 值=55 切片 初始化 s1 := array[0:3] s2 := slice[0:3] s3 := []int{1,2,3} s4 := make([]int, 3) 运行时表示 // src/runtime/slice.</description>
     </item>
     
     <item>
@@ -124,7 +125,7 @@ package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;reflect&amp;#34; 	&amp;#
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/4.%E6%95%A3%E5%88%97%E8%A1%A8map/</guid>
-      <description>初始化 m1 := map[string]int{&amp;#34;aa&amp;#34;:1, &amp;#34;bb&amp;#34;:2} m2 := make(map[string]int, 100)  // src/runtime/map.go // 通过断点调试，为什么hint的值固定为137? func makemap(t *maptype, hint int, h *hmap) *hmap {} map基础  map中的key是唯一的，且无序 map是非线程安全的，并发访问应使用sync.Map map中的value不可取址 使用cap参数创建map可提升性能  运行时表示 // src/runtime/map.go type hmap struct { 	// Note: the format of the hmap is also encoded in cmd/compile/internal/reflectdata/reflect.go. 	// Make sure this stays in sync with the compiler&amp;#39;s definition. 	count int // # live cells == size of map.</description>
+      <description>初始化 m1 := map[string]int{&amp;#34;aa&amp;#34;:1, &amp;#34;bb&amp;#34;:2} m2 := make(map[string]int, 100) // src/runtime/map.go // 通过断点调试，为什么hint的值固定为137? func makemap(t *maptype, hint int, h *hmap) *hmap {} map基础 map中的key是唯一的，且无序 map是非线程安全的，并发访问应使用sync.Map map中的value不可取址 使用cap参数创建map可提升性能 运行时表示 // src/runtime/map.go type hmap struct { // Note: the format of the hmap is also encoded in cmd/compile/internal/reflectdata/reflect.go. // Make sure this stays in sync with the compiler&amp;#39;s definition. count int // # live cells == size of map. Must be first (used by len() builtin) flags uint8 B uint8 // log_2 of # of buckets (can hold up to loadFactor * 2^B items) noverflow uint16 // approximate number of overflow buckets; see incrnoverflow for details hash0 uint32 // hash seed buckets unsafe.</description>
     </item>
     
     <item>
@@ -133,9 +134,9 @@ package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;reflect&amp;#34; 	&amp;#
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/5.%E5%87%BD%E6%95%B0/</guid>
-      <description>函数基础  函数定义：关键字func、函数名、输入、输出、函数体 函数参数的传递永远是值拷贝 函数类型又叫函数签名，两个函数类型相同的条件是：参数和返回值的次序、个数、类型都相同 函数名首字母大小写决定函数是否导出 支持多个返回值，C语言只能返回一个值 支持不定参数，相当于一个切片  匿名函数与闭包  匿名函数可以看作函数的字面量 匿名函数引用外部变量就成了闭包 普通函数中不可以嵌套定义普通函数，但可以定义匿名函数 普通函数通过参数传递变量，而闭包可以直接引用外部函数的局部变量 闭包是由函数及其相关引用环境组合而成的实体，即：闭包=函数+引用环境 闭包捕获的变量、常量都是是引用传递 闭包最初的目的是减少全局变量 对象是附有行为的数据，而闭包是附有数据的行为  装饰器  定义一个有名函数类型 为有名函数类型添加方法  defer defer基本用法 延迟执行，按先进后出的顺序执行
-package main  import &amp;#34;fmt&amp;#34;  func main() { 	defer fmt.Println(&amp;#34;AAA&amp;#34;) 	defer fmt.Println(&amp;#34;BBB&amp;#34;) 	fmt.Println(&amp;#34;CCC&amp;#34;) }  //CCC //BBB //AAA defer遇到闭包 defer函数对外部变量的引用有两种方式：
- 函数参数：defer定义时，参数已进行初始化赋值 闭包引用：在真正调用时，根据上下文确定  package main  import &amp;#34;fmt&amp;#34;  func main() { 	x := 10  	// 通过闭包引用外部变量，函数真正执行时，通过上下文确定参数值，输出defer1: 11 	defer func() { 	fmt.</description>
+      <description>函数基础 函数定义：关键字func、函数名、输入、输出、函数体 函数参数的传递永远是值拷贝 函数类型又叫函数签名，两个函数类型相同的条件是：参数和返回值的次序、个数、类型都相同 函数名首字母大小写决定函数是否导出 支持多个返回值，C语言只能返回一个值 支持不定参数，相当于一个切片 匿名函数与闭包 匿名函数可以看作函数的字面量 匿名函数引用外部变量就成了闭包 普通函数中不可以嵌套定义普通函数，但可以定义匿名函数 普通函数通过参数传递变量，而闭包可以直接引用外部函数的局部变量 闭包是由函数及其相关引用环境组合而成的实体，即：闭包=函数+引用环境 闭包捕获的变量、常量都是是引用传递 闭包最初的目的是减少全局变量 对象是附有行为的数据，而闭包是附有数据的行为 装饰器 定义一个有名函数类型 为有名函数类型添加方法 defer defer基本用法 延迟执行，按先进后出的顺序执行
+package main import &amp;#34;fmt&amp;#34; func main() { defer fmt.Println(&amp;#34;AAA&amp;#34;) defer fmt.Println(&amp;#34;BBB&amp;#34;) fmt.Println(&amp;#34;CCC&amp;#34;) } //CCC //BBB //AAA defer遇到闭包 defer函数对外部变量的引用有两种方式：
+函数参数：defer定义时，参数已进行初始化赋值 闭包引用：在真正调用时，根据上下文确定 package main import &amp;#34;fmt&amp;#34; func main() { x := 10 // 通过闭包引用外部变量，函数真正执行时，通过上下文确定参数值，输出defer1: 11 defer func() { fmt.Println(&amp;#34;defer1:&amp;#34;, x) }() // 通过函数参数引用，此时形参x是外部x的一个副本，外部x改变不影响形参x，输出defer2: 10 defer func(x int) { fmt.Println(&amp;#34;defer2:&amp;#34;, x) }(x) // 通过函数参数引用，但形参x存储的是外部x的地址，故输出defer3: 11 defer func(x *int) { fmt.</description>
     </item>
     
     <item>
@@ -144,8 +145,8 @@ package main  import &amp;#34;fmt&amp;#34;  func main() { 	defer fmt.Println(&am
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/6.%E6%8E%A5%E5%8F%A3/</guid>
-      <description>接口概念  变量：变量包含值、类型 实例：实例包含值、类型、方法 接口：接口包含值、类型（静态类型、动态类型）、动态类型绑定的方法 接口静态类型：在接口定义时确定，静态类型的本质就是接口的方法签名集合 接口动态类型：接口绑定的具体实例类型为接口的动态类型 接口初始化：为接口绑定具体类型的实例，有两种方式：将具体类型实例赋值给接口、将接口直接赋值给接口 接口方法调用：间接调用所绑定实例的方法  底层实现 接口调用分析：
- 接口实例化，即iface数据结构的初始化过程 间接调用实例的方法  // src/runtime/runtime2.go  // 空接口表示 type eface struct { 	_type *_type 	data unsafe.Pointer }  // 非空接口表示 type iface struct { 	tab *itab	// 静态类型、动态类型、方法 	data unsafe.Pointer // 动态类型的值 }  // 类型信息 type itab struct { 	inter *interfacetype	// 静态类型 	_type *_type	// 动态类型 	hash uint32 // copy of _type.</description>
+      <description>接口概念 变量：变量包含值、类型 实例：实例包含值、类型、方法 接口：接口包含值、类型（静态类型、动态类型）、动态类型绑定的方法 接口静态类型：在接口定义时确定，静态类型的本质就是接口的方法签名集合 接口动态类型：接口绑定的具体实例类型为接口的动态类型 接口初始化：为接口绑定具体类型的实例，有两种方式：将具体类型实例赋值给接口、将接口直接赋值给接口 接口方法调用：间接调用所绑定实例的方法 底层实现 接口调用分析：
+接口实例化，即iface数据结构的初始化过程 间接调用实例的方法 // src/runtime/runtime2.go // 空接口表示 type eface struct { _type *_type data unsafe.Pointer } // 非空接口表示 type iface struct { tab *itab	// 静态类型、动态类型、方法 data unsafe.Pointer // 动态类型的值 } // 类型信息 type itab struct { inter *interfacetype	// 静态类型 _type *_type	// 动态类型 hash uint32 // copy of _type.hash. Used for type switches. _ [4]byte fun [1]uintptr // variable sized.</description>
     </item>
     
     <item>
@@ -155,7 +156,7 @@ package main  import &amp;#34;fmt&amp;#34;  func main() { 	defer fmt.Println(&am
       
       <guid>/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/8.for-range%E8%A1%A8%E8%BE%BE%E5%BC%8F/</guid>
       <description>range闭包 每次迭代，i、v都是同一个变量
-package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;time&amp;#34; )  func main() { 	var s = []int{1,2,3,4,5} 	for i,v := range s { 	go func() { 	time.Sleep(time.Second*1) 	fmt.Println(i,v) 	}() 	} 	time.Sleep(time.Second*3) }  //4 5 //4 5 //4 5 //4 5 //4 5 range数组、切片 package main  import &amp;#34;fmt&amp;#34;  func main() { 	var arr = [5]int{1,2,3,4,5} 	var arr1 [5]int 	for i,v := range arr {	// 理解此处range迭代的arr是arr的一个副本！ 	if i == 0 { 	arr[1] = 11 	arr[2] = 12 	} 		arr1[i] = v 	}  	fmt.</description>
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) func main() { var s = []int{1,2,3,4,5} for i,v := range s { go func() { time.Sleep(time.Second*1) fmt.Println(i,v) }() } time.Sleep(time.Second*3) } //4 5 //4 5 //4 5 //4 5 //4 5 range数组、切片 package main import &amp;#34;fmt&amp;#34; func main() { var arr = [5]int{1,2,3,4,5} var arr1 [5]int for i,v := range arr {	// 理解此处range迭代的arr是arr的一个副本！ if i == 0 { arr[1] = 11 arr[2] = 12 } arr1[i] = v } fmt.</description>
     </item>
     
     <item>
@@ -165,8 +166,8 @@ package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;time&amp;#34; )  func ma
       
       <guid>/public/go/1-1.go%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/9.%E5%B7%A5%E5%85%B7%E9%93%BE/</guid>
       <description>31个！Golang常用工具来啦（建议收藏）
-Go语言历史  2009-11-10，Go语言正式开源 2015-8-19，Go1.5版本发布，实现自举  包管理 // 单个导入 import &amp;#34;fmt&amp;#34;  // 一次导入多个 import ( 	&amp;#34;fmt&amp;#34;  &amp;#34;os&amp;#34; )  // 取别名 import (  crand &amp;#34;crypto/rand&amp;#34; 	&amp;#34;math/rand&amp;#34; )  // 加点，引用时可以省略包名 import . &amp;#34;fmt&amp;#34;  // 加下划线，空的导入，只执行对应包中的init函数 import ( 	&amp;#34;database/sql&amp;#34;  _ &amp;#34;github.com/go-sql-driver/mysql&amp;#34; ) Go项目结构 构建二进制可执行文件的项目结构：
-projectName/	// 项目名称 	LICENSE	// 许可证文件 	Makefile	// 构建脚本 	README.md // 项目介绍 	go.mod	// 依赖管理文件 	go.</description>
+Go语言历史 2009-11-10，Go语言正式开源 2015-8-19，Go1.5版本发布，实现自举 包管理 // 单个导入 import &amp;#34;fmt&amp;#34; // 一次导入多个 import ( &amp;#34;fmt&amp;#34; &amp;#34;os&amp;#34; ) // 取别名 import ( crand &amp;#34;crypto/rand&amp;#34; &amp;#34;math/rand&amp;#34; ) // 加点，引用时可以省略包名 import . &amp;#34;fmt&amp;#34; // 加下划线，空的导入，只执行对应包中的init函数 import ( &amp;#34;database/sql&amp;#34; _ &amp;#34;github.com/go-sql-driver/mysql&amp;#34; ) Go项目结构 构建二进制可执行文件的项目结构：
+projectName/	// 项目名称 LICENSE	// 许可证文件 Makefile	// 构建脚本 README.md // 项目介绍 go.mod	// 依赖管理文件 go.sum	// 依赖管理文件 cmd/	// 可执行文件目录 app1/ main.go app2/ main.go pkg/	// 库文件目录 lib1/ lib1.go lib2/ lib2.</description>
     </item>
     
     <item>
@@ -177,7 +178,7 @@ projectName/	// 项目名称 	LICENSE	// 许可证文件 	Makefile	// 构建脚�
       <guid>/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%BA%90%E7%A0%81gpm%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B/</guid>
       <description>例1 https://www.bilibili.com/video/BV19b4y1i74w
 goroutine调度优先级
- runnext中的g 本地队列runq中的g，大小为256 全局队列runq中的g  package main  import ( 	&amp;#34;runtime&amp;#34; 	&amp;#34;sync&amp;#34; )  func main() { 	runtime.GOMAXPROCS(1) 	var wg sync.WaitGroup 	wg.Add(3)  	go func(n int) { 	println(n) 	wg.Done() 	}(1)  	go func(n int) { 	println(n) 	wg.Done() 	}(2)  	go func(n int) { 	println(n) 	wg.Done() 	}(3)  	wg.Wait() }  //3 //1 //2 例2 package main  import ( 	&amp;#34;runtime&amp;#34; 	&amp;#34;sync&amp;#34; )  func main() { 	runtime.</description>
+runnext中的g 本地队列runq中的g，大小为256 全局队列runq中的g package main import ( &amp;#34;runtime&amp;#34; &amp;#34;sync&amp;#34; ) func main() { runtime.GOMAXPROCS(1) var wg sync.WaitGroup wg.Add(3) go func(n int) { println(n) wg.Done() }(1) go func(n int) { println(n) wg.Done() }(2) go func(n int) { println(n) wg.Done() }(3) wg.Wait() } //3 //1 //2 例2 package main import ( &amp;#34;runtime&amp;#34; &amp;#34;sync&amp;#34; ) func main() { runtime.GOMAXPROCS(1) var wg sync.WaitGroup for i:=1;i&amp;lt;=257;i++{ wg.Add(1) go func(n int) { println(n) wg.</description>
     </item>
     
     <item>
@@ -186,13 +187,13 @@ goroutine调度优先级
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/http/</guid>
-      <description>HTTP2历史  2009年，谷歌的SPDY协议问世，主要特性：流多路利用、请求优先级、HTTP首部压缩 2015年，基于SPDY的HTTP2协议正式成为标准问世  HTTP2新增概念  二进制协议 多路复用 流量控制功能 数据流优先级 首部压缩 服务端推送  组合  HTTP/1.1+http HTTP/1.1+https HTTP/2+https=h2 HTTP/2+http=h2c  命令  telnet，使用telnet模拟tcp连接和发送http请求 nc(netcat)  HTTP版本区别 https://www.cnblogs.com/yjh1995/p/16368320.html
- HTTP/0.9：只有一个命令GET HTTP/1.0：增加了请求方法、HTTP版本号、HTTP首部、响应状态码 HTTP/1.1：强制添加host首部、支持持久连接 HTTP/2：host首部改为:authority伪首部，可通过这个字段区别1.1和2版本；HTTP/2请求中未明确声明版本号  HTTPS  HTTPS在HTTP的基础上，添加了TLS加密 TLS的前身是SSL HTTPS提供了消息加密、消息完整性验证、服务器身份验证  模拟发送HTTP请求  telnet、nc（netcat）、curl、wget 浏览器、postman  其他 优化http/1.1
- 使用多个http连接 合并http请求  网站测试瀑布图 https://www.webpagetest.org/
-升级到HTTP/2 负载均衡  HTTP负载均衡器，也称7层负载均衡器 TCP负载均衡器，也称4层负载均衡器  TCP队头阻塞 https://blog.csdn.net/weixin_44260459/article/details/120797655
+      <description>HTTP2历史 2009年，谷歌的SPDY协议问世，主要特性：流多路利用、请求优先级、HTTP首部压缩 2015年，基于SPDY的HTTP2协议正式成为标准问世 HTTP2新增概念 二进制协议 多路复用 流量控制功能 数据流优先级 首部压缩 服务端推送 组合 HTTP/1.1+http HTTP/1.1+https HTTP/2+https=h2 HTTP/2+http=h2c 命令 telnet，使用telnet模拟tcp连接和发送http请求 nc(netcat) HTTP版本区别 https://www.cnblogs.com/yjh1995/p/16368320.html
+HTTP/0.9：只有一个命令GET HTTP/1.0：增加了请求方法、HTTP版本号、HTTP首部、响应状态码 HTTP/1.1：强制添加host首部、支持持久连接 HTTP/2：host首部改为:authority伪首部，可通过这个字段区别1.1和2版本；HTTP/2请求中未明确声明版本号 HTTPS HTTPS在HTTP的基础上，添加了TLS加密 TLS的前身是SSL HTTPS提供了消息加密、消息完整性验证、服务器身份验证 模拟发送HTTP请求 telnet、nc（netcat）、curl、wget 浏览器、postman 其他 优化http/1.1
+使用多个http连接 合并http请求 网站测试瀑布图 https://www.webpagetest.org/
+升级到HTTP/2 负载均衡 HTTP负载均衡器，也称7层负载均衡器 TCP负载均衡器，也称4层负载均衡器 TCP队头阻塞 https://blog.csdn.net/weixin_44260459/article/details/120797655
 HTTP/2解决了http层的队头阻塞，但TCP层的队头阻塞依然存在
 因为tcp要保证有序，如果前面的包丢失，尽管后边的包成功收到，仍无法向上交付，必须等丢失的包重传后才能向应用层交付
-QUIC协议  谷歌提出，全称：Quick UDP Internet Connections 基于UDP  </description>
+QUIC协议 谷歌提出，全称：Quick UDP Internet Connections 基于UDP </description>
     </item>
     
     <item>
@@ -205,12 +206,12 @@ QUIC协议  谷歌提出，全称：Quick UDP Internet Connections 基于UDP  </
 方式一 通过Ingress注释配置，add_header指令会映射到nginx配置文件中的localtion模块中，只对单个服务生效
 https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#configuration-snippet
 示例：
-apiVersion: extensions/v1betal kind: Ingress metadata:  annotations:  kubernetes.io/ingress.class: nginx  nginx.ingress.kubernetes.io/configuration-snippet: | add_header &amp;#34;**&amp;#34; &amp;#34;**&amp;#34;; spec:  rules:  ** 方式二 将配置存储在configmap中，在Ingress中间接引用，此方式会将add_header指令映射到nginx配置文件中的http模块中，对所有服务生效
+apiVersion: extensions/v1betal kind: Ingress metadata: annotations: kubernetes.io/ingress.class: nginx nginx.ingress.kubernetes.io/configuration-snippet: | add_header &amp;#34;**&amp;#34; &amp;#34;**&amp;#34;; spec: rules: ** 方式二 将配置存储在configmap中，在Ingress中间接引用，此方式会将add_header指令映射到nginx配置文件中的http模块中，对所有服务生效
 https://kubernetes.github.io/ingress-nginx/examples/customization/custom-headers/
 示例：
 自定义custom-headers文件，存储响应头
-apiVersion: v1 kind: ConfigMap metadata:  name: custom-headers  namespace: ingress-nginx data:  X-Different-Name: &amp;#34;true&amp;#34;  X-Using-Nginx-Controller: &amp;#34;true&amp;#34; 在Ingress-nginx默认配置文件中，间接引用custom-headers
-apiVersion: v1 kind: ConfigMap metadata:  name: ingress-nginx-controller  namespace: ingress-nginx data:  add-headers: &amp;#34;ingress-nginx/custom-headers&amp;#34; 注意事项  方式二修改配置文件后，需要重启nginx-ingress-controller，配置才能生效！ 由于nginx指令add_header的继承性问题，两种方式不能同时配置，否则方式二会失效！请参考：https://juejin.cn/post/6844904041126838286  </description>
+apiVersion: v1 kind: ConfigMap metadata: name: custom-headers namespace: ingress-nginx data: X-Different-Name: &amp;#34;true&amp;#34; X-Using-Nginx-Controller: &amp;#34;true&amp;#34; 在Ingress-nginx默认配置文件中，间接引用custom-headers
+apiVersion: v1 kind: ConfigMap metadata: name: ingress-nginx-controller namespace: ingress-nginx data: add-headers: &amp;#34;ingress-nginx/custom-headers&amp;#34; 注意事项 方式二修改配置文件后，需要重启nginx-ingress-controller，配置才能生效！ 由于nginx指令add_header的继承性问题，两种方式不能同时配置，否则方式二会失效！请参考：https://juejin.cn/post/6844904041126838286 </description>
     </item>
     
     <item>
@@ -220,7 +221,7 @@ apiVersion: v1 kind: ConfigMap metadata:  name: ingress-nginx-controller  namesp
       
       <guid>/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/1.mysql/</guid>
       <description>安装 YUM安装 https://dev.mysql.com/downloads/repo/yum/
-# 添加yum仓库 rpm -ivh https://repo.mysql.com//mysql80-community-release-el7-6.noarch.rpm  # 安装mysql yum install mysql-community-server  # 默认安装8.0版本，此处开启5.7版本 [root@localhost yum.repos.d]# cat mysql-community.repo  # Enable to use MySQL 5.7 [mysql57-community] name=MySQL 5.7 Community Server baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/7/$basearch enabled=1 gpgcheck=1 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2022  file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql  [mysql80-community] name=MySQL 8.0 Community Server baseurl=http://repo.mysql.com/yum/mysql-8.0-community/el/7/$basearch enabled=0 gpgcheck=1 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2022  file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql  # 启动 systemctl start mysqld  # 首次启动会生成临时密码 [root@localhost ~]# cat /var/log/mysqld.log |grep password 2022-08-22T12:33:59.016946Z 1 [Note] A temporary password is generated for root@localhost: jkVb2X4qU;t%  # 修改密码 mysql&amp;gt; alter user &amp;#39;root&amp;#39;@&amp;#39;localhost&amp;#39; identified by &amp;#34;Test@123&amp;#34;; Query OK, 0 rows affected (0.</description>
+# 添加yum仓库 rpm -ivh https://repo.mysql.com//mysql80-community-release-el7-6.noarch.rpm # 安装mysql yum install mysql-community-server # 默认安装8.0版本，此处开启5.7版本 [root@localhost yum.repos.d]# cat mysql-community.repo # Enable to use MySQL 5.7 [mysql57-community] name=MySQL 5.7 Community Server baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/7/$basearch enabled=1 gpgcheck=1 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2022 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql [mysql80-community] name=MySQL 8.0 Community Server baseurl=http://repo.mysql.com/yum/mysql-8.0-community/el/7/$basearch enabled=0 gpgcheck=1 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2022 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql # 启动 systemctl start mysqld # 首次启动会生成临时密码 [root@localhost ~]# cat /var/log/mysqld.log |grep password 2022-08-22T12:33:59.016946Z 1 [Note] A temporary password is generated for root@localhost: jkVb2X4qU;t% # 修改密码 mysql&amp;gt; alter user &amp;#39;root&amp;#39;@&amp;#39;localhost&amp;#39; identified by &amp;#34;Test@123&amp;#34;; Query OK, 0 rows affected (0.</description>
     </item>
     
     <item>
@@ -229,7 +230,9 @@ apiVersion: v1 kind: ConfigMap metadata:  name: ingress-nginx-controller  namesp
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/3.nginx/</guid>
-      <description>Nginx概述 nginx版本  开源版Nginx：https://nginx.org/en/download.html 商业版Nginx Plus：https://www.nginx.com/products/nginx 分支版本Tengine：https://tengine.taobao.org/ 扩展版本OpenResty：https://openresty.org/en/  nginx架构  事件驱动、异步非阻塞、固定数量的多进程模型 由一个主进程和多个工作进程组成 主进程通过频道（channel）传递信号的方式控制工作进程 工作进程之间共享内存并处理请求，工作进程数量等于CPU核数  信号    信号 命令行参数 功能     TERM、INT stop 快速关闭nginx服务   QUIT quit 安全关闭nginx服务   HUP reload 热加载配置文件   WINCH  安全关闭工作进程   USR1 reopen 重新创建日志文件   USR2  平滑更新nginx执行文件    kill -HUP &amp;lt;pid&amp;gt; nginx -s reload 工作进程的调度方式  无调度模式：所有工作进程会争相与客户端建立连接，会造成资源消耗（惊群现象） 互斥锁模式：所有工作进程周期性的争抢互斥锁，抢到锁的进程可以与客户端建立连接。工作进程可能负载不均衡，导致QPS下降 套接字分片：每个工作进程都有一组相同的监听套接字，哪个进程建立连接由内核决定，性能最好（listen指令启用reuseport参数）  工作流机制 每个请求会经过多个阶段的处理，请求在不同阶段由功能模块进行处理</description>
+      <description>Nginx概述 nginx版本 开源版Nginx：https://nginx.org/en/download.html 商业版Nginx Plus：https://www.nginx.com/products/nginx 分支版本Tengine：https://tengine.taobao.org/ 扩展版本OpenResty：https://openresty.org/en/ nginx架构 事件驱动、异步非阻塞、固定数量的多进程模型 由一个主进程和多个工作进程组成 主进程通过频道（channel）传递信号的方式控制工作进程 工作进程之间共享内存并处理请求，工作进程数量等于CPU核数 信号 信号 命令行参数 功能 TERM、INT stop 快速关闭nginx服务 QUIT quit 安全关闭nginx服务 HUP reload 热加载配置文件 WINCH 安全关闭工作进程 USR1 reopen 重新创建日志文件 USR2 平滑更新nginx执行文件 kill -HUP &amp;lt;pid&amp;gt; nginx -s reload 工作进程的调度方式 无调度模式：所有工作进程会争相与客户端建立连接，会造成资源消耗（惊群现象） 互斥锁模式：所有工作进程周期性的争抢互斥锁，抢到锁的进程可以与客户端建立连接。工作进程可能负载不均衡，导致QPS下降 套接字分片：每个工作进程都有一组相同的监听套接字，哪个进程建立连接由内核决定，性能最好（listen指令启用reuseport参数） 工作流机制 每个请求会经过多个阶段的处理，请求在不同阶段由功能模块进行处理
+http请求会经过11个处理阶段 TCP/UDP会话会经过7个处理阶段 模块化 模块化的设计为nginx提供了高度的可配置、可扩展、可定制特性。模块分为核心模块和功能模块。在编译时添加dynamic，支持模块动态加载
+Nginx编译及部署 参数调优 DNS缓存 # 缓存DNS，提高域名解析响应速度 yum install nscd -y systemctl start nscd systemctl enable nscd 修改文件打开数限制 [root@localhost security]# sysctl -a|grep fs.file-max fs.file-max = 180977 [root@localhost security]# ulimit -n 1024 echo -e &amp;#34;* soft nofile 65536\n* hard nofile 65536&amp;#34; &amp;gt;&amp;gt;/etc/security/limits.</description>
     </item>
     
     <item>
@@ -238,9 +241,9 @@ apiVersion: v1 kind: ConfigMap metadata:  name: ingress-nginx-controller  namesp
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/3.%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/2.redis/</guid>
-      <description>redis文档  DOC：https://redis.io/docs/ 安装：https://redis.io/docs/getting-started/installation/install-redis-from-source/ 命令：https://redis.io/commands/  redis基础 数据库  redis默认会创建16个数据库，编号为0~15 数据库可以理解为命名空间，不同的数据库中的键可以相等 可以使用select切换数据库（select 7）  键 https://redis.io/docs/data-types/tutorial/
+      <description>redis文档 DOC：https://redis.io/docs/ 安装：https://redis.io/docs/getting-started/installation/install-redis-from-source/ 命令：https://redis.io/commands/ redis基础 数据库 redis默认会创建16个数据库，编号为0~15 数据库可以理解为命名空间，不同的数据库中的键可以相等 可以使用select切换数据库（select 7） 键 https://redis.io/docs/data-types/tutorial/
 值 即数据结构
-redis数据结构 String（字符串）    set 默认 NX XX     键不存在 OK OK nil   键存在 OK nil OK    Hash（散列） List（列表） 消息队列 Set（集合） 抽奖 Sorted Set（有序集合） 排行榜 HyperLogLog（计数） 唯一计数器 Bitmap（位图） 记录用户行为 Geospatial indices（地理坐标） 查找附近用户 Stream（流） 实现消息队列 Pub/Sub（发布订阅） redis扩展 流水线和事务 Lua脚本 模块 redis持久化 RDB持久化（默认） AOF持久化 RDB-AOF混合持久化 redis高可用 Redis主从复制 Redis Sentinel模式 Redis集群 </description>
+redis数据结构 String（字符串） set 默认 NX XX 键不存在 OK OK nil 键存在 OK nil OK Hash（散列） List（列表） 消息队列 Set（集合） 抽奖 Sorted Set（有序集合） 排行榜 HyperLogLog（计数） 唯一计数器 Bitmap（位图） 记录用户行为 Geospatial indices（地理坐标） 查找附近用户 Stream（流） 实现消息队列 Pub/Sub（发布订阅） redis扩展 流水线和事务 Lua脚本 模块 redis持久化 RDB持久化（默认） AOF持久化 RDB-AOF混合持久化 redis高可用 Redis主从复制 Redis Sentinel模式 Redis集群 </description>
     </item>
     
     <item>
@@ -249,7 +252,7 @@ redis数据结构 String（字符串）    set 默认 NX XX     键不存在 OK 
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/reflect%E5%8F%8D%E5%B0%84/</guid>
-      <description>基本概念  反射：支持程序在运行中，动态地访问和修改变量的类型和值  反射规则  实例、Value、Type之间可以相互转换 reflect.Type表示实例的类型信息 reflect.Value表示实例的值信息  实例、Type互转 // src/reflect/type.go type Type interface {...}  // 实例转Type // 若i传入的是具体类型，则返回具体类型信息 // 若i传入的是接口类型，且绑定了具体实例，则返回接口的动态类型信息 // 若i传入的是接口类型，其未绑定具体实例，则返回接口的静态类型信息 func TypeOf(i any) Type {}  // Type转实例？ 实例、Value互转 // src/reflect/value.go type Value struct { 	typ *rtype 	ptr unsafe.Pointer 	flag }  // 实例转Value func ValueOf(i any) Value {}  // Value转实例 func (v Value) Interface() (i any) {} func (v Value) Int() int64 {} func (v Value) Float() float64 {} func (v Value) Bool() bool {} .</description>
+      <description>基本概念 反射：支持程序在运行中，动态地访问和修改变量的类型和值 反射规则 实例、Value、Type之间可以相互转换 reflect.Type表示实例的类型信息 reflect.Value表示实例的值信息 实例、Type互转 // src/reflect/type.go type Type interface {...} // 实例转Type // 若i传入的是具体类型，则返回具体类型信息 // 若i传入的是接口类型，且绑定了具体实例，则返回接口的动态类型信息 // 若i传入的是接口类型，其未绑定具体实例，则返回接口的静态类型信息 func TypeOf(i any) Type {} // Type转实例？ 实例、Value互转 // src/reflect/value.go type Value struct { typ *rtype ptr unsafe.Pointer flag } // 实例转Value func ValueOf(i any) Value {} // Value转实例 func (v Value) Interface() (i any) {} func (v Value) Int() int64 {} func (v Value) Float() float64 {} func (v Value) Bool() bool {} .</description>
     </item>
     
     <item>
@@ -259,11 +262,11 @@ redis数据结构 String（字符串）    set 默认 NX XX     键不存在 OK 
       
       <guid>/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/tcp/</guid>
       <description>https://liuyehcf.github.io/2019/10/28/TCP-IP%E8%AF%A6%E8%A7%A3-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/
-术语  ARQ（Automatic repeat request）：自动重复请求 面向连接、可靠的字节流、全双工 一个TCP连接由一个套接字（四元组）标识，四元组：由IP头中的源ip和目的ip、tcp头中的源端口和目的端口组成  抓包 wireshark 常用过滤规则：https://blog.csdn.net/liu_yanxiaobai/article/details/124943492
+术语 ARQ（Automatic repeat request）：自动重复请求 面向连接、可靠的字节流、全双工 一个TCP连接由一个套接字（四元组）标识，四元组：由IP头中的源ip和目的ip、tcp头中的源端口和目的端口组成 抓包 wireshark 常用过滤规则：https://blog.csdn.net/liu_yanxiaobai/article/details/124943492
 tcpdump 命令 telnet telnet可以建立tcp连接，一般用于端口探测
 https://blog.csdn.net/weixin_45322291/article/details/116780620
 netstat [root@iZ8vb8qjajxkxytobaq81hZ ~]# netstat -h -n, --numeric don&amp;#39;t resolve names	# 显示ip地址而不是域名 -l, --listening display listening server sockets	# 只显示监听套接字 -a, --all display all sockets (default: connected)	# 显示所有套接字 {-t|--tcp} {-u|--udp}	# 显示TCP/UDP连接 -p, --programs display PID/Program name for sockets	# 显示对应的应用程序 常用组合
-# 显示所有tcp监听套接字 netstat -nltp  # 显示所有tcp套接字 netstat -natp  # 同理udp netstat -nlup netstat -naup TCP头部组成  16位源端口+16位目的端口 32位序列号：代表每个分组的第一个字节在整个数据流中的字节偏移，ISN初始序列号是随机的 32位确认号：表示该序列号的字节已成功接收，期待接收下一个字节，即序列号+1（只有标志位ACK开启才生效） 4位头部长度+4位保留+8位标志号+16位窗口大小 16位TCP校验和+16紧急指针（只有标志位URG开启才生效） 选项  头部长度 tcp头部占20字节，选项部分最多占40字节，总长度最大为60字节 为什么总长度最大为60字节？头部长度用4位表示，最大值为15，且以4字节为单位，故15*4=60</description>
+# 显示所有tcp监听套接字 netstat -nltp # 显示所有tcp套接字 netstat -natp # 同理udp netstat -nlup netstat -naup TCP头部组成 16位源端口+16位目的端口 32位序列号：代表每个分组的第一个字节在整个数据流中的字节偏移，ISN初始序列号是随机的 32位确认号：表示该序列号的字节已成功接收，期待接收下一个字节，即序列号+1（只有标志位ACK开启才生效） 4位头部长度+4位保留+8位标志号+16位窗口大小 16位TCP校验和+16紧急指针（只有标志位URG开启才生效） 选项 头部长度 tcp头部占20字节，选项部分最多占40字节，总长度最大为60字节 为什么总长度最大为60字节？头部长度用4位表示，最大值为15，且以4字节为单位，故15*4=60</description>
     </item>
     
     <item>
@@ -272,10 +275,10 @@ netstat [root@iZ8vb8qjajxkxytobaq81hZ ~]# netstat -h -n, --numeric don&amp;#39;t
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/unsafe%E6%8C%87%E9%92%88%E8%BF%90%E7%AE%97/</guid>
-      <description>Go中的三种指针类型  普通类型的指针 unsafe.Pointer指针 uintptr指针  普通类型的指针和unsafe.Pointer指针可以相互转换，因此不同普通类型的指针可以互转
+      <description>Go中的三种指针类型 普通类型的指针 unsafe.Pointer指针 uintptr指针 普通类型的指针和unsafe.Pointer指针可以相互转换，因此不同普通类型的指针可以互转
 unsafe.Pointer指针可以和uintptr指针相互转换，且uintptr指针可以运算，因此可以实现普通类型的指针运算
-package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;unsafe&amp;#34; )  func main() { 	s := &amp;#34;hello&amp;#34; 	fmt.Printf(&amp;#34;%p %p %v\n&amp;#34;, &amp;amp;s, unsafe.Pointer(&amp;amp;s), uintptr(unsafe.Pointer(&amp;amp;s))) }  // 0xc00004a250 0xc00004a250 824634024528 转换关系 普通指针类型 &amp;lt;==&amp;gt; unsafe.Pointer &amp;lt;==&amp;gt; uintptr
- 通过unsafe.Pointer，可以实现不同指针类型相互转换 通过unsafe.Pointer+uintptr，可以实现指针运算  修改私有成员 // src/strings/reader.go type Reader struct { 	s string 	i int64 // current reading index 	prevRune int // index of previous rune; or &amp;lt; 0 } package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;strings&amp;#34; 	&amp;#34;unsafe&amp;#34; )  func main() { 	r := strings.</description>
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;unsafe&amp;#34; ) func main() { s := &amp;#34;hello&amp;#34; fmt.Printf(&amp;#34;%p %p %v\n&amp;#34;, &amp;amp;s, unsafe.Pointer(&amp;amp;s), uintptr(unsafe.Pointer(&amp;amp;s))) } // 0xc00004a250 0xc00004a250 824634024528 转换关系 普通指针类型 &amp;lt;==&amp;gt; unsafe.Pointer &amp;lt;==&amp;gt; uintptr
+通过unsafe.Pointer，可以实现不同指针类型相互转换 通过unsafe.Pointer+uintptr，可以实现指针运算 修改私有成员 // src/strings/reader.go type Reader struct { s string i int64 // current reading index prevRune int // index of previous rune; or &amp;lt; 0 } package main import ( &amp;#34;fmt&amp;#34; &amp;#34;strings&amp;#34; &amp;#34;unsafe&amp;#34; ) func main() { r := strings.</description>
     </item>
     
     <item>
@@ -284,8 +287,11 @@ package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;unsafe&amp;#34; )  func 
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%BA%90%E7%A0%81%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E4%B8%8Egc/</guid>
-      <description>堆栈区别  堆在运行过程中动态分配内存，需要通过GC回收，分配速度慢 栈内存自动释放，分配速度快  逃逸分析 package main  import &amp;#34;fmt&amp;#34;  func foo() *int { 	t := 3 	return &amp;amp;t }  func main() { 	x := foo() 	fmt.Println(*x) } $ go build -gcflags &amp;#39;-m -l&amp;#39; main.go # command-line-arguments .\main.go:6:2: moved to heap: t .\main.go:12:13: ... argument does not escape .\main.go:12:14: *x escapes to heap 参数说明：
- -gcflags 启动编译器支持的额外标志 -m 输出编译器的优化细节 -N 禁用优化 -l 禁用内联  https://stackoverflow.</description>
+      <description>堆栈区别 堆在运行过程中动态分配内存，需要通过GC回收，分配速度慢 栈内存自动释放，分配速度快 逃逸分析 package main import &amp;#34;fmt&amp;#34; func foo() *int { t := 3 return &amp;amp;t } func main() { x := foo() fmt.Println(*x) } $ go build -gcflags &amp;#39;-m -l&amp;#39; main.go # command-line-arguments .\main.go:6:2: moved to heap: t .\main.go:12:13: ... argument does not escape .\main.go:12:14: *x escapes to heap 参数说明：
+-gcflags 启动编译器支持的额外标志 -m 输出编译器的优化细节 -N 禁用优化 -l 禁用内联 https://stackoverflow.com/questions/62589743/whats-go-cmd-option-gcflags-all-possible-values
+https://pkg.go.dev/cmd/compile
+内存对齐 数据类型的大小和对齐边界
+类型大小小于8，对齐边界等于类型大小 类型大小大于等于8，对齐边界等于8 例外：complex64大小为8，对齐边界为4 // 获取类型大小 func Sizeof(x ArbitraryType) uintptr // 获取结构体某个字段偏移 func Offsetof(x ArbitraryType) uintptr // 获取类型对齐边界 func Alignof(x ArbitraryType) uintptr package main import ( &amp;#34;fmt&amp;#34; &amp;#34;unsafe&amp;#34; ) type s1 struct { a int8 b int64 c int8 d int32 e int16 } type s2 struct { a int8 c int8 e int16 d int32 b int64 } type s3 struct { A int32 // 4 B []int32 // 24 C string // 16 D bool // 1 } func main() { var v1 s1 var v2 s2 var v3 s3 fmt.</description>
     </item>
     
     <item>
@@ -294,9 +300,9 @@ package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;unsafe&amp;#34; )  func 
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E9%94%81%E5%B9%B6%E5%8F%91/</guid>
-      <description>传统多进程编程 进程 进程通信 通信方式  管道 消息队列 信号量 共享内存 信号 socket  Go语言支持：管道、信号、socket
+      <description>传统多进程编程 进程 进程通信 通信方式 管道 消息队列 信号量 共享内存 信号 socket Go语言支持：管道、信号、socket
 管道 匿名管道，实现命令：ps -ef|grep nginx
-package main  import ( 	&amp;#34;bytes&amp;#34; 	&amp;#34;fmt&amp;#34; 	&amp;#34;log&amp;#34; 	&amp;#34;os/exec&amp;#34; )  func main() { 	// 将cmd1的标准输出作为cmd2的标准输入 	cmd1 := exec.Command(&amp;#34;ps&amp;#34;, &amp;#34;-ef&amp;#34;) 	cmd2 := exec.Command(&amp;#34;grep&amp;#34;, &amp;#34;nginx&amp;#34;)  	var outputBuf1 bytes.Buffer 	cmd1.Stdout = &amp;amp;outputBuf1	// 将cmd1的标准输出指定为outputBuf1 	if err := cmd1.Start(); err != nil { 	log.Fatalln(&amp;#34;cmd1 start error!</description>
+package main import ( &amp;#34;bytes&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; &amp;#34;os/exec&amp;#34; ) func main() { // 将cmd1的标准输出作为cmd2的标准输入 cmd1 := exec.Command(&amp;#34;ps&amp;#34;, &amp;#34;-ef&amp;#34;) cmd2 := exec.Command(&amp;#34;grep&amp;#34;, &amp;#34;nginx&amp;#34;) var outputBuf1 bytes.Buffer cmd1.Stdout = &amp;amp;outputBuf1	// 将cmd1的标准输出指定为outputBuf1 if err := cmd1.Start(); err != nil { log.Fatalln(&amp;#34;cmd1 start error!&amp;#34;) } if err := cmd1.Wait(); err != nil { log.Fatalln(&amp;#34;cmd1 wait error!&amp;#34;) } var outputBuf2 bytes.</description>
     </item>
     
     <item>
@@ -306,7 +312,9 @@ package main  import ( 	&amp;#34;bytes&amp;#34; 	&amp;#34;fmt&amp;#34; 	&amp;#34
       
       <guid>/public/go/2-1.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%8E%92%E5%BA%8F/</guid>
       <description>选择排序 每次遍历找到一个最大值，将最大值与最后一个元素交换
-package main  import &amp;#34;fmt&amp;#34;  func main() { 	s := []int{22, 36, 11, 9, 59, 41, 32, 61, 83, 17} 	fmt.Println(s) 	fmt.Println() 	Sort(s) }  func Sort(s []int) { 	for j:=len(s)-1;j&amp;gt;0;j--{ 	max := s[0] 	maxIdx := 0 	for i:=0;i&amp;lt;=j;i++{ 	if s[i] &amp;gt; max { 	max = s[i] 	maxIdx = i 	} 	} 	if j!</description>
+package main import &amp;#34;fmt&amp;#34; func main() { s := []int{22, 36, 11, 9, 59, 41, 32, 61, 83, 17} fmt.Println(s) fmt.Println() Sort(s) } func Sort(s []int) { for j:=len(s)-1;j&amp;gt;0;j--{ max := s[0] maxIdx := 0 for i:=0;i&amp;lt;=j;i++{ if s[i] &amp;gt; max { max = s[i] maxIdx = i } } if j!=maxIdx { s[j],s[maxIdx] = s[maxIdx], s[j] } fmt.Println(s) } } 插入排序 将第一个元素视为一个有序记录，每次遍历将后边一个元素插入到有序记录中
+方式一：先挪后插 先将前面的元素一个个往后挪，然后再将目标元素插入
+package main import &amp;#34;fmt&amp;#34; func main() { s := []int{22, 36, 11, 9, 59, 41, 32, 61, 83, 17} fmt.</description>
     </item>
     
     <item>
@@ -317,7 +325,7 @@ package main  import &amp;#34;fmt&amp;#34;  func main() { 	s := []int{22, 36, 11
       <guid>/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%9C%AA%E5%BD%92%E7%B1%BB/</guid>
       <description>noCopy机制 https://blog.csdn.net/EDDYCJY/article/details/125883888
 WaitGroup源码中的结构体定义如下，这个noCopy有什么用呢？
-type WaitGroup struct { 	noCopy noCopy  	// 64-bit value: high 32 bits are counter, low 32 bits are waiter count. 	// 64-bit atomic operations require 64-bit alignment, but 32-bit 	// compilers only guarantee that 64-bit fields are 32-bit aligned. 	// For this reason on 32 bit architectures we need to check in state() 	// if state1 is aligned or not, and dynamically &amp;#34;swap&amp;#34; the field order if 	// needed.</description>
+type WaitGroup struct { noCopy noCopy // 64-bit value: high 32 bits are counter, low 32 bits are waiter count. // 64-bit atomic operations require 64-bit alignment, but 32-bit // compilers only guarantee that 64-bit fields are 32-bit aligned. // For this reason on 32 bit architectures we need to check in state() // if state1 is aligned or not, and dynamically &amp;#34;swap&amp;#34; the field order if // needed.</description>
     </item>
     
     <item>
@@ -326,8 +334,8 @@ type WaitGroup struct { 	noCopy noCopy  	// 64-bit value: high 32 bits are count
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%B1%87%E7%BC%96/</guid>
-      <description>寄存器 通用寄存器  FLAGS（状态寄存器）：CMP、TEST指令会修改FLAGS寄存器，实现流程控制 IP（指令寄存器）：保存下一条将要被执行的指令地址，不能直接引用；由JMP、CALL、RET等指令间接修改 AX、BX、CX、DX（通用寄存器） ESI、EDI（通用寄存器）：扩展源索引寄存器、扩展目标索引寄存器 BP（通用寄存器）：记录当前函数帧的开始位置，用来引用栈上的函数参数和局部变量 SP（通用寄存器）：记录当前栈指针的位置，用于寻址栈上的数据 R8~R15（通用寄存器）  伪寄存器  伪PC：IP寄存器的别名 伪FP（frame pointer）：1.栈帧寄存器，执行当前函数调用栈帧的栈底；2.对应函数的帧指针，用于访问函数的参数和返回值 伪SP（stack pointer）：指向当前函数栈帧的底部（高地址），用于定位局部变量；真SP，指向当前函数栈帧的顶部（低地址），用于定位参数和返回值 伪SB（static base pointer）：静态基址寄存器，它和全局符号一起表示全局变量的地址  辨别真伪SP寄存器：  没有标识符前缀的表示真SP寄存器：(SP)、+8(SP) 有标识符前缀的表示伪SP寄存器：a(SP)、b+8(SP)  区别FP、真SP、伪SP作用  伪FP：定位参数和返回值 伪SP：定位局部变量 真SP：定位调用其他函数的参数和返回值  X86-64指令集  数据传输指令：MOVB、MOVW、MOVL、MOVQ 算数指令：ADD、SUB、MUL、DIV、AND、OR、NOT 流程控制指令：CMP、JMP、JMP-if-x、CALL、RET 取地址、压栈、出栈：LEA、PUSH、POP  函数栈帧布局 &amp;hellip; args to callee（当前函数的参数和返回值，由调用者分配空间） return address BP指针 locals args to callee（调用下个函数时，分配的参数、返回值空间） &amp;hellip;
-操作数宽度 B:表示BYTE，字节，8位 W:表示WORD，字，16位 L:表示LONG，长字，32位 Q:表示QuadWord，四字，64位 输出汇编 正向生成汇编 go tool compile -l -N -S main.go go build -gcflags=&amp;#34;-S -N -l&amp;#34; main.</description>
+      <description>寄存器 通用寄存器 FLAGS（状态寄存器）：CMP、TEST指令会修改FLAGS寄存器，实现流程控制 IP（指令寄存器）：保存下一条将要被执行的指令地址，不能直接引用；由JMP、CALL、RET等指令间接修改 AX、BX、CX、DX（通用寄存器） ESI、EDI（通用寄存器）：扩展源索引寄存器、扩展目标索引寄存器 BP（通用寄存器）：记录当前函数帧的开始位置，用来引用栈上的函数参数和局部变量 SP（通用寄存器）：记录当前栈指针的位置，用于寻址栈上的数据 R8~R15（通用寄存器） 伪寄存器 伪PC：IP寄存器的别名 伪FP（frame pointer）：1.栈帧寄存器，执行当前函数调用栈帧的栈底；2.对应函数的帧指针，用于访问函数的参数和返回值 伪SP（stack pointer）：指向当前函数栈帧的底部（高地址），用于定位局部变量；真SP，指向当前函数栈帧的顶部（低地址），用于定位参数和返回值 伪SB（static base pointer）：静态基址寄存器，它和全局符号一起表示全局变量的地址 辨别真伪SP寄存器： 没有标识符前缀的表示真SP寄存器：(SP)、+8(SP) 有标识符前缀的表示伪SP寄存器：a(SP)、b+8(SP) 区别FP、真SP、伪SP作用 伪FP：定位参数和返回值 伪SP：定位局部变量 真SP：定位调用其他函数的参数和返回值 X86-64指令集 数据传输指令：MOVB、MOVW、MOVL、MOVQ 算数指令：ADD、SUB、MUL、DIV、AND、OR、NOT 流程控制指令：CMP、JMP、JMP-if-x、CALL、RET 取地址、压栈、出栈：LEA、PUSH、POP 函数栈帧布局 &amp;hellip; args to callee（当前函数的参数和返回值，由调用者分配空间） return address BP指针 locals args to callee（调用下个函数时，分配的参数、返回值空间） &amp;hellip;
+操作数宽度 B:表示BYTE，字节，8位 W:表示WORD，字，16位 L:表示LONG，长字，32位 Q:表示QuadWord，四字，64位 输出汇编 正向生成汇编 go tool compile -l -N -S main.go go build -gcflags=&amp;#34;-S -N -l&amp;#34; main.go 反汇编 [root@iZ8vb8qjajxkxytobaq81hZ go]# go tool objdump usage: go tool objdump [-S] [-gnu] [-s symregexp] binary [start end] -S	print Go code alongside assembly -gnu print GNU assembly next to Go assembly (where supported) -s string only dump symbols matching this regexp go tool objdump -S -gnu -s main.</description>
     </item>
     
     <item>
@@ -336,7 +344,7 @@ type WaitGroup struct { 	noCopy noCopy  	// 64-bit value: high 32 bits are count
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/2-1.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%93%BE%E8%A1%A8/</guid>
-      <description>链表翻转 package main  import &amp;#34;fmt&amp;#34;  type Node struct { 	Data int 	Next *Node }  // CreateList 通过切片初始化链表 func CreateList(data []int, head *Node) { 	p := head 	for _,v := range data { 	p.Next = &amp;amp;Node{v, nil} 	p = p.Next 	}  }  // PrintList 打印链表 func PrintList(head *Node) { 	p := head.Next 	for p!=nil { 	fmt.Printf(&amp;#34;%d &amp;#34;, p.</description>
+      <description>链表翻转 package main import &amp;#34;fmt&amp;#34; type Node struct { Data int Next *Node } // CreateList 通过切片初始化链表 func CreateList(data []int, head *Node) { p := head for _,v := range data { p.Next = &amp;amp;Node{v, nil} p = p.Next } } // PrintList 打印链表 func PrintList(head *Node) { p := head.Next for p!=nil { fmt.Printf(&amp;#34;%d &amp;#34;, p.Data) p = p.Next } fmt.Println() } func main() { data := []int{3,8,1,9,6,2,7,4,5} //data := []int{3,8} //data := []int{3} head := &amp;amp;Node{} CreateList(data, head) PrintList(head) ReverseLink(head) PrintList(head) } // ReverseLink 链表逆序 func ReverseLink(head *Node) { if head == nil || head.</description>
     </item>
     
     <item>
@@ -345,7 +353,7 @@ type WaitGroup struct { 	noCopy noCopy  	// 64-bit value: high 32 bits are count
       <pubDate>Fri, 06 May 2022 10:26:00 +0800</pubDate>
       
       <guid>/public/go/1-2.go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</guid>
-      <description>panic  panic会打印堆栈并终止程序运行 发生panic的两种情况：1.程序主动执行panic 2.运行时产生的panic 对于大型程序，为保证程序的健壮性，需使用recover()拦截来自运行时的panic recover()函数只有在defer函数中直接调用才有效 父goroutine无法捕获子goroutine的panic，故每个goroutine需要单独处理panic  error  多个返回值的函数中，error作为最后一个返回值 先处理error，后执行defer 错误向上传递时，错误信息应不断完善和丰富  如何处理第三方库出现的panic? 最佳实践 https://lailin.xyz/post/go-training-03.html
+      <description>panic panic会打印堆栈并终止程序运行 发生panic的两种情况：1.程序主动执行panic 2.运行时产生的panic 对于大型程序，为保证程序的健壮性，需使用recover()拦截来自运行时的panic recover()函数只有在defer函数中直接调用才有效 父goroutine无法捕获子goroutine的panic，故每个goroutine需要单独处理panic error 多个返回值的函数中，error作为最后一个返回值 先处理error，后执行defer 错误向上传递时，错误信息应不断完善和丰富 如何处理第三方库出现的panic? 最佳实践 https://lailin.xyz/post/go-training-03.html
 panic blame 机器人 https://qcrao.com/post/panic-blame-robot/</description>
     </item>
     
@@ -358,8 +366,8 @@ panic blame 机器人 https://qcrao.com/post/panic-blame-robot/</description>
       <description>Ingress-nginx路由配置 官方文档：https://kubernetes.github.io/ingress-nginx/examples/rewrite/
 静态文件404问题 https://www.qikqiak.com/post/url-rewrite-on-ingress-nginx/
 https://stackoverflow.com/questions/50871970/kubernetes-ingress-nginx-loading-resources-404
-配置示例 kind: Ingress apiVersion: extensions/v1beta1 metadata:  name: **  namespace: **  annotations:  kubernetes.io/ingress.class: nginx  nginx.ingress.kubernetes.io/rewrite-target: /$1	# $1为正则匹配占位符  nginx.ingress.kubernetes.io/configuration-snippet: | rewrite ^/css/(.*)$ /app/css/$1 redirect; # 给静态文件目录添加app前缀 spec:  rules:  - host: **  http:  paths:  - path: /app/(.*)	# 添加app路径，以路径区别后端服务  pathType: Prefix  backend:  serviceName: **  servicePort: 80 注意事项 后端对静态资源的引用，要删除前导斜杠
-如: &amp;lt;script src=/public/js/example.js&amp;gt;&amp;lt;/script&amp;gt; 删除前导斜杠: &amp;lt;script src=js/example.</description>
+配置示例 kind: Ingress apiVersion: extensions/v1beta1 metadata: name: ** namespace: ** annotations: kubernetes.io/ingress.class: nginx nginx.ingress.kubernetes.io/rewrite-target: /$1	# $1为正则匹配占位符 nginx.ingress.kubernetes.io/configuration-snippet: | rewrite ^/css/(.*)$ /app/css/$1 redirect; # 给静态文件目录添加app前缀 spec: rules: - host: ** http: paths: - path: /app/(.*)	# 添加app路径，以路径区别后端服务 pathType: Prefix backend: serviceName: ** servicePort: 80 注意事项 后端对静态资源的引用，要删除前导斜杠
+如: &amp;lt;script src=/public/js/example.js&amp;gt;&amp;lt;/script&amp;gt; 删除前导斜杠: &amp;lt;script src=js/example.js&amp;gt;&amp;lt;/script&amp;gt; </description>
     </item>
     
     <item>
@@ -386,7 +394,7 @@ https://stackoverflow.com/questions/50871970/kubernetes-ingress-nginx-loading-re
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/public/go/1-3.go%E8%AF%AD%E8%A8%80%E6%A0%87%E5%87%86%E5%BA%93/io/</guid>
-      <description>理解io.Reader // 从Reader中读取数据到切片中，返回值n&amp;lt;=len(p) // 若传入的切片长度为0，则不会读取任何数据，如：p := make([]byte, 0 ,10) type Reader interface { 	Read(p []byte) (n int, err error) } package main  import ( 	&amp;#34;fmt&amp;#34; 	&amp;#34;log&amp;#34; 	&amp;#34;os&amp;#34; )  func main() { 	b := make([]byte, 0, 10) 	//b := make([]byte, 10) 	fmt.Println(len(b), cap(b), b) 	f,err := os.Open(&amp;#34;text.txt&amp;#34;) 	if err != nil { 	log.Fatal(err) 	} 	//n,err := f.Read(b[len(b):cap(b)]) 	n,err := f.</description>
+      <description>理解io.Reader // 从Reader中读取数据到切片中，返回值n&amp;lt;=len(p) // 若传入的切片长度为0，则不会读取任何数据，如：p := make([]byte, 0 ,10) type Reader interface { Read(p []byte) (n int, err error) } package main import ( &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; &amp;#34;os&amp;#34; ) func main() { b := make([]byte, 0, 10) //b := make([]byte, 10) fmt.Println(len(b), cap(b), b) f,err := os.Open(&amp;#34;text.txt&amp;#34;) if err != nil { log.Fatal(err) } //n,err := f.Read(b[len(b):cap(b)]) n,err := f.Read(b) if err != nil { log.Fatal(err) } fmt.Println(n) fmt.Println(len(b), cap(b), b) } //0 10 [] //0 //0 10 [] </description>
     </item>
     
     <item>
@@ -395,7 +403,7 @@ https://stackoverflow.com/questions/50871970/kubernetes-ingress-nginx-loading-re
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/public/go/1-3.go%E8%AF%AD%E8%A8%80%E6%A0%87%E5%87%86%E5%BA%93/os%E5%8C%85/</guid>
-      <description>文件 // 链接文件 func Link(oldname, newname string) error	// 创建硬链接 func Symlink(oldname, newname string) error	// 创建软连接（符号链接） func Readlink(name string) (string, error)	// 读取符号链接指向的文件名  // 管道文件 func Pipe() (r *File, w *File, err error)	// 创建管道  // 文件读写 func ReadFile(name string) ([]byte, error)	// 读取整个文件到内存 func WriteFile(name string, data []byte, perm FileMode) error	// 将数据保存到文件  // 文件删除 func Remove(name string) error	// 删除文件或目录 func RemoveAll(path string) error	// 递归删除文件、目录，相当于rm -rf，慎用！  // 文件权限修改 func Getgid() int	// 获取gid func Getegid() int	// 获取有效gid func Getuid() int	// 获取uid func Geteuid() int	// 获取有效uid  func Chown(name string, uid, gid int) error	// 更改文件所有者，更改符号链接指向的文件 func Lchown(name string, uid, gid int) error	// 更改文件所有者，更改符号链接本身  // 文件信息修改 func Rename(oldpath, newpath string) error	// 重命名文件 func Truncate(name string, size int64) error	// 更改文件大小 func Chtimes(name string, atime time.</description>
+      <description>文件 // 链接文件 func Link(oldname, newname string) error	// 创建硬链接 func Symlink(oldname, newname string) error	// 创建软连接（符号链接） func Readlink(name string) (string, error)	// 读取符号链接指向的文件名 // 管道文件 func Pipe() (r *File, w *File, err error)	// 创建管道 // 文件读写 func ReadFile(name string) ([]byte, error)	// 读取整个文件到内存 func WriteFile(name string, data []byte, perm FileMode) error	// 将数据保存到文件 // 文件删除 func Remove(name string) error	// 删除文件或目录 func RemoveAll(path string) error	// 递归删除文件、目录，相当于rm -rf，慎用！ // 文件权限修改 func Getgid() int	// 获取gid func Getegid() int	// 获取有效gid func Getuid() int	// 获取uid func Geteuid() int	// 获取有效uid func Chown(name string, uid, gid int) error	// 更改文件所有者，更改符号链接指向的文件 func Lchown(name string, uid, gid int) error	// 更改文件所有者，更改符号链接本身 // 文件信息修改 func Rename(oldpath, newpath string) error	// 重命名文件 func Truncate(name string, size int64) error	// 更改文件大小 func Chtimes(name string, atime time.</description>
     </item>
     
     <item>
@@ -408,7 +416,8 @@ https://stackoverflow.com/questions/50871970/kubernetes-ingress-nginx-loading-re
 分析：将数组累加求和，减去1+2+3+&amp;hellip;+1000的和，结果即为重复元素
 时间复杂度：O(n)
 空间复杂度：O(1)
-package main  import &amp;#34;fmt&amp;#34;  func main() { 	arr := []int{3, 6, 1, 9, 2, 5, 7, 4, 8, 10, 9} 	fmt.Println(f(arr)) }  func f(arr []int) int { 	l := len(arr) 	sum := 0  // 累加过程中，直接加上1~1000的相反数，避免sum溢出 	for i:=0;i&amp;lt;l-1;i++{ 	sum += arr[i] + (i+1)*-1 	} 	return sum + arr[l-1] }  // 9 求数组中两个元素的最小距离（动态规划） 分析：蛮力法，通过两次遍历数组，找出两个元素的位置并计算距离，保存最小值。时间复杂度：O(n*n)</description>
+package main import &amp;#34;fmt&amp;#34; func main() { arr := []int{3, 6, 1, 9, 2, 5, 7, 4, 8, 10, 9} fmt.Println(f(arr)) } func f(arr []int) int { l := len(arr) sum := 0 // 累加过程中，直接加上1~1000的相反数，避免sum溢出 for i:=0;i&amp;lt;l-1;i++{ sum += arr[i] + (i+1)*-1 } return sum + arr[l-1] } // 9 求数组中两个元素的最小距离（动态规划） 分析：蛮力法，通过两次遍历数组，找出两个元素的位置并计算距离，保存最小值。时间复杂度：O(n*n)
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;math&amp;#34; ) func main() { arr := []int{4, 5, 6, 4, 7, 4, 6, 4, 7, 8, 5, 6, 4, 3, 10, 8} fmt.</description>
     </item>
     
     <item>
@@ -417,7 +426,7 @@ package main  import &amp;#34;fmt&amp;#34;  func main() { 	arr := []int{3, 6, 1,
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/1.tcp%E5%8D%8F%E8%AE%AE/</guid>
-      <description>net包 net.Conn接口 // Conn表示一个连接 type Conn interface { 	Read(b []byte) (n int, err error) 	Write(b []byte) (n int, err error) 	Close() error 	LocalAddr() Addr 	RemoteAddr() Addr 	SetDeadline(t time.Time) error 	SetReadDeadline(t time.Time) error 	SetWriteDeadline(t time.Time) error } net.Listener接口 // Listener表示一个监听器，用于服务端监听连接 type Listener interface { 	Accept() (Conn, error) 	Close() error 	Addr() Addr } // 初始化监听器 func Listen(network, address string) (Listener, error) {}  // 处理conn Accept() (Conn, error) net.</description>
+      <description>net包 net.Conn接口 // Conn表示一个连接 type Conn interface { Read(b []byte) (n int, err error) Write(b []byte) (n int, err error) Close() error LocalAddr() Addr RemoteAddr() Addr SetDeadline(t time.Time) error SetReadDeadline(t time.Time) error SetWriteDeadline(t time.Time) error } net.Listener接口 // Listener表示一个监听器，用于服务端监听连接 type Listener interface { Accept() (Conn, error) Close() error Addr() Addr } // 初始化监听器 func Listen(network, address string) (Listener, error) {} // 处理conn Accept() (Conn, error) net.Dialer // Dialer表示一个拨号器，用于客户端发起连接 type Dialer struct { Timeout time.</description>
     </item>
     
     <item>
@@ -426,7 +435,7 @@ package main  import &amp;#34;fmt&amp;#34;  func main() { 	arr := []int{3, 6, 1,
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/public/go/2-2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/2.http%E5%8D%8F%E8%AE%AE/</guid>
-      <description>net/http包 http.Request // Request表示一个http请求 type Request struct { 	Method string 	URL *url.URL 	Proto string // &amp;#34;HTTP/1.0&amp;#34; 	ProtoMajor int // 1 	ProtoMinor int // 0 	Header Header 	Body io.ReadCloser 	GetBody func() (io.ReadCloser, error) 	ContentLength int64 	TransferEncoding []string 	Close bool 	Host string 	Form url.Values 	PostForm url.Values 	MultipartForm *multipart.Form 	Trailer Header 	RemoteAddr string 	RequestURI string 	TLS *tls.</description>
+      <description>net/http包 http.Request // Request表示一个http请求 type Request struct { Method string URL *url.URL Proto string // &amp;#34;HTTP/1.0&amp;#34; ProtoMajor int // 1 ProtoMinor int // 0 Header Header Body io.ReadCloser GetBody func() (io.ReadCloser, error) ContentLength int64 TransferEncoding []string Close bool Host string Form url.Values PostForm url.Values MultipartForm *multipart.Form Trailer Header RemoteAddr string RequestURI string TLS *tls.ConnectionState Cancel &amp;lt;-chan struct{} Response *Response ctx context.Context } http.Response // Response表示一个http响应 type Response struct { Status string // e.</description>
     </item>
     
     <item>
@@ -453,9 +462,9 @@ panic: protobuf tag not enough fields in Message.state:
 &amp;ldquo;github.com/gogo/protobuf/proto&amp;quot;替换为&amp;quot;github.com/golang/protobuf/proto&amp;rdquo;
 http://dicey.ink/archives/151
 protocol文件
-syntax = &amp;#34;proto3&amp;#34;; package protocol; option go_package = &amp;#34;./;protocol&amp;#34;;  enum FOO {  X = 0; };  message UserInfo{  string message = 1;  int32 length = 2; } 编译
+syntax = &amp;#34;proto3&amp;#34;; package protocol; option go_package = &amp;#34;./;protocol&amp;#34;; enum FOO { X = 0; }; message UserInfo{ string message = 1; int32 length = 2; } 编译
 protoc --go_out=./ *.proto 测试：
-package main  import ( 	&amp;#34;demo/protocol&amp;#34; 	&amp;#34;fmt&amp;#34; 	&amp;#34;log&amp;#34; ) import &amp;#34;github.</description>
+package main import ( &amp;#34;demo/protocol&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; ) import &amp;#34;github.com/golang/protobuf/proto&amp;#34; func main() { u := &amp;amp;protocol.</description>
     </item>
     
     <item>
