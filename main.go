@@ -41,6 +41,7 @@ func Run(){
 			core.GetAll()
 			core.Juejin()
 			core.Kr36()
+			core.Douyin()
 			PrintM()
 			time.Sleep(time.Second*60)
 		}
@@ -68,6 +69,13 @@ func RunServer() {
 	r.GET("/hot", func(c *gin.Context) {
 		c.Request.URL.Path = "/weibo"
 		r.HandleContext(c)
+	})
+
+	r.GET("/douyin", func(c *gin.Context) {
+		tmp := make(map[string]interface{})
+		tmp["Flag"] = 0
+		tmp["Data"] = model.M["DY"]
+		c.HTML(200, "onelist.html",tmp)
 	})
 
 	r.GET("/weibo", func(c *gin.Context) {
