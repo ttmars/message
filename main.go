@@ -175,6 +175,102 @@ func RunServer() {
 		c.HTML(200, "threelist.html",R)
 	})
 
+	r.GET("/githubJava", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 20
+		R.Data = append(R.Data,
+			S2{Title: "Daily(Java)", Content: model.M["Github12"]},
+			S2{Title: "Weekly(Java)", Content: model.M["Github13"]},
+			S2{Title: "Monthly(Java)", Content: model.M["Github14"]},
+		)
+		c.HTML(200, "threelist.html",R)
+	})
+
+	r.GET("/githubRust", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 20
+		R.Data = append(R.Data,
+			S2{Title: "Daily(Rust)", Content: model.M["Github15"]},
+			S2{Title: "Weekly(Rust)", Content: model.M["Github16"]},
+			S2{Title: "Monthly(Rust)", Content: model.M["Github17"]},
+		)
+		c.HTML(200, "threelist.html",R)
+	})
+
+	r.GET("/githubCPP", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 20
+		R.Data = append(R.Data,
+			S2{Title: "Daily(CPP)", Content: model.M["Github18"]},
+			S2{Title: "Weekly(CPP)", Content: model.M["Github19"]},
+			S2{Title: "Monthly(CPP)", Content: model.M["Github20"]},
+		)
+		c.HTML(200, "threelist.html",R)
+	})
+
+	r.GET("/githubJS", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 20
+		R.Data = append(R.Data,
+			S2{Title: "Daily(JS)", Content: model.M["Github21"]},
+			S2{Title: "Weekly(JS)", Content: model.M["Github22"]},
+			S2{Title: "Monthly(JS)", Content: model.M["Github23"]},
+		)
+		c.HTML(200, "threelist.html",R)
+	})
+
+	r.GET("/githubShell", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 20
+		R.Data = append(R.Data,
+			S2{Title: "Daily(Shell)", Content: model.M["Github24"]},
+			S2{Title: "Weekly(Shell)", Content: model.M["Github25"]},
+			S2{Title: "Monthly(Shell)", Content: model.M["Github26"]},
+		)
+		c.HTML(200, "threelist.html",R)
+	})
+
+	r.GET("/githubAssembly", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 20
+		R.Data = append(R.Data,
+			S2{Title: "Daily(Assembly)", Content: model.M["Github27"]},
+			S2{Title: "Weekly(Assembly)", Content: model.M["Github28"]},
+			S2{Title: "Monthly(Assembly)", Content: model.M["Github29"]},
+		)
+		c.HTML(200, "threelist.html",R)
+	})
+
+	r.GET("/githubCSharp", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 20
+		R.Data = append(R.Data,
+			S2{Title: "Daily(CSharp)", Content: model.M["Github30"]},
+			S2{Title: "Weekly(CSharp)", Content: model.M["Github31"]},
+			S2{Title: "Monthly(CSharp)", Content: model.M["Github32"]},
+		)
+		c.HTML(200, "threelist.html",R)
+	})
+
+	r.GET("/githubPHP", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 20
+		R.Data = append(R.Data,
+			S2{Title: "Daily(PHP)", Content: model.M["Github33"]},
+			S2{Title: "Weekly(PHP)", Content: model.M["Github34"]},
+			S2{Title: "Monthly(PHP)", Content: model.M["Github35"]},
+		)
+		c.HTML(200, "threelist.html",R)
+	})
+
 	r.GET("/juejin", func(c *gin.Context) {
 		var R S1
 		R.Flag = 1
