@@ -94,7 +94,9 @@ func F(url string, k string)  {
 		}
 		title := htmlquery.SelectAttr(n1, "href")
 		link := "https://github.com" + title
-		result = append(result, model.Item{Name: title[1:], Link: link, Description: des, Badge: star})
+		if len(title) > 0 {
+			result = append(result, model.Item{Name: title[1:], Link: link, Description: des, Badge: star})
+		}
 	}
 	if len(result) >= model.GithubNum {
 		model.M[k] = result[:model.GithubNum]
