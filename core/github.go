@@ -84,7 +84,7 @@ func F(url string, k string)  {
 	}
 	nodes := htmlquery.Find(doc, "//article")
 	for _,node := range nodes{
-		n1,_ := htmlquery.Query(node, "//h1/a")
+		n1,_ := htmlquery.Query(node, "//h2/a")			// h1改为h2
 		n2,_ := htmlquery.Query(node, "//p")
 		n3,_ := htmlquery.Query(node, "//div[last()]/span[last()]")
 		star := strings.TrimSpace(htmlquery.InnerText(n3))

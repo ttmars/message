@@ -3,11 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/antchfx/htmlquery"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"log"
 	"message/core"
 	"message/model"
+	"strings"
 	"time"
 )
 
@@ -24,6 +26,59 @@ type S1 struct {
 
 func main()  {
 	Run()
+	//F111("https://github.com/trending/go?since=daily", "github1")
+}
+
+func F111(url string, k string)  {
+	//defer wg1.Done()
+	var result []model.Item
+	resp, err := model.DFClient.Get(url)
+	if err != nil {
+		log.Printf("github err:%v\n", err)
+		return
+	}
+	defer resp.Body.Close()
+	//bodyText, err := io.ReadAll(resp.Body)
+	//if err != nil {
+	//	log.Printf("github err:%v\n", err)
+	//	return
+	//}
+
+	doc,err := htmlquery.Parse(resp.Body)
+	if err != nil {
+		log.Printf("github err:%v\n", err)
+		return
+	}
+	fmt.Println(doc)
+
+	nodes := htmlquery.Find(doc, "//article")
+	fmt.Println(len(nodes))
+	for _,node := range nodes{
+		n1,_ := htmlquery.Query(node, "//h2/a")
+		n2,_ := htmlquery.Query(node, "//p")
+		n3,_ := htmlquery.Query(node, "//div[last()]/span[last()]")
+		star := strings.TrimSpace(htmlquery.InnerText(n3))
+		des := ""
+		if n2 != nil {
+			des = strings.TrimSpace(htmlquery.InnerText(n2))
+		}
+		title := htmlquery.SelectAttr(n1, "href")
+		link := "https://github.com" + title
+
+		if len(title) > 0 {
+			title = title[1:]
+		}
+		fmt.Println(title, link, des, star)
+		break
+		result = append(result, model.Item{Name: title, Link: link, Description: des, Badge: star})
+	}
+	if len(result) >= model.GithubNum {
+		model.M[k] = result[:model.GithubNum]
+	}else{
+		model.M[k] = result
+	}
+	model.M[k] = append(model.M[k], model.Item{Name: "更多", Link: url})
+	log.Println("github success!!")
 }
 
 func Run(){
