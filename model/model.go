@@ -17,6 +17,21 @@ var DFClient = &http.Client{Timeout: time.Second * 10}
 var Num = 20
 var GithubNum = 10
 
+type Douban1Struct struct {
+	Subjects []struct {
+		EpisodesInfo string `json:"episodes_info"`
+		Rate         string `json:"rate"`
+		CoverX       int    `json:"cover_x"`
+		Title        string `json:"title"`
+		URL          string `json:"url"`
+		Playable     bool   `json:"playable"`
+		Cover        string `json:"cover"`
+		ID           string `json:"id"`
+		CoverY       int    `json:"cover_y"`
+		IsNew        bool   `json:"is_new"`
+	} `json:"subjects"`
+}
+
 type BiliStruct struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`

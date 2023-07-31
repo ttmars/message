@@ -15,11 +15,11 @@
   <body class="bootstrap-iso" style="background-color: #e8e8e8;">
 	<div class="container-fluid">
 		<div class="row">
-			
+
 			<div class="col-md-2">
 				<!-- <p>留白</p> -->
 			</div>
-			
+
 			<div class="col-md-8">
 				<nav class="navbar navbar-default nav-stacked" role="navigation">
 				    <div class="container-fluid">
@@ -42,30 +42,31 @@
 							</ul>
 							<i class="navbar-text navbar-right" style="color: #AC2925;"><b>To making it count.</b></i>
 						</div>
-						
+
 				    </div>
 				</nav>
 			</div>
-			
+
 			<div class="col-md-2">
 				<!-- <p>留白</p> -->
 			</div>
-			
+
 		</div>
 	</div>
-	
+
     <div class="container-fluid">
 		<div class="row">
 			  <div class="col-xs-0 col-md-2">
 					<!-- <img src="../img/1.jpg" width="100%"> -->
 			  </div>
-			  
+
 		      <div class="col-xs-2 col-md-1">
 				  <ul class="nav nav-pills nav-stacked">
 				    <li id="weibo"><a href="/weibo">微博</a></li>
 					  <li id="douyin"><a href="/douyin">抖音</a></li>
 				    <li id="baidu"><a href="/baidu">百度</a></li>
 					<li id="zhihu"><a href="/zhihu">知乎</a></li>
+					  <li id="douban"><a href="/douban">豆瓣</a></li>
 				    <li id="acfun"><a href="/acfun">ACFUN</a></li>
 					<li id="blbl"><a href="/blbl">BLBL</a></li>
 					<li id="csdn"><a href="/csdn">CSDN</a></li>
@@ -90,22 +91,22 @@
 			  <!-- https://www.liwenzhou.com/posts/Go/go_template/ -->
 		      <div class="col-xs-10 col-md-7">
 				  {{ $v := .Flag }}
-				  
+
 				  {{ if eq $v 0 }}
 					{{block "onelist" . }}{{end}}
 				  {{end}}
-				  
+
 				  {{ if eq $v 1 }}
 				  	{{block "threelist" . }}{{end}}
 				  {{end}}
 			  </div>
-			  
+
 			  <div class="col-xs-0 col-md-2">
-			  					
+
 			  </div>
 		</div>
 	</div>
-	
+
 	<!-- <footer class="navbar-fixed-bottom">
 	   <div class="container">
 	     <p>© 2022. All rights reserved. </p>

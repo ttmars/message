@@ -26,7 +26,7 @@ type S1 struct {
 
 func main() {
 	Run()
-	//core.Douyin()
+	//core.Douban1()
 	//F111("https://github.com/trending/go?since=daily", "github1")
 }
 
@@ -97,6 +97,7 @@ func Run() {
 			core.Juejin()
 			core.Kr36()
 			core.Douyin()
+			core.Douban()
 			PrintM()
 			time.Sleep(time.Second * 60)
 		}
@@ -323,6 +324,18 @@ func RunServer() {
 			S2{Title: "Daily(PHP)", Content: model.M["Github33"]},
 			S2{Title: "Weekly(PHP)", Content: model.M["Github34"]},
 			S2{Title: "Monthly(PHP)", Content: model.M["Github35"]},
+		)
+		c.HTML(200, "threelist.html", R)
+	})
+
+	r.GET("/douban", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 20
+		R.Data = append(R.Data,
+			S2{Title: "正在热映", Content: model.M["Douban0"]},
+			S2{Title: "热门电影", Content: model.M["Douban1"]},
+			S2{Title: "热门电视剧", Content: model.M["Douban2"]},
 		)
 		c.HTML(200, "threelist.html", R)
 	})
