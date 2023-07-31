@@ -106,6 +106,7 @@ func Run() {
 }
 
 func RunServer() {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 
 	// 加载静态文件和模板

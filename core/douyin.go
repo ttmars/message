@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/chromedp"
 	"golang.org/x/net/context"
@@ -52,7 +51,7 @@ func Douyin() {
 		title := node.Children[0].NodeValue
 		link := "https://www.douyin.com" + node.Parent.Attributes[1]
 		result = append(result, model.Item{Name: title, Link: link})
-		fmt.Println(title, link)
+		//fmt.Println(title, link)
 	}
 	if len(result) >= model.Num {
 		model.M["DY"] = result[:model.Num]
