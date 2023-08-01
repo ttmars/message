@@ -26,7 +26,7 @@ type S1 struct {
 
 func main() {
 	Run()
-	//core.Douban1()
+	//core.ITHome()
 	//F111("https://github.com/trending/go?since=daily", "github1")
 }
 
@@ -93,6 +93,7 @@ func Run() {
 	// 其他页面
 	go func() {
 		for {
+			core.ITHome()
 			core.GetAll()
 			core.Juejin()
 			core.Kr36()
@@ -349,6 +350,18 @@ func RunServer() {
 			S2{Title: "Triduum", Content: model.M["Juejin3"]},
 			S2{Title: "Weekly", Content: model.M["Juejin7"]},
 			S2{Title: "Monthly", Content: model.M["Juejin30"]},
+		)
+		c.HTML(200, "threelist.html", R)
+	})
+
+	r.GET("/ithome", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 10
+		R.Data = append(R.Data,
+			S2{Title: "日榜", Content: model.M["ithome0"]},
+			S2{Title: "周榜", Content: model.M["ithome1"]},
+			S2{Title: "月榜", Content: model.M["ithome2"]},
 		)
 		c.HTML(200, "threelist.html", R)
 	})

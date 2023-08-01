@@ -188,7 +188,7 @@ func Douban0() {
 			result = append(result, model.Item{Name: dataTitle, Link: link, Description: description, Badge: dataRate})
 		}
 	}
-	if len(result) >= model.GithubNum {
+	if len(result) >= model.Num {
 		model.M["Douban0"] = result[:model.Num]
 	} else {
 		model.M["Douban0"] = result
