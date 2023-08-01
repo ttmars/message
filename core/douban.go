@@ -60,7 +60,7 @@ func Douban2() {
 		result = append(result, model.Item{Name: item.Title, Link: item.URL, Description: "", Badge: item.Rate})
 	}
 
-	if len(result) >= model.GithubNum {
+	if len(result) >= model.Num {
 		model.M["Douban2"] = result[:model.Num]
 	} else {
 		model.M["Douban2"] = result
@@ -114,7 +114,7 @@ func Douban1() {
 		result = append(result, model.Item{Name: item.Title, Link: item.URL, Description: "", Badge: item.Rate})
 	}
 
-	if len(result) >= model.GithubNum {
+	if len(result) >= model.Num {
 		model.M["Douban1"] = result[:model.Num]
 	} else {
 		model.M["Douban1"] = result

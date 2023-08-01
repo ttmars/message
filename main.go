@@ -26,7 +26,7 @@ type S1 struct {
 
 func main() {
 	Run()
-	//core.ITHome()
+	//core.Tieba()
 	//F111("https://github.com/trending/go?since=daily", "github1")
 }
 
@@ -93,6 +93,7 @@ func Run() {
 	// 其他页面
 	go func() {
 		for {
+			core.Tieba()
 			core.ITHome()
 			core.GetAll()
 			core.Juejin()
@@ -148,6 +149,14 @@ func RunServer() {
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["Baidu"]
+		c.HTML(200, "onelist.html", tmp)
+	})
+
+	r.GET("/tieba", func(c *gin.Context) {
+		tmp := make(map[string]interface{})
+		tmp["Flag"] = 0
+		tmp["StyleFlag"] = 666
+		tmp["Data"] = model.M["tieba"]
 		c.HTML(200, "onelist.html", tmp)
 	})
 

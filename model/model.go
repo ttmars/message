@@ -17,6 +17,46 @@ var DFClient = &http.Client{Timeout: time.Second * 10}
 var Num = 20
 var GithubNum = 10
 
+type TiebaStruct struct {
+	Data struct {
+		BangHeadPic  string `json:"bang_head_pic"`
+		UserHisTopic struct {
+			ModuleTitle string        `json:"module_title"`
+			TopicList   []interface{} `json:"topic_list"`
+		} `json:"user_his_topic"`
+		SugTopic struct {
+			ModuleTitle string        `json:"module_title"`
+			TopicList   []interface{} `json:"topic_list"`
+		} `json:"sug_topic"`
+		BangTopic struct {
+			ModuleTitle string `json:"module_title"`
+			TopicList   []struct {
+				TopicID            int    `json:"topic_id"`
+				TopicName          string `json:"topic_name"`
+				TopicDesc          string `json:"topic_desc"`
+				Abstract           string `json:"abstract"`
+				TopicPic           string `json:"topic_pic"`
+				Tag                int    `json:"tag"`
+				DiscussNum         int    `json:"discuss_num"`
+				IdxNum             int    `json:"idx_num"`
+				CreateTime         int    `json:"create_time"`
+				ContentNum         int    `json:"content_num"`
+				TopicAvatar        string `json:"topic_avatar"`
+				IsVideoTopic       string `json:"is_video_topic"`
+				TopicURL           string `json:"topic_url"`
+				TopicDefaultAvatar string `json:"topic_default_avatar"`
+			} `json:"topic_list"`
+		} `json:"bang_topic"`
+		ManualTopic struct {
+			ModuleTitle string        `json:"module_title"`
+			TopicList   []interface{} `json:"topic_list"`
+		} `json:"manual_topic"`
+		Timestamp int64 `json:"timestamp"`
+	} `json:"data"`
+	Errno  int    `json:"errno"`
+	Errmsg string `json:"errmsg"`
+}
+
 type Douban1Struct struct {
 	Subjects []struct {
 		EpisodesInfo string `json:"episodes_info"`
