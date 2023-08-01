@@ -109,6 +109,7 @@ func Run() {
 func RunServer() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
+	r.Use(gin.Recovery())
 
 	// 加载静态文件和模板
 	r.Static("bootstrap/img", "./web/static/bootstrap/img")
