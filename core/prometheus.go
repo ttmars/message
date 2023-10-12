@@ -37,7 +37,10 @@ func ExportMetric() {
 
 	go func() {
 		c := cron.New()
-		c.AddFunc("@daily", func() { Met.VisitCount.Set(0) })
+		c.AddFunc("59 59 23 * * *", func() {
+			log.Println("重置访问次数")
+			Met.VisitCount.Set(0)
+		})
 		c.Start()
 	}()
 
