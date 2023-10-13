@@ -4,12 +4,19 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"log/slog"
 	"message/model"
 	"net/http"
 	"strings"
 )
 
 func Juejin() {
+	defer func() {
+		if err := recover(); err != nil {
+			slog.Error("panic occurred", "error", err)
+		}
+	}()
+
 	FF("https://juejin.cn/?sort=three_days_hottest", "3")
 	FF("https://juejin.cn/?sort=weekly_hottest", "7")
 	FF("https://juejin.cn/?sort=monthly_hottest", "30")
@@ -38,18 +45,18 @@ func FF(url, k string) {
 	v := &model.JuejinStruct{}
 	err = json.Unmarshal(bodyText, v)
 	var result []model.Item
-	for _,i := range v.Data {
+	for _, i := range v.Data {
 		title := i.ItemInfo.ArticleInfo.Title
 		link := "https://juejin.cn/post/" + i.ItemInfo.ArticleInfo.ArticleID
 		//description := i.ItemInfo.ArticleInfo.BriefContent
-		if title != ""{
+		if title != "" {
 			result = append(result, model.Item{Name: title, Link: link})
 		}
 	}
 	name := "Juejin" + k
 	if len(result) >= model.Num {
 		model.M[name] = result[:model.Num]
-	}else{
+	} else {
 		model.M[name] = result
 	}
 	model.M[name] = append(model.M[name], model.Item{Name: "更多", Link: url})

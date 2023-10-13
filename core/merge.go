@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"log/slog"
 	"message/model"
 	"net/http"
 	"strconv"
@@ -15,6 +16,12 @@ import (
 )
 
 func GetAll() {
+	defer func() {
+		if err := recover(); err != nil {
+			slog.Error("panic occurred", "error", err)
+		}
+	}()
+
 	Weibo()
 	Baidu()
 	Bilibili()

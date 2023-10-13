@@ -87,21 +87,33 @@ func Run() {
 	go func() {
 		for {
 			core.Github()
-			time.Sleep(time.Second * 120)
+			time.Sleep(time.Second * 300)
 		}
 	}()
 	// 其他页面
 	go func() {
 		for {
-			core.Tieba()
-			core.ITHome()
-			core.GetAll()
-			core.Juejin()
-			core.Kr36()
-			core.Douyin()
-			core.Douban()
-			PrintM()
-			time.Sleep(time.Second * 60)
+			go core.Tieba()
+			time.Sleep(time.Second * 3)
+
+			go core.ITHome()
+			time.Sleep(time.Second * 3)
+
+			go core.GetAll()
+			time.Sleep(time.Second * 3)
+
+			go core.Juejin()
+			time.Sleep(time.Second * 3)
+
+			go core.Kr36()
+			time.Sleep(time.Second * 3)
+
+			go core.Douyin()
+			time.Sleep(time.Second * 3)
+
+			go core.Douban()
+			//PrintM()
+			time.Sleep(time.Second * 150)
 		}
 	}()
 	// 开启服务

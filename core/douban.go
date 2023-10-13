@@ -7,11 +7,18 @@ import (
 	"github.com/antchfx/htmlquery"
 	"io"
 	"log"
+	"log/slog"
 	"message/model"
 	"net/http"
 )
 
 func Douban() {
+	defer func() {
+		if err := recover(); err != nil {
+			slog.Error("panic occurred", "error", err)
+		}
+	}()
+
 	Douban0()
 	Douban1()
 	Douban2()

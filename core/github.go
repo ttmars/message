@@ -5,6 +5,7 @@ import (
 	"github.com/antchfx/htmlquery"
 	"io"
 	"log"
+	"log/slog"
 	"message/model"
 	"strconv"
 	"strings"
@@ -13,45 +14,45 @@ import (
 
 var wg1 = &sync.WaitGroup{}
 
-func Github()  {
+func Github() {
 	urls := []string{"https://github.com/trending/go?since=daily",
-					"https://github.com/trending/go?since=weekly",
-					"https://github.com/trending/go?since=monthly",
-					"https://github.com/trending?since=daily",
-					"https://github.com/trending?since=weekly",
-					"https://github.com/trending?since=monthly",
-					"https://github.com/trending/python?since=daily",
-					"https://github.com/trending/python?since=weekly",
-					"https://github.com/trending/python?since=monthly",
-					"https://github.com/trending/c?since=daily",
-					"https://github.com/trending/c?since=weekly",
-					"https://github.com/trending/c?since=monthly",
-					"https://github.com/trending/java?since=daily",
-					"https://github.com/trending/java?since=weekly",
-					"https://github.com/trending/java?since=monthly",
-					"https://github.com/trending/rust?since=daily",
-					"https://github.com/trending/rust?since=weekly",
-					"https://github.com/trending/rust?since=monthly",
-					"https://github.com/trending/c++?since=daily",
-					"https://github.com/trending/c++?since=weekly",
-					"https://github.com/trending/c++?since=monthly",
-					"https://github.com/trending/javascript?since=daily",
-					"https://github.com/trending/javascript?since=weekly",
-					"https://github.com/trending/javascript?since=monthly",
-					"https://github.com/trending/shell?since=daily",
-					"https://github.com/trending/shell?since=weekly",
-					"https://github.com/trending/shell?since=monthly",
-					"https://github.com/trending/assembly?since=daily",
-					"https://github.com/trending/assembly?since=weekly",
-					"https://github.com/trending/assembly?since=monthly",
-					"https://github.com/trending/c%23?since=daily",
-					"https://github.com/trending/c%23?since=weekly",
-					"https://github.com/trending/c%23?since=monthly",
-					"https://github.com/trending/php?since=daily",
-					"https://github.com/trending/php?since=weekly",
-					"https://github.com/trending/php?since=monthly",
+		"https://github.com/trending/go?since=weekly",
+		"https://github.com/trending/go?since=monthly",
+		"https://github.com/trending?since=daily",
+		"https://github.com/trending?since=weekly",
+		"https://github.com/trending?since=monthly",
+		"https://github.com/trending/python?since=daily",
+		"https://github.com/trending/python?since=weekly",
+		"https://github.com/trending/python?since=monthly",
+		"https://github.com/trending/c?since=daily",
+		"https://github.com/trending/c?since=weekly",
+		"https://github.com/trending/c?since=monthly",
+		"https://github.com/trending/java?since=daily",
+		"https://github.com/trending/java?since=weekly",
+		"https://github.com/trending/java?since=monthly",
+		"https://github.com/trending/rust?since=daily",
+		"https://github.com/trending/rust?since=weekly",
+		"https://github.com/trending/rust?since=monthly",
+		"https://github.com/trending/c++?since=daily",
+		"https://github.com/trending/c++?since=weekly",
+		"https://github.com/trending/c++?since=monthly",
+		"https://github.com/trending/javascript?since=daily",
+		"https://github.com/trending/javascript?since=weekly",
+		"https://github.com/trending/javascript?since=monthly",
+		"https://github.com/trending/shell?since=daily",
+		"https://github.com/trending/shell?since=weekly",
+		"https://github.com/trending/shell?since=monthly",
+		"https://github.com/trending/assembly?since=daily",
+		"https://github.com/trending/assembly?since=weekly",
+		"https://github.com/trending/assembly?since=monthly",
+		"https://github.com/trending/c%23?since=daily",
+		"https://github.com/trending/c%23?since=weekly",
+		"https://github.com/trending/c%23?since=monthly",
+		"https://github.com/trending/php?since=daily",
+		"https://github.com/trending/php?since=weekly",
+		"https://github.com/trending/php?since=monthly",
 	}
-	for i,url := range urls{
+	for i, url := range urls {
 		//log.Println("debug", i, url)
 		wg1.Add(1)
 		key := "Github" + strconv.Itoa(i)
@@ -62,7 +63,13 @@ func Github()  {
 	//log.Println("finish##########################################################################")
 }
 
-func F(url string, k string)  {
+func F(url string, k string) {
+	defer func() {
+		if err := recover(); err != nil {
+			slog.Error("panic occurred", "error", err)
+		}
+	}()
+
 	defer wg1.Done()
 	var result []model.Item
 	resp, err := model.DFClient.Get(url)
@@ -77,16 +84,16 @@ func F(url string, k string)  {
 		return
 	}
 
-	doc,err := htmlquery.Parse(bytes.NewReader(bodyText))
+	doc, err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
 		log.Printf("github err:%v\n", err)
 		return
 	}
 	nodes := htmlquery.Find(doc, "//article")
-	for _,node := range nodes{
-		n1,_ := htmlquery.Query(node, "//h2/a")			// h1改为h2
-		n2,_ := htmlquery.Query(node, "//p")
-		n3,_ := htmlquery.Query(node, "//div[last()]/span[last()]")
+	for _, node := range nodes {
+		n1, _ := htmlquery.Query(node, "//h2/a") // h1改为h2
+		n2, _ := htmlquery.Query(node, "//p")
+		n3, _ := htmlquery.Query(node, "//div[last()]/span[last()]")
 		star := strings.TrimSpace(htmlquery.InnerText(n3))
 		des := ""
 		if n2 != nil {
@@ -102,7 +109,7 @@ func F(url string, k string)  {
 	}
 	if len(result) >= model.GithubNum {
 		model.M[k] = result[:model.GithubNum]
-	}else{
+	} else {
 		model.M[k] = result
 	}
 	model.M[k] = append(model.M[k], model.Item{Name: "更多", Link: url})

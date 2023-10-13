@@ -6,11 +6,18 @@ import (
 	"github.com/antchfx/htmlquery"
 	"io"
 	"log"
+	"log/slog"
 	"message/model"
 	"net/http"
 )
 
 func ITHome() {
+	defer func() {
+		if err := recover(); err != nil {
+			slog.Error("panic occurred", "error", err)
+		}
+	}()
+
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://www.ithome.com/", nil)
 	if err != nil {

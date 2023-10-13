@@ -4,11 +4,18 @@ import (
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/chromedp"
 	"golang.org/x/net/context"
+	"log/slog"
 	"message/model"
 	"time"
 )
 
 func Douyin() {
+	defer func() {
+		if err := recover(); err != nil {
+			slog.Error("panic occurred", "error", err)
+		}
+	}()
+
 	// 自定义浏览器选项
 	options := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.Flag("headless", true),

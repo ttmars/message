@@ -6,11 +6,18 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"log/slog"
 	"message/model"
 	"net/http"
 )
 
 func Tieba() {
+	defer func() {
+		if err := recover(); err != nil {
+			slog.Error("panic occurred", "error", err)
+		}
+	}()
+
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
