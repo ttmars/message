@@ -89,12 +89,12 @@ func F111(url string, k string) {
 
 func Run() {
 	// 采集GitHub
-	go func() {
-		for {
-			core.Github()
-			time.Sleep(time.Second * 300)
-		}
-	}()
+	//go func() {
+	//	for {
+	//		core.Github()
+	//		time.Sleep(time.Second * 300)
+	//	}
+	//}()
 	// 其他页面
 	go func() {
 		for {
