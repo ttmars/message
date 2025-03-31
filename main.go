@@ -26,7 +26,12 @@ type S1 struct {
 
 func main() {
 	Run()
-	//core.Tieba()
+	//core.Bilibili()
+	//sli := model.M["Bilibili"]
+	//fmt.Println(len(sli))
+	//for _, v := range sli {
+	//	fmt.Println(v)
+	//}
 	//F111("https://github.com/trending/go?since=daily", "github1")
 }
 

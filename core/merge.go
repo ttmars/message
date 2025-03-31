@@ -3,6 +3,7 @@ package core
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/antchfx/htmlquery"
 	"io"
 	"io/ioutil"
@@ -145,22 +146,47 @@ func Baidu() (result []model.Item, err error) {
 }
 
 func Bilibili() (result []model.Item, err error) {
-	url := "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=all"
-	req, _ := http.NewRequest("GET", url, nil)
-	resp, err := model.DFClient.Do(req)
+	url := "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=all&web_location=333.934&w_rid=53b20296ec99dd4db6409ea8bcf0ad45&wts=1743417372"
+	method := "GET"
+
+	client := &http.Client{}
+	req, err := http.NewRequest(method, url, nil)
+
 	if err != nil {
-		log.Printf("Bilibili err:%v\n", err)
+		fmt.Println(err)
 		return
 	}
-	defer resp.Body.Close()
-	bodyText, err := io.ReadAll(resp.Body)
+	req.Header.Add("accept", "*/*")
+	req.Header.Add("accept-language", "zh-CN,zh;q=0.9")
+	req.Header.Add("cache-control", "no-cache")
+	req.Header.Add("origin", "https://www.bilibili.com")
+	req.Header.Add("pragma", "no-cache")
+	req.Header.Add("priority", "u=1, i")
+	req.Header.Add("referer", "https://www.bilibili.com/v/popular/rank/all")
+	req.Header.Add("sec-ch-ua", "\"Chromium\";v=\"134\", \"Not:A-Brand\";v=\"24\", \"Google Chrome\";v=\"134\"")
+	req.Header.Add("sec-ch-ua-mobile", "?0")
+	req.Header.Add("sec-ch-ua-platform", "\"Windows\"")
+	req.Header.Add("sec-fetch-dest", "empty")
+	req.Header.Add("sec-fetch-mode", "cors")
+	req.Header.Add("sec-fetch-site", "same-site")
+	req.Header.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36")
+
+	res, err := client.Do(req)
 	if err != nil {
-		log.Printf("Bilibili err:%v\n", err)
+		fmt.Println(err)
 		return
 	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	//fmt.Println(string(body))
 
 	var v model.BiliStruct
-	json.Unmarshal(bodyText, &v)
+	json.Unmarshal(body, &v)
 
 	for _, node := range v.Data.List {
 		title := strings.TrimSpace(node.Title)
@@ -176,47 +202,6 @@ func Bilibili() (result []model.Item, err error) {
 	model.M["Bilibili"] = append(model.M["Bilibili"], model.Item{Name: "更多", Link: "https://www.bilibili.com/v/popular/rank/all"})
 	return
 }
-
-//func Bilibili() (result []model.Item, err error) {
-//	url := "https://www.bilibili.com/v/popular/rank/all"
-//	req, _ := http.NewRequest("GET", url, nil)
-//	req.Header.Set("cookie", "buvid3=5D5418C6-B76A-475E-9EF5-618C6121ED1A167614infoc; b_lsid=DFBF6551_17FB45E250C; bsource=search_baidu; _uuid=967E76C2-AEA1-8B110-FB99-8425ABA3434C43121infoc; LIVE_BUVID=AUTO1016479985451625; buvid_fp=d2c03acdbde02a5f747fa45978e2213e; buvid4=377A79AA-5113-B55B-B36C-5925BFA3E9E745806-022032309-DsswV1JjVn6AGA18EUjH+g%3D%3D; innersign=0; b_ut=7; i-wanna-go-back=2; PVID=2")
-//	resp, err := model.DFClient.Do(req)
-//	if err != nil {
-//		log.Printf("Bilibili err:%v\n", err)
-//		return
-//	}
-//	defer resp.Body.Close()
-//	bodyText, err := ioutil.ReadAll(resp.Body)
-//	if err != nil {
-//		log.Printf("Bilibili err:%v\n", err)
-//		return
-//	}
-//	log.Println(string(bodyText))
-//
-//	doc, err := htmlquery.Parse(bytes.NewReader(bodyText))
-//	if err != nil {
-//		log.Printf("Bilibili err:%v\n", err)
-//		return
-//	}
-//	nodes, err := htmlquery.QueryAll(doc, "//*[@id=\"app\"]/div/div[2]/div[2]/ul/li/div/div[2]/a")
-//	if err != nil {
-//		log.Printf("Bilibili err:%v\n", err)
-//		return
-//	}
-//	for _, node := range nodes {
-//		title := strings.TrimSpace(htmlquery.InnerText(node))
-//		link := "https:" + htmlquery.SelectAttr(node, "href")
-//		result = append(result, model.Item{Name: title, Link: link})
-//	}
-//	if len(result) >= model.Num {
-//		model.M["Bilibili"] = result[:model.Num]
-//	} else {
-//		model.M["Bilibili"] = result
-//	}
-//	model.M["Bilibili"] = append(model.M["Bilibili"], model.Item{Name: "更多", Link: url})
-//	return
-//}
 
 func Acfun() (result []model.Item, err error) {
 	url := "https://www.acfun.cn/rest/pc-direct/rank/channel?channelId=&subChannelId=&rankLimit=30&rankPeriod=DAY"
