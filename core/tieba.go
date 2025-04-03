@@ -5,26 +5,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
-	"log/slog"
 	"message/model"
 	"net/http"
 )
 
-func Tieba() {
-	defer func() {
-		if err := recover(); err != nil {
-			slog.Error("panic occurred", "error", err)
-		}
-	}()
-
+func Tieba() error {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 	client := &http.Client{Transport: tr}
 	req, err := http.NewRequest("GET", "http://tieba.baidu.com/hottopic/browse/topicList", nil)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
 	req.Header.Set("Accept-Language", "zh-CN,zh-TW;q=0.9,zh;q=0.8,en-US;q=0.7,en;q=0.6")
@@ -36,21 +28,22 @@ func Tieba() {
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36")
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-	//fmt.Printf("%s\n", bodyText)
 
 	var v model.TiebaStruct
-	json.Unmarshal(bodyText, &v)
+	err = json.Unmarshal(bodyText, &v)
+	if err != nil {
+		return err
+	}
 
 	var result []model.Item
 	for _, item := range v.Data.BangTopic.TopicList {
-		//fmt.Println(item)
 		result = append(result, model.Item{Name: item.TopicName, Link: item.TopicURL, Description: item.TopicDesc, Badge: fmt.Sprintf("%.1fw", float64(item.DiscussNum)/10000)})
 	}
 
@@ -62,6 +55,5 @@ func Tieba() {
 	}
 	model.M[key] = append(model.M[key], model.Item{Name: "更多", Link: "https://tieba.baidu.com/hottopic/browse/topicList?res_type=1"})
 
-	log.Println("Tieba success!!")
-	return
+	return nil
 }

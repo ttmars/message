@@ -3,12 +3,9 @@ package core
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/antchfx/htmlquery"
 	"io"
 	"io/ioutil"
-	"log"
-	"log/slog"
 	"message/model"
 	"net/http"
 	"strconv"
@@ -16,35 +13,17 @@ import (
 	"time"
 )
 
-func GetAll() {
-	defer func() {
-		if err := recover(); err != nil {
-			slog.Error("panic occurred", "error", err)
-		}
-	}()
-
-	Weibo()
-	Baidu()
-	Bilibili()
-	Acfun()
-	CSDN()
-	Zhihu()
-	CCTV()
-	ZWTX()
-}
-
-func CSDN() (result []model.Item, err error) {
+func CSDN() error {
+	var result []model.Item
 	url := "https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type="
 	resp, err := model.DFClient.Get(url)
 	if err != nil {
-		log.Printf("CSDN err:%v\n", err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("CSDN err:%v\n", err)
-		return
+		return err
 	}
 
 	v := &model.CSDNStruct{}
@@ -61,35 +40,32 @@ func CSDN() (result []model.Item, err error) {
 		model.M["CSDN"] = result
 	}
 	model.M["CSDN"] = append(model.M["CSDN"], model.Item{Name: "更多", Link: "https://blog.csdn.net/rank/list"})
-	return
+	return nil
 }
 
-func Weibo() (result []model.Item, err error) {
+func Weibo() error {
 	url := "https://s.weibo.com/top/summary"
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("cookie", "SUB=_2AkMVZUSbf8NxqwFRmP0WxG_jb41yyAvEieKjObVAJRMxHRl-yT9jqlULtRB6PuVqdHCUYilcOycjbJG7lmJA3vZSjI41; SUBP=0033WrSXqPxfM72-Ws9jqgMF55529P9D9WFlfySZ479DB-M3cI_uFeOE")
 	resp, err := model.DFClient.Do(req)
 	if err != nil {
-		log.Printf("Weibo err:%v\n", err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("Weibo err:%v\n", err)
-		return
+		return err
 	}
 
 	doc, err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
-		log.Printf("Weibo err:%v\n", err)
-		return
+		return err
 	}
 	nodes, err := htmlquery.QueryAll(doc, "//*[@id=\"pl_top_realtimehot\"]/table/tbody/tr/td[2]/a")
 	if err != nil {
-		log.Printf("Weibo err:%v\n", err)
-		return
+		return err
 	}
+	var result []model.Item
 	for _, node := range nodes {
 		title := htmlquery.InnerText(node)
 		href := htmlquery.SelectAttr(node, "href")
@@ -104,32 +80,29 @@ func Weibo() (result []model.Item, err error) {
 		model.M["Weibo"] = result
 	}
 	model.M["Weibo"] = append(model.M["Weibo"], model.Item{Name: "更多", Link: url})
-	return
+	return nil
 }
 
-func Baidu() (result []model.Item, err error) {
+func Baidu() error {
+	var result []model.Item
 	url := "https://top.baidu.com/board?tab=realtime"
 	resp, err := model.DFClient.Get(url)
 	if err != nil {
-		log.Printf("Baidu err:%v\n", err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("Baidu err:%v\n", err)
-		return
+		return err
 	}
 
 	doc, err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
-		log.Printf("Baidu err:%v\n", err)
-		return
+		return err
 	}
 	nodes, err := htmlquery.QueryAll(doc, "//*[@id=\"sanRoot\"]/main/div[2]/div/div[2]/div/div[2]/a/div[1]")
 	if err != nil {
-		log.Printf("Baidu err:%v\n", err)
-		return
+		return err
 	}
 	for _, node := range nodes {
 		title := strings.TrimSpace(htmlquery.InnerText(node))
@@ -142,10 +115,11 @@ func Baidu() (result []model.Item, err error) {
 		model.M["Baidu"] = result
 	}
 	model.M["Baidu"] = append(model.M["Baidu"], model.Item{Name: "更多", Link: url})
-	return
+	return nil
 }
 
-func Bilibili() (result []model.Item, err error) {
+func Bilibili() error {
+	var result []model.Item
 	url := "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=all&web_location=333.934&w_rid=53b20296ec99dd4db6409ea8bcf0ad45&wts=1743417372"
 	method := "GET"
 
@@ -153,8 +127,7 @@ func Bilibili() (result []model.Item, err error) {
 	req, err := http.NewRequest(method, url, nil)
 
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 	req.Header.Add("accept", "*/*")
 	req.Header.Add("accept-language", "zh-CN,zh;q=0.9")
@@ -173,26 +146,25 @@ func Bilibili() (result []model.Item, err error) {
 
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
-	//fmt.Println(string(body))
 
 	var v model.BiliStruct
-	json.Unmarshal(body, &v)
+	err = json.Unmarshal(body, &v)
+	if err != nil {
+		return err
+	}
 
 	for _, node := range v.Data.List {
 		title := strings.TrimSpace(node.Title)
 		link := node.ShortLinkV2
 		result = append(result, model.Item{Name: title, Link: link})
-		//fmt.Println(title, link)
 	}
 	if len(result) >= model.Num {
 		model.M["Bilibili"] = result[:model.Num]
@@ -200,23 +172,22 @@ func Bilibili() (result []model.Item, err error) {
 		model.M["Bilibili"] = result
 	}
 	model.M["Bilibili"] = append(model.M["Bilibili"], model.Item{Name: "更多", Link: "https://www.bilibili.com/v/popular/rank/all"})
-	return
+	return nil
 }
 
-func Acfun() (result []model.Item, err error) {
+func Acfun() error {
+	var result []model.Item
 	url := "https://www.acfun.cn/rest/pc-direct/rank/channel?channelId=&subChannelId=&rankLimit=30&rankPeriod=DAY"
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36")
 	resp, err := model.DFClient.Do(req)
 	if err != nil {
-		log.Printf("Acfun err:%v\n", err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("Acfun err:%v\n", err)
-		return
+		return err
 	}
 
 	v := &model.AcfunStruct{}
@@ -232,44 +203,41 @@ func Acfun() (result []model.Item, err error) {
 		model.M["Acfun"] = result
 	}
 	model.M["Acfun"] = append(model.M["Acfun"], model.Item{Name: "更多", Link: "https://www.acfun.cn/rank/list"})
-	return
+	return err
 }
 
-func Zhihu() {
-	defer func() {
-		if err := recover(); err != nil {
-			log.Printf("Zhihu panic:%v\n", err)
-		}
-	}()
+func Zhihu() error {
 	url := "https://www.zhihu.com/billboard"
-	r, _ := http.NewRequest("GET", url, nil)
+	r, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return err
+	}
 	r.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36")
 	resp, err := http.DefaultClient.Do(r)
 	if err != nil {
-		log.Printf("Zhihu err:%v\n", err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("Zhihu err:%v\n", err)
-		return
+		return err
 	}
 
 	doc, err := htmlquery.Parse(bytes.NewReader(b))
 	if err != nil {
-		log.Printf("Zhihu err:%v\n", err)
-		return
+		return err
 	}
 	node, err := htmlquery.Query(doc, "//*[@id=\"js-initialData\"]")
 	if err != nil {
-		log.Printf("Zhihu err:%v\n", err)
-		return
+		return err
 	}
 	bodyText := []byte(htmlquery.InnerText(node))
 
 	v := &model.ZhihuStruct{}
 	err = json.Unmarshal(bodyText, v)
+	if err != nil {
+		return err
+	}
 	var result []model.Item
 	for _, i := range v.InitialState.Topstory.HotList {
 		title := i.Target.TitleArea.Text
@@ -283,35 +251,31 @@ func Zhihu() {
 		model.M["Zhihu"] = result
 	}
 	model.M["Zhihu"] = append(model.M["Zhihu"], model.Item{Name: "更多", Link: url})
-	return
+	return nil
 }
 
-func CCTV() {
+func CCTV() error {
 	url := "https://tv.cctv.com/lm/xwlb/"
 	t := time.Now().AddDate(0, 0, -1).Format("20060102")
 	dataUrl := "https://tv.cctv.com/lm/xwlb/day/" + t + ".shtml"
 	req, _ := http.NewRequest("GET", dataUrl, nil)
 	resp, err := model.DFClient.Do(req)
 	if err != nil {
-		log.Printf("CCTV err:%v\n", err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("CCTV err:%v\n", err)
-		return
+		return err
 	}
 
 	doc, err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
-		log.Printf("CCTV err:%v\n", err)
-		return
+		return err
 	}
 	nodes, err := htmlquery.QueryAll(doc, "/html/body/li/div/a")
 	if err != nil {
-		log.Printf("CCTV err:%v\n", err)
-		return
+		return err
 	}
 	var result []model.Item
 	for _, node := range nodes {
@@ -326,47 +290,28 @@ func CCTV() {
 		model.M["CCTV"] = result
 	}
 	model.M["CCTV"] = append(model.M["CCTV"], model.Item{Name: "更多", Link: url})
-	return
+	return nil
 }
 
-func ZWTX() {
+func ZWTX() error {
 	url := "https://tv.cctv.com/lm/zwtx/index.shtml"
 	t := time.Now().Format("20060102")
 	dataUrl := "https://api.cntv.cn/NewVideo/getVideoListByColumn?id=TOPC1451558496100826&n=100&sort=desc&p=1&bd=" + t + "&mode=2&serviceId=tvcctv&cb=cb"
 	req, _ := http.NewRequest("GET", dataUrl, nil)
 	resp, err := model.DFClient.Do(req)
 	if err != nil {
-		log.Printf("ZWTX err:%v\n", err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("ZWTX err:%v\n", err)
-		return
+		return err
 	}
-	type AutoGenerated struct {
-		Data struct {
-			Total int `json:"total"`
-			List  []struct {
-				GUID      string `json:"guid"`
-				ID        string `json:"id"`
-				Time      string `json:"time"`
-				Title     string `json:"title"`
-				Length    string `json:"length"`
-				Image     string `json:"image"`
-				FocusDate int64  `json:"focus_date"`
-				Brief     string `json:"brief"`
-				URL       string `json:"url"`
-				Mode      int    `json:"mode"`
-			} `json:"list"`
-		} `json:"data"`
-	}
-	var v AutoGenerated
+
+	var v model.ZWTXStruct
 	err = json.Unmarshal(bodyText[3:len(bodyText)-2], &v)
 	if err != nil {
-		log.Printf("ZWTX err:%v\n", err)
-		return
+		return err
 	}
 	var T = make(map[string][]model.Item)
 	for _, data := range v.Data.List {
@@ -394,5 +339,5 @@ func ZWTX() {
 		}
 		model.M[k] = append(model.M[k], model.Item{Name: "更多", Link: url})
 	}
-	return
+	return nil
 }

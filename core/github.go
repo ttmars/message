@@ -4,17 +4,13 @@ import (
 	"bytes"
 	"github.com/antchfx/htmlquery"
 	"io"
-	"log"
-	"log/slog"
 	"message/model"
 	"strconv"
 	"strings"
-	"sync"
+	"time"
 )
 
-var wg1 = &sync.WaitGroup{}
-
-func Github() {
+func Github() error {
 	urls := []string{"https://github.com/trending/go?since=daily",
 		"https://github.com/trending/go?since=weekly",
 		"https://github.com/trending/go?since=monthly",
@@ -53,41 +49,30 @@ func Github() {
 		"https://github.com/trending/php?since=monthly",
 	}
 	for i, url := range urls {
-		//log.Println("debug", i, url)
-		wg1.Add(1)
-		key := "Github" + strconv.Itoa(i)
-		go F(url, key)
+		err := F(url, "Github"+strconv.Itoa(i))
+		if err != nil {
+			return err
+		}
+		time.Sleep(time.Second * 5)
 	}
-	//log.Println("wait##########################################################################")
-	wg1.Wait()
-	//log.Println("finish##########################################################################")
+	return nil
 }
 
-func F(url string, k string) {
-	defer func() {
-		if err := recover(); err != nil {
-			slog.Error("panic occurred", "error", err)
-		}
-	}()
-
-	defer wg1.Done()
+func F(url string, k string) error {
 	var result []model.Item
 	resp, err := model.DFClient.Get(url)
 	if err != nil {
-		log.Printf("github err:%v\n", err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("github err:%v\n", err)
-		return
+		return err
 	}
 
 	doc, err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
-		log.Printf("github err:%v\n", err)
-		return
+		return err
 	}
 	nodes := htmlquery.Find(doc, "//article")
 	for _, node := range nodes {
@@ -113,5 +98,5 @@ func F(url string, k string) {
 		model.M[k] = result
 	}
 	model.M[k] = append(model.M[k], model.Item{Name: "更多", Link: url})
-	log.Println("github success!!")
+	return nil
 }

@@ -4,20 +4,12 @@ import (
 	"bytes"
 	"github.com/antchfx/htmlquery"
 	"io/ioutil"
-	"log"
-	"log/slog"
 	"message/model"
 	"strconv"
 	"time"
 )
 
-func Kr36() {
-	defer func() {
-		if err := recover(); err != nil {
-			slog.Error("panic occurred", "error", err)
-		}
-	}()
-
+func Kr36() error {
 	t := time.Now().Format("2006-01-02")
 	urls := []string{
 		"https://www.36kr.com/hot-list/renqi/" + t + "/1",
@@ -26,28 +18,29 @@ func Kr36() {
 	}
 	for i, url := range urls {
 		k := "Kr36" + strconv.Itoa(i)
-		FFF(url, k)
+		err := FFF(url, k)
+		if err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
-func FFF(url, k string) {
+func FFF(url, k string) error {
 	resp, err := model.DFClient.Get(url)
 	if err != nil {
-		log.Printf("Kr36 err:%v\n", err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("Kr36 err:%v\n", err)
-		return
+		return err
 	}
 
 	var result []model.Item
 	doc, err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
-		log.Printf("Kr36 err:%v\n", err)
-		return
+		return err
 	}
 	nodes := htmlquery.Find(doc, "//*[@id=\"app\"]/div/div[2]/div[3]/div/div/div[2]/div[1]/div/div/div/div/div[2]/div[2]/p/a")
 	for _, node := range nodes {
@@ -61,5 +54,5 @@ func FFF(url, k string) {
 		model.M[k] = result
 	}
 	model.M[k] = append(model.M[k], model.Item{Name: "更多", Link: url})
-	return
+	return nil
 }

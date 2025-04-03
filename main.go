@@ -2,14 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/antchfx/htmlquery"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"log"
 	"message/core"
 	"message/model"
-	"strings"
 	"time"
 )
 
@@ -26,103 +23,44 @@ type S1 struct {
 
 func main() {
 	Run()
-	//core.Bilibili()
-	//sli := model.M["Bilibili"]
-	//fmt.Println(len(sli))
-	//for _, v := range sli {
-	//	fmt.Println(v)
-	//}
-	//F111("https://github.com/trending/go?since=daily", "github1")
 }
 
-func F111(url string, k string) {
-	//defer wg1.Done()
-	var result []model.Item
-	resp, err := model.DFClient.Get(url)
+func handleErr(err error, msg string) {
 	if err != nil {
-		log.Printf("github err:%v\n", err)
-		return
+		log.Printf("%s: %v\n", msg, err)
 	}
-	defer resp.Body.Close()
-	//bodyText, err := io.ReadAll(resp.Body)
-	//if err != nil {
-	//	log.Printf("github err:%v\n", err)
-	//	return
-	//}
-
-	doc, err := htmlquery.Parse(resp.Body)
-	if err != nil {
-		log.Printf("github err:%v\n", err)
-		return
-	}
-	fmt.Println(doc)
-
-	nodes := htmlquery.Find(doc, "//article")
-	fmt.Println(len(nodes))
-	for _, node := range nodes {
-		n1, _ := htmlquery.Query(node, "//h2/a")
-		n2, _ := htmlquery.Query(node, "//p")
-		n3, _ := htmlquery.Query(node, "//div[last()]/span[last()]")
-		star := strings.TrimSpace(htmlquery.InnerText(n3))
-		des := ""
-		if n2 != nil {
-			des = strings.TrimSpace(htmlquery.InnerText(n2))
-		}
-		title := htmlquery.SelectAttr(n1, "href")
-		link := "https://github.com" + title
-
-		if len(title) > 0 {
-			title = title[1:]
-		}
-		fmt.Println(title, link, des, star)
-		break
-		result = append(result, model.Item{Name: title, Link: link, Description: des, Badge: star})
-	}
-	if len(result) >= model.GithubNum {
-		model.M[k] = result[:model.GithubNum]
-	} else {
-		model.M[k] = result
-	}
-	model.M[k] = append(model.M[k], model.Item{Name: "更多", Link: url})
-	log.Println("github success!!")
 }
 
 func Run() {
 	// 采集GitHub
-	//go func() {
-	//	for {
-	//		core.Github()
-	//		time.Sleep(time.Second * 300)
-	//	}
-	//}()
+	go func() {
+		for {
+			handleErr(core.Github(), "Github")
+			time.Sleep(time.Minute * 30)
+		}
+	}()
 	// 其他页面
 	go func() {
 		for {
-			go core.Tieba()
-			time.Sleep(time.Second * 3)
-
-			go core.ITHome()
-			time.Sleep(time.Second * 3)
-
-			go core.GetAll()
-			time.Sleep(time.Second * 3)
-
-			go core.Juejin()
-			time.Sleep(time.Second * 3)
-
-			go core.Kr36()
-			time.Sleep(time.Second * 3)
-
-			go core.Douyin()
-			time.Sleep(time.Second * 3)
-
-			go core.Douban()
-			//PrintM()
-			time.Sleep(time.Second * 150)
+			handleErr(core.Tieba(), "Tieba")
+			handleErr(core.ITHome(), "ITHome")
+			handleErr(core.Weibo(), "Weibo")
+			handleErr(core.Baidu(), "Baidu")
+			handleErr(core.Bilibili(), "Bilibili")
+			handleErr(core.Acfun(), "Acfun")
+			handleErr(core.CSDN(), "CSDN")
+			handleErr(core.Zhihu(), "Zhihu")
+			handleErr(core.CCTV(), "CCTV")
+			handleErr(core.ZWTX(), "ZWTX")
+			handleErr(core.Juejin(), "Juejin")
+			handleErr(core.Kr36(), "Kr36")
+			//core.Douyin()
+			handleErr(core.Douban(), "Douban")
+			time.Sleep(time.Minute * 10)
 		}
 	}()
 	// 开启服务
-	go core.ExportMetric()
+	//go core.ExportMetric()
 	RunServer()
 }
 
@@ -140,19 +78,16 @@ func RunServer() {
 	r.Static("/public", "./hugo/site/public/")
 
 	r.GET("/", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		c.Request.URL.Path = "/weibo"
 		r.HandleContext(c)
 	})
 
 	r.GET("/hot", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		c.Request.URL.Path = "/weibo"
 		r.HandleContext(c)
 	})
 
 	r.GET("/douyin", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["DY"]
@@ -160,7 +95,6 @@ func RunServer() {
 	})
 
 	r.GET("/weibo", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["Weibo"]
@@ -168,7 +102,6 @@ func RunServer() {
 	})
 
 	r.GET("/baidu", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["Baidu"]
@@ -176,7 +109,6 @@ func RunServer() {
 	})
 
 	r.GET("/tieba", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["StyleFlag"] = 666
@@ -185,7 +117,6 @@ func RunServer() {
 	})
 
 	r.GET("/cctv", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["CCTV"]
@@ -193,7 +124,6 @@ func RunServer() {
 	})
 
 	r.GET("/csdn", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["CSDN"]
@@ -201,7 +131,6 @@ func RunServer() {
 	})
 
 	r.GET("/zhihu", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["Zhihu"]
@@ -209,7 +138,6 @@ func RunServer() {
 	})
 
 	r.GET("/acfun", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["Acfun"]
@@ -217,7 +145,6 @@ func RunServer() {
 	})
 
 	r.GET("/blbl", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		tmp := make(map[string]interface{})
 		tmp["Flag"] = 0
 		tmp["Data"] = model.M["Bilibili"]
@@ -225,7 +152,6 @@ func RunServer() {
 	})
 
 	r.GET("/github", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -238,7 +164,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubGo", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -251,7 +176,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubPy", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -264,7 +188,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubC", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -277,7 +200,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubJava", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -290,7 +212,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubRust", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -303,7 +224,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubCPP", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -316,7 +236,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubJS", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -329,7 +248,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubShell", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -342,7 +260,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubAssembly", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -355,7 +272,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubCSharp", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -368,7 +284,6 @@ func RunServer() {
 	})
 
 	r.GET("/githubPHP", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -381,7 +296,6 @@ func RunServer() {
 	})
 
 	r.GET("/douban", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 20
@@ -394,7 +308,6 @@ func RunServer() {
 	})
 
 	r.GET("/juejin", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 10
@@ -407,7 +320,6 @@ func RunServer() {
 	})
 
 	r.GET("/ithome", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 10
@@ -420,7 +332,6 @@ func RunServer() {
 	})
 
 	r.GET("/kr36", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 10
@@ -433,7 +344,6 @@ func RunServer() {
 	})
 
 	r.GET("/zwtx", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var R S1
 		R.Flag = 1
 		R.Style = 10
@@ -446,7 +356,6 @@ func RunServer() {
 	})
 
 	r.GET("/tool", func(c *gin.Context) {
-		core.Met.VisitCount.Inc()
 		var v model.ToolStruct
 		b, _ := ioutil.ReadFile("./data/tool.txt")
 		err := json.Unmarshal(b, &v)
@@ -458,11 +367,4 @@ func RunServer() {
 	})
 
 	r.Run("127.0.0.1:8080")
-}
-
-func PrintM() {
-	fmt.Println("===============================")
-	for k, v := range model.M {
-		log.Println(k, len(v))
-	}
 }

@@ -5,23 +5,15 @@ import (
 	"fmt"
 	"github.com/antchfx/htmlquery"
 	"io"
-	"log"
-	"log/slog"
 	"message/model"
 	"net/http"
 )
 
-func ITHome() {
-	defer func() {
-		if err := recover(); err != nil {
-			slog.Error("panic occurred", "error", err)
-		}
-	}()
-
+func ITHome() error {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://www.ithome.com/", nil)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	req.Header.Set("authority", "www.ithome.com")
 	req.Header.Set("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
@@ -40,22 +32,20 @@ func ITHome() {
 	req.Header.Set("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36")
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-	//fmt.Printf("%s\n", bodyText)
 
 	var result0 []model.Item
 	var result1 []model.Item
 	var result2 []model.Item
 	doc, err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
-		log.Printf("Kr36 err:%v\n", err)
-		return
+		return err
 	}
 	nodes0 := htmlquery.Find(doc, "//*[@id=\"d-1\"]/li/a")
 	nodes1 := htmlquery.Find(doc, "//*[@id=\"d-2\"]/li/a")
@@ -103,6 +93,5 @@ func ITHome() {
 		model.M[key] = append(model.M[key], model.Item{Name: "更多", Link: "https://www.ithome.com/"})
 	}
 
-	log.Println("ITHome0/1/2 success!!")
-	return
+	return err
 }

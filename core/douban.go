@@ -6,30 +6,33 @@ import (
 	"fmt"
 	"github.com/antchfx/htmlquery"
 	"io"
-	"log"
-	"log/slog"
 	"message/model"
 	"net/http"
 )
 
-func Douban() {
-	defer func() {
-		if err := recover(); err != nil {
-			slog.Error("panic occurred", "error", err)
-		}
-	}()
-
-	Douban0()
-	Douban1()
-	Douban2()
+func Douban() error {
+	var err error
+	err = Douban0()
+	if err != nil {
+		return err
+	}
+	err = Douban1()
+	if err != nil {
+		return err
+	}
+	err = Douban2()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // Douban2 热门电视剧
-func Douban2() {
+func Douban2() error {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://movie.douban.com/j/search_subjects?type=tv&tag=%E7%83%AD%E9%97%A8&page_limit=50&page_start=0", nil)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Accept-Language", "zh-CN,zh-TW;q=0.9,zh;q=0.8,en-US;q=0.7,en;q=0.6")
@@ -48,16 +51,19 @@ func Douban2() {
 	req.Header.Set("sec-ch-ua-platform", `"Windows"`)
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	var v model.Douban1Struct
-	json.Unmarshal(bodyText, &v)
+	err = json.Unmarshal(bodyText, &v)
+	if err != nil {
+		return err
+	}
 
 	var result []model.Item
 	for _, item := range v.Subjects {
@@ -74,16 +80,15 @@ func Douban2() {
 	}
 	model.M["Douban2"] = append(model.M["Douban2"], model.Item{Name: "更多", Link: "https://movie.douban.com/"})
 
-	log.Println("Douban2 success!!")
-	return
+	return nil
 }
 
 // Douban1 热门电影
-func Douban1() {
+func Douban1() error {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://movie.douban.com/j/search_subjects?type=movie&tag=%E7%83%AD%E9%97%A8&page_limit=50&page_start=0", nil)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Accept-Language", "zh-CN,zh-TW;q=0.9,zh;q=0.8,en-US;q=0.7,en;q=0.6")
@@ -102,16 +107,19 @@ func Douban1() {
 	req.Header.Set("sec-ch-ua-platform", `"Windows"`)
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	var v model.Douban1Struct
-	json.Unmarshal(bodyText, &v)
+	err = json.Unmarshal(bodyText, &v)
+	if err != nil {
+		return err
+	}
 
 	var result []model.Item
 	for _, item := range v.Subjects {
@@ -128,15 +136,14 @@ func Douban1() {
 	}
 	model.M["Douban1"] = append(model.M["Douban1"], model.Item{Name: "更多", Link: "https://movie.douban.com/"})
 
-	log.Println("Douban1 success!!")
-	return
+	return nil
 }
 
 // Douban0 正在热映
-func Douban0() {
+func Douban0() error {
 	req, err := http.NewRequest("GET", "https://movie.douban.com/", nil)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
 	req.Header.Set("Accept-Language", "zh-CN,zh-TW;q=0.9,zh;q=0.8,en-US;q=0.7,en;q=0.6")
@@ -156,20 +163,19 @@ func Douban0() {
 	req.Header.Set("sec-ch-ua-platform", `"Windows"`)
 	resp, err := model.DFClient.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	//fmt.Printf("%s\n", bodyText)
 
 	var result []model.Item
 	doc, err := htmlquery.Parse(bytes.NewReader(bodyText))
 	if err != nil {
-		log.Printf("Kr36 err:%v\n", err)
-		return
+		return err
 	}
 	nodes := htmlquery.Find(doc, "//*[@id=\"screening\"]/div[2]/ul/li")
 	for _, node := range nodes {
@@ -202,6 +208,5 @@ func Douban0() {
 	}
 	model.M["Douban0"] = append(model.M["Douban0"], model.Item{Name: "更多", Link: "https://movie.douban.com/"})
 
-	log.Println("Douban0 success!!")
-	return
+	return nil
 }

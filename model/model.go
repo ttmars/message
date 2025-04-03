@@ -17,6 +17,24 @@ var DFClient = &http.Client{Timeout: time.Second * 10}
 var Num = 20
 var GithubNum = 10
 
+type ZWTXStruct struct {
+	Data struct {
+		Total int `json:"total"`
+		List  []struct {
+			GUID      string `json:"guid"`
+			ID        string `json:"id"`
+			Time      string `json:"time"`
+			Title     string `json:"title"`
+			Length    string `json:"length"`
+			Image     string `json:"image"`
+			FocusDate int64  `json:"focus_date"`
+			Brief     string `json:"brief"`
+			URL       string `json:"url"`
+			Mode      int    `json:"mode"`
+		} `json:"list"`
+	} `json:"data"`
+}
+
 type TiebaStruct struct {
 	Data struct {
 		BangHeadPic  string `json:"bang_head_pic"`
