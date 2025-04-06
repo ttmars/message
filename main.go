@@ -39,6 +39,7 @@ func Run() {
 			time.Sleep(time.Hour)
 		}
 	}()
+
 	// 其他页面
 	go func() {
 		for {
@@ -50,6 +51,7 @@ func Run() {
 				}()
 				core.Douyin()
 			}()
+			handleErr(core.Huxiu(), "Huxiu")
 			handleErr(core.Tieba(), "Tieba")
 			handleErr(core.ITHome(), "ITHome")
 			handleErr(core.Weibo(), "Weibo")
@@ -322,6 +324,17 @@ func RunServer() {
 			S2{Title: "Triduum", Content: model.M["Juejin3"]},
 			S2{Title: "Weekly", Content: model.M["Juejin7"]},
 			S2{Title: "Monthly", Content: model.M["Juejin30"]},
+		)
+		c.HTML(200, "threelist.html", R)
+	})
+
+	r.GET("/huxiu", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 10
+		R.Data = append(R.Data,
+			S2{Title: "48小时", Content: model.M["Huxiu2"]},
+			S2{Title: "周", Content: model.M["Huxiu1"]},
 		)
 		c.HTML(200, "threelist.html", R)
 	})
