@@ -25,7 +25,7 @@ func main() {
 	Run()
 }
 
-func handleErr(err error, msg string) {
+func handleErr(err any, msg string) {
 	if err != nil {
 		log.Printf("%s: %v\n", msg, err)
 	}
@@ -42,6 +42,14 @@ func Run() {
 	// 其他页面
 	go func() {
 		for {
+			go func() {
+				defer func() {
+					if err := recover(); err != nil {
+						handleErr(err, "Douyin")
+					}
+				}()
+				core.Douyin()
+			}()
 			handleErr(core.Tieba(), "Tieba")
 			handleErr(core.ITHome(), "ITHome")
 			handleErr(core.Weibo(), "Weibo")
@@ -54,7 +62,6 @@ func Run() {
 			handleErr(core.ZWTX(), "ZWTX")
 			handleErr(core.Juejin(), "Juejin")
 			handleErr(core.Kr36(), "Kr36")
-			//core.Douyin()
 			handleErr(core.Douban(), "Douban")
 			time.Sleep(time.Minute * 10)
 		}
