@@ -25,7 +25,7 @@ func main() {
 	Run()
 }
 
-func handleErr(err error, msg string) {
+func handleErr(err any, msg string) {
 	if err != nil {
 		log.Printf("%s: %v\n", msg, err)
 	}
@@ -39,9 +39,19 @@ func Run() {
 			time.Sleep(time.Hour)
 		}
 	}()
+
 	// 其他页面
 	go func() {
 		for {
+			go func() {
+				defer func() {
+					if err := recover(); err != nil {
+						handleErr(err, "Douyin")
+					}
+				}()
+				core.Douyin()
+			}()
+			handleErr(core.Huxiu(), "Huxiu")
 			handleErr(core.Tieba(), "Tieba")
 			handleErr(core.ITHome(), "ITHome")
 			handleErr(core.Weibo(), "Weibo")
@@ -54,7 +64,6 @@ func Run() {
 			handleErr(core.ZWTX(), "ZWTX")
 			handleErr(core.Juejin(), "Juejin")
 			handleErr(core.Kr36(), "Kr36")
-			//core.Douyin()
 			handleErr(core.Douban(), "Douban")
 			time.Sleep(time.Minute * 10)
 		}
@@ -315,6 +324,17 @@ func RunServer() {
 			S2{Title: "Triduum", Content: model.M["Juejin3"]},
 			S2{Title: "Weekly", Content: model.M["Juejin7"]},
 			S2{Title: "Monthly", Content: model.M["Juejin30"]},
+		)
+		c.HTML(200, "threelist.html", R)
+	})
+
+	r.GET("/huxiu", func(c *gin.Context) {
+		var R S1
+		R.Flag = 1
+		R.Style = 10
+		R.Data = append(R.Data,
+			S2{Title: "48小时", Content: model.M["Huxiu2"]},
+			S2{Title: "周", Content: model.M["Huxiu1"]},
 		)
 		c.HTML(200, "threelist.html", R)
 	})

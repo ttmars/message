@@ -35,6 +35,28 @@ type ZWTXStruct struct {
 	} `json:"data"`
 }
 
+type HuxiuStruct struct {
+	Success bool `json:"success"`
+	Data    []struct {
+		Aid        int    `json:"aid"`
+		Title      string `json:"title"`
+		PicPath    string `json:"pic_path"`
+		URL        string `json:"url"`
+		IsOriginal bool   `json:"is_original"`
+		UserInfo   struct {
+			UID      int    `json:"uid"`
+			Username string `json:"username"`
+		} `json:"user_info"`
+		Label          string `json:"label"`
+		IsVideoArticle bool   `json:"is_video_article"`
+		CountInfo      struct {
+			TotalCommentNum int `json:"total_comment_num"`
+			FavoriteNum     int `json:"favorite_num"`
+		} `json:"count_info"`
+	} `json:"data"`
+	Message string `json:"message"`
+}
+
 type TiebaStruct struct {
 	Data struct {
 		BangHeadPic  string `json:"bang_head_pic"`

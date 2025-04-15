@@ -4,18 +4,11 @@ import (
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/chromedp"
 	"golang.org/x/net/context"
-	"log/slog"
 	"message/model"
 	"time"
 )
 
 func Douyin() {
-	defer func() {
-		if err := recover(); err != nil {
-			slog.Error("panic occurred", "error", err)
-		}
-	}()
-
 	// 自定义浏览器选项
 	options := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.Flag("headless", true),
@@ -44,9 +37,9 @@ func Douyin() {
 		// 重新获取流量信息
 		chromedp.Sleep(time.Second*10),
 
-		chromedp.Click(`#login-pannel > div.dy-account-close`), // 关闭登录弹窗
+		chromedp.Click(`#douyin_login_comp_flat_panel > div.Xc2llNZX > div._CwbZHXv > svg`), // 关闭登录弹窗
 		chromedp.Sleep(time.Second*5),
-		chromedp.Nodes(`//*[@id="douyin-right-container"]/div[3]/div/div[3]/ul/li/div[2]/div[1]/a/h3`, &nodes),
+		chromedp.Nodes(`//*[@id="douyin-right-container"]/div[2]/div/div[3]/ul/li/div[2]/div[1]/a/h3`, &nodes),
 	)
 
 	//fmt.Println("hello")
@@ -66,5 +59,4 @@ func Douyin() {
 		model.M["DY"] = result
 	}
 	model.M["DY"] = append(model.M["DY"], model.Item{Name: "更多", Link: "https://www.douyin.com/hot"})
-	return
 }
