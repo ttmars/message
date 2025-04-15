@@ -36,7 +36,7 @@ func Run() {
 	go func() {
 		for {
 			handleErr(core.Github(), "Github")
-			time.Sleep(time.Minute * 30)
+			time.Sleep(time.Hour)
 		}
 	}()
 	// 其他页面

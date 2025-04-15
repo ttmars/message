@@ -53,7 +53,7 @@ func Github() error {
 		if err != nil {
 			return err
 		}
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 10)
 	}
 	return nil
 }
